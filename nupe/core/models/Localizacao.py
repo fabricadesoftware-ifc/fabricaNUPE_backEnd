@@ -33,4 +33,4 @@ class Localizacao(models.Model):
         verbose_name_plural = "Localizações"
 
     def __str__(self):
-        return "Cidade: {} | Estado: {}".format(self.cidade, self.estado)
+        return "{} - {}".format(self.cidade, self.estado)
