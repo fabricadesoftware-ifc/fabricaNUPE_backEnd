@@ -7,12 +7,16 @@ authors = ["\"eduardo\", \"yuri\", \"luis\", \"jorge\", \"kaua\""]
 [tool.poetry.dependencies]
 python = "^3.6.1"
 django = "^3.0.5"
+djangorestframework = "^3.11.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.2.0"
 black = "^19.10b0"
 flake8 = "^3.7.9"
 isort = "^4.3.21"
+pytest = "^5.4.1"
+pytest-cov = "^2.8.1"
+pytest-django = "^3.9.0"
 
 [tool.black]
 line-length = 119
