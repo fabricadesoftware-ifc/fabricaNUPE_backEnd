@@ -22,14 +22,14 @@ Projeto desenvolvido por membros da **Fábrica de Software IFC - Araquari** para
 
 # Criação de Issues
 
- - O título da issue **deve ser breve** e **específico**, seguindo o padrão do commit, **deve iniciar no modo imperativo**
- - A descrição deve ser utilizada para **detalhar** o que precisa ser feito, **e se necessário**, como ser feito
- - O campo assignee não é obrigatório na criação, é utilizado para especificar um "**responsável**" para resolver a issue. Obs.: **Caso a issue que você for resolver não tiver um responsável, torne-se ele**
+ - O **título** da issue **deve ser breve** e **específico**, seguindo o padrão do commit, **deve iniciar no modo imperativo**
+ - A **descrição** deve ser utilizada para **detalhar** o que precisa ser feito, **e se necessário**, como ser feito
+ - O campo **assignee** **não é obrigatório na criação**, é utilizado para **especificar um "responsável"** para resolver a issue. Obs.: **Caso a issue que você for resolver não tiver um responsável, torne-se ele**
  - # Labels
 
-   - Utilize **backend** ou **frontend** para informar onde deverá ser implementada
+   - Utilize **backend** ou **frontend** para informar **onde** deverá ser implementada
    - Utilize **error** para informar que um erro **deve ser corrigido**
-   - Utilize **implementation** para informar que você está desenvolvendo a solução
-   - Utilize **test** para informar que você está desenvolvendo os tests da issue
-   - Utilize **refactor** para informar que você está refatorando o código
-   - **todo** e **doing** são associados a issue automaticamente pelo kanban do gitlab
+   - Utilize **implementation** para informar que você está **desenvolvendo a solução**
+   - Utilize **test** para informar que você está **desenvolvendo os tests** da issue
+   - Utilize **refactor** para informar que você está **refatorando o código**
+   - **todo** e **doing** são associados a issue **automaticamente pelo kanban do gitlab**
