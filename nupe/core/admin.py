@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from nupe.core.models import Cidade, Estado, Localizacao
+from nupe.core.models import City, Location, State
 
-localizacao = [Localizacao, Cidade, Estado]
+location = [City, State, Location]
 
-admin.site.register(localizacao)
+admin.site.register(location)

@@ -1,1 +1,1 @@
-from nupe.core.models.Localizacao import Cidade, Estado, Localizacao
+from nupe.core.models.Location import City, Location, State
