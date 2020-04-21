@@ -1,1 +1,1 @@
-from tests.models.Location import LocationTestCase
+from tests.models.Location import CityTestCase, LocationTestCase, StateTestCase
