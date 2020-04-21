@@ -27,8 +27,9 @@ Projeto desenvolvido por membros da **Fábrica de Software IFC - Araquari** para
  - O campo assignee não é obrigatório na criação, é utilizado para especificar um "**responsável**" para resolver a issue. Obs.: **Caso a issue que você for resolver não tiver um responsável, torne-se ele**
  - # Labels
 
-   - Utilize as labels para especificar se a issue deve ser feita no **backend** ou **frontend**
-   - Toda issue **deve conter** a label **implementation** para informar que a implementação dela está sendo feita
-   - Após implementar, adicione a label **test** para especificar que você está desenvolvendo os tests
-   - Ao finalizar a issue, ela **deve conter** as labels: **backend** ou **frontend**, **implementation**, **test**, e em alguns casos **refactor**,
-       caso seja necessário refatorar o código
+   - Utilizando as labels **backend** e **frontend**, **especifique** onde ela deve ser implementada
+   - Utilize **error** para informar que um erro **deve ser corrigido**
+   - Utilize **implementation** para informar que você está desenvolvendo a solução
+   - Utilize **test** para informar que você está desenvolvendo os tests da issue
+   - Utilize **refactor** para informar que você está refatorando o código
+   - **todo** e **doing** são associados a issue automaticamente pelo kanban do gitlab
