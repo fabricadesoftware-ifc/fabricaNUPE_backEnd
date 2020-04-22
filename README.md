@@ -52,4 +52,4 @@ Por isso, o nome da branch deve seguir a nomenclatura padrão do gitlab "**issue
 
 
 		Closes #1**
-	**Obs**: O checkbox para remover a branch após o merge deve ser mantido como **checked**
+	**Obs**.: O checkbox para remover a branch após o merge deve ser mantido como **checked**
