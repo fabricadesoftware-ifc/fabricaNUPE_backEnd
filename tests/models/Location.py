@@ -73,11 +73,11 @@ class LocationTestCase(TestCase):
         with self.assertRaises(ValueError):
             Location.objects.create(city="", state="")
 
-    def test_create_invalid_course_and_grade_instance(self):
+    def test_create_invalid_city_and_state_instance(self):
         with self.assertRaises(ValueError):
             Location.objects.create(city=1, state=1)
 
-    def test_create_invalid_course_and_grade_unique_together(self):
+    def test_create_invalid_city_and_state_unique_together(self):
         city = City.objects.create(name=city_name)
         state = State.objects.create(name=state_name)
 
