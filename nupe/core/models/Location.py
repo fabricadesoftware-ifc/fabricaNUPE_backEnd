@@ -1,8 +1,11 @@
 from django.db import models
 
+CITY_MAX_LENGTH = 50
+STATE_MAX_LENGTH = 50
+
 
 class City(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name="nome")
+    name = models.CharField(max_length=CITY_MAX_LENGTH, unique=True, verbose_name="nome")
 
     class Meta:
         verbose_name = "Cidade"
@@ -13,7 +16,7 @@ class City(models.Model):
 
 
 class State(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name="nome")
+    name = models.CharField(max_length=STATE_MAX_LENGTH, unique=True, verbose_name="nome")
     cities = models.ManyToManyField(
         City, related_name="states", related_query_name="state", through="Location", verbose_name="cidades"
     )

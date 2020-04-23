@@ -2,73 +2,85 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from django.test import TestCase
 
-from nupe.core.models import City, Location, State
+from nupe.core.models import City, Location, State, CITY_MAX_LENGTH, STATE_MAX_LENGTH
+
+city_name = "Joinville"
+state_name = "Santa Catarina"
 
 
 class CityTestCase(TestCase):
-    city = "Joinville"
+    def test_create_valid(self):
+        city = City.objects.create(name=city_name)
+        self.assertEqual(city.name, city_name)
 
-    def test_create_city_valid(self):
-        city = City.objects.create(name=self.city)
-        self.assertEqual(city.name, self.city)
-
-    def test_create_city_invalid(self):
-        # test max_length
+    def test_create_invalid_max_length(self):
         with self.assertRaises(ValidationError):
-            City.objects.create(name=self.city * 50).clean_fields()
+            City.objects.create(name=city_name * CITY_MAX_LENGTH).clean_fields()
 
-        # test unique name
+    def test_create_invalid_null(self):
         with self.assertRaises(IntegrityError):
-            City.objects.create(name=self.city)
-            City.objects.create(name=self.city)
+            City.objects.create(name=None)
+
+    def test_create_invalid_blank(self):
+        with self.assertRaises(ValidationError):
+            City.objects.create().clean_fields()
+
+    def test_create_invalid_unique_name(self):
+        with self.assertRaises(IntegrityError):
+            City.objects.create(name=city_name)
+            City.objects.create(name=city_name)
 
 
 class StateTestCase(TestCase):
-    state = "Santa Catarina"
+    def test_create_valid(self):
+        state = State.objects.create(name=state_name)
+        self.assertEqual(state.name, state_name)
 
-    def test_create_state_valid(self):
-        state = State.objects.create(name=self.state)
-        self.assertEqual(state.name, self.state)
-
-    def test_create_state_invalid(self):
-        # test max_length
+    def test_create_invalid_max_length(self):
         with self.assertRaises(ValidationError):
-            State.objects.create(name=self.state * 50).clean_fields()
+            State.objects.create(name=state_name * STATE_MAX_LENGTH).clean_fields()
 
-        # test unique name
+    def test_create_invalid_null(self):
         with self.assertRaises(IntegrityError):
-            State.objects.create(name=self.state)
-            State.objects.create(name=self.state)
+            State.objects.create(name=None)
+
+    def test_create_invalid_blank(self):
+        with self.assertRaises(ValidationError):
+            State.objects.create().clean_fields()
+
+    def test_create_invalid_unique_name(self):
+        with self.assertRaises(IntegrityError):
+            State.objects.create(name=state_name)
+            State.objects.create(name=state_name)
 
 
 class LocationTestCase(TestCase):
-    city = "Joinville"
-    state = "Santa Catarina"
-
-    def setUp(self):
-        City.objects.create(name=self.city)
-        State.objects.create(name=self.state)
-
-    def test_create_location_valid(self):
-        city = City.objects.get(name=self.city)
-        state = State.objects.get(name=self.state)
+    def test_create_valid(self):
+        city = City.objects.create(name=city_name)
+        state = State.objects.create(name=state_name)
 
         location = Location.objects.create(city=city, state=state)
 
-        self.assertEqual(location.city.name, self.city)
-        self.assertEqual(location.state.name, self.state)
+        self.assertEqual(location.city.name, city_name)
+        self.assertEqual(location.state.name, state_name)
         self.assertEqual(Location.objects.all().count(), 1)
 
-    def test_create_unique_together_location_invalid(self):
-        city = City.objects.get(name=self.city)
-        state = State.objects.get(name=self.state)
-
-        Location.objects.create(city=city, state=state)
-
-        # test unique together
+    def test_create_invalid_null(self):
         with self.assertRaises(IntegrityError):
-            Location.objects.create(city=city, state=state)
+            Location.objects.create()
 
-        # test instance
+    def test_create_invalid_blank(self):
+        with self.assertRaises(ValueError):
+            Location.objects.create(city="", state="")
+
+    def test_create_invalid_course_and_grade_instance(self):
         with self.assertRaises(ValueError):
             Location.objects.create(city=1, state=1)
+
+    def test_create_invalid_course_and_grade_unique_together(self):
+        city = City.objects.create(name=city_name)
+        state = State.objects.create(name=state_name)
+
+        with self.assertRaises(IntegrityError):
+            Location.objects.create(city=city, state=state)
+            Location.objects.create(city=city, state=state)
