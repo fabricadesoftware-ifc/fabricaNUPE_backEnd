@@ -18,8 +18,8 @@ class CityTestCase(TestCase):
             City.objects.create(name=self.city * 50).clean_fields()
 
         # test unique name
-        City.objects.create(name=self.city)
         with self.assertRaises(IntegrityError):
+            City.objects.create(name=self.city)
             City.objects.create(name=self.city)
 
 
@@ -36,8 +36,8 @@ class StateTestCase(TestCase):
             State.objects.create(name=self.state * 50).clean_fields()
 
         # test unique name
-        State.objects.create(name=self.state)
         with self.assertRaises(IntegrityError):
+            State.objects.create(name=self.state)
             State.objects.create(name=self.state)
 
 
