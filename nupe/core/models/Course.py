@@ -1,8 +1,11 @@
 from django.db import models
 
+COURSE_MAX_LENGTH = 50
+GRADE_MAX_LENGTH = 50
+
 
 class Course(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name="nome")
+    name = models.CharField(max_length=COURSE_MAX_LENGTH, unique=True, verbose_name="nome")
 
     class Meta:
         verbose_name = "Curso"
@@ -13,7 +16,7 @@ class Course(models.Model):
 
 
 class Grade(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name="nome")
+    name = models.CharField(max_length=GRADE_MAX_LENGTH, unique=True, verbose_name="nome")
     courses = models.ManyToManyField(
         Course, related_name="grades", related_query_name="grade", through="AcademicEducation", verbose_name="cursos"
     )
