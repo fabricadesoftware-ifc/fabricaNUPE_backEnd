@@ -57,9 +57,12 @@ class AcademicEducationTestCase(TestCase):
     def test_create_valid(self):
         course = Course.objects.create(name=course_name)
         grade = Grade.objects.create(name=grade_name)
+
         academic_education = AcademicEducation.objects.create(course=course, grade=grade)
+
         self.assertEqual(academic_education.course.name, course_name)
         self.assertEqual(academic_education.grade.name, grade_name)
+        self.assertEqual(AcademicEducation.objects.all().count(), 1)
 
     def test_create_invalid_null(self):
         with self.assertRaises(IntegrityError):
@@ -76,6 +79,7 @@ class AcademicEducationTestCase(TestCase):
     def test_create_invalid_course_and_grade_unique_together(self):
         course = Course.objects.create(name=course_name)
         grade = Grade.objects.create(name=grade_name)
+
         with self.assertRaises(IntegrityError):
             AcademicEducation.objects.create(course=course, grade=grade)
             AcademicEducation.objects.create(course=course, grade=grade)
