@@ -1,7 +1,8 @@
-from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
-from nupe.core.models import Course, Grade, AcademicEducation, COURSE_MAX_LENGTH, GRADE_MAX_LENGTH
+from django.test import TestCase
+
+from nupe.core.models import COURSE_MAX_LENGTH, GRADE_MAX_LENGTH, AcademicEducation, Course, Grade
 
 course_name = "Informática"
 grade_name = "Técnico"

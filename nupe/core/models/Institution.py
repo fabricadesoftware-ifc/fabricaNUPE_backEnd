@@ -1,5 +1,6 @@
 from django.db import models
-from nupe.core.models import Location, AcademicEducation
+
+from nupe.core.models import AcademicEducation, Location
 
 INSTITUTION_MAX_LENGTH = 50
 CAMPUS_MAX_LENGTH = 50
