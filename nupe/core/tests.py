@@ -1,8 +1,12 @@
 from tests.models import (
+    AcademicEducationCampusTestCase,
+    AcademicEducationTestCase,
+    CampusTestCase,
     CityTestCase,
-    LocationTestCase,
-    StateTestCase,
     CourseTestCase,
     GradeTestCase,
-    AcademicEducationTestCase,
+    InstitutionCampusTestCase,
+    InstitutionTestCase,
+    LocationTestCase,
+    StateTestCase,
 )

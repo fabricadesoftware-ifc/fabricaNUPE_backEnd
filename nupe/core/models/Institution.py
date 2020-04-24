@@ -37,13 +37,9 @@ class Campus(models.Model):
 
 class InstitutionCampus(models.Model):
     institution = models.ForeignKey(
-        Institution,
-        related_name="institution_campus",
-        on_delete=models.SET_NULL,
-        verbose_name="instituição",
-        null=True,
+        Institution, related_name="institution_campus", on_delete=models.PROTECT, verbose_name="instituição",
     )
-    campus = models.ForeignKey(Campus, related_name="institution_campus", on_delete=models.SET_NULL, null=True)
+    campus = models.ForeignKey(Campus, related_name="institution_campus", on_delete=models.PROTECT)
 
     class Meta:
         unique_together = ["institution", "campus"]
@@ -56,13 +52,9 @@ class InstitutionCampus(models.Model):
 
 class AcademicEducationCampus(models.Model):
     academic_education = models.ForeignKey(
-        AcademicEducation,
-        related_name="course_campus",
-        on_delete=models.SET_NULL,
-        verbose_name="formação acadêmica",
-        null=True,
+        AcademicEducation, related_name="course_campus", on_delete=models.PROTECT, verbose_name="formação acadêmica",
     )
-    campus = models.ForeignKey(Campus, related_name="course_campus", on_delete=models.SET_NULL, null=True)
+    campus = models.ForeignKey(Campus, related_name="course_campus", on_delete=models.PROTECT)
 
     class Meta:
         unique_together = ["campus", "academic_education"]
