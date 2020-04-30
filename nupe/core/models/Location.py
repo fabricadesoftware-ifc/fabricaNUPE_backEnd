@@ -14,6 +14,11 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+    def clean_fields(self, exclude=None):
+        if self.name is not None:
+            self.name = self.name.strip()
+        return super().clean_fields(exclude=exclude)
+
 
 class State(models.Model):
     name = models.CharField(max_length=STATE_MAX_LENGTH, unique=True, verbose_name="nome")
@@ -27,6 +32,11 @@ class State(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean_fields(self, exclude=None):
+        if self.name is not None:
+            self.name = self.name.strip()
+        return super().clean_fields(exclude=exclude)
 
 
 class Location(models.Model):
