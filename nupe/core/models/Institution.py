@@ -16,6 +16,11 @@ class Institution(models.Model):
     def __str__(self):
         return self.name
 
+    def clean_fields(self, exclude=None):
+        if self.name is not None:
+            self.name = self.name.strip()
+        return super().clean_fields(exclude=exclude)
+
 
 class Campus(models.Model):
     name = models.CharField(max_length=CAMPUS_MAX_LENGTH, unique=True, verbose_name="nome")
@@ -33,6 +38,11 @@ class Campus(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean_fields(self, exclude=None):
+        if self.name is not None:
+            self.name = self.name.strip()
+        return super().clean_fields(exclude=exclude)
 
 
 class InstitutionCampus(models.Model):

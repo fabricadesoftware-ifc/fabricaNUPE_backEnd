@@ -14,6 +14,11 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+    def clean_fields(self, exclude=None):
+        if self.name is not None:
+            self.name = self.name.strip()
+        super().clean_fields(exclude=exclude)
+
 
 class Grade(models.Model):
     name = models.CharField(max_length=GRADE_MAX_LENGTH, unique=True, verbose_name="nome")
@@ -27,6 +32,11 @@ class Grade(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean_fields(self, exclude=None):
+        if self.name is not None:
+            self.name = self.name.strip()
+        return super().clean_fields(exclude=exclude)
 
 
 class AcademicEducation(models.Model):
