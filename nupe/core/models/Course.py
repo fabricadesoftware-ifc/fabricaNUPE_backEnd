@@ -23,7 +23,7 @@ class Course(models.Model):
 class Grade(models.Model):
     name = models.CharField(max_length=GRADE_MAX_LENGTH, unique=True, verbose_name="nome")
     courses = models.ManyToManyField(
-        Course, related_name="grades", related_query_name="grade", through="AcademicEducation", verbose_name="cursos"
+        "Course", related_name="grades", related_query_name="grade", through="AcademicEducation", verbose_name="cursos"
     )
 
     class Meta:
@@ -41,14 +41,14 @@ class Grade(models.Model):
 
 class AcademicEducation(models.Model):
     course = models.ForeignKey(
-        Course,
+        "Course",
         related_name="academics_educations",
         related_query_name="academic_education",
         on_delete=models.PROTECT,
         verbose_name="curso",
     )
     grade = models.ForeignKey(
-        Grade,
+        "Grade",
         related_name="academics_educations",
         related_query_name="academic_education",
         on_delete=models.PROTECT,
