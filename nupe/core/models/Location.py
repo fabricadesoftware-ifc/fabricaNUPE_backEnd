@@ -23,7 +23,7 @@ class City(models.Model):
 class State(models.Model):
     name = models.CharField(max_length=STATE_MAX_LENGTH, unique=True, verbose_name="nome")
     cities = models.ManyToManyField(
-        City, related_name="states", related_query_name="state", through="Location", verbose_name="cidades"
+        "City", related_name="states", related_query_name="state", through="Location", verbose_name="cidades"
     )
 
     class Meta:
@@ -41,10 +41,18 @@ class State(models.Model):
 
 class Location(models.Model):
     city = models.ForeignKey(
-        City, related_name="locations", related_query_name="location", on_delete=models.PROTECT, verbose_name="cidade"
+        "City",
+        related_name="locations",
+        related_query_name="location",
+        on_delete=models.PROTECT,
+        verbose_name="cidade",
     )
     state = models.ForeignKey(
-        State, related_name="locations", related_query_name="location", on_delete=models.PROTECT, verbose_name="estado"
+        "State",
+        related_name="locations",
+        related_query_name="location",
+        on_delete=models.PROTECT,
+        verbose_name="estado",
     )
 
     class Meta:

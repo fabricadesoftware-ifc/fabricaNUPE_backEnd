@@ -8,5 +8,6 @@ from tests.models import (
     InstitutionCampusTestCase,
     InstitutionTestCase,
     LocationTestCase,
+    PersonTestCase,
     StateTestCase,
 )

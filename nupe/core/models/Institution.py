@@ -1,7 +1,5 @@
 from django.db import models
 
-from nupe.core.models import AcademicEducation, Location
-
 INSTITUTION_MAX_LENGTH = 50
 CAMPUS_MAX_LENGTH = 50
 
@@ -24,12 +22,17 @@ class Institution(models.Model):
 
 class Campus(models.Model):
     name = models.CharField(max_length=CAMPUS_MAX_LENGTH, unique=True, verbose_name="nome")
-    location = models.ForeignKey(Location, related_name="campus", on_delete=models.PROTECT, verbose_name="localização")
+    location = models.ForeignKey(
+        "Location", related_name="campus", on_delete=models.PROTECT, verbose_name="localização"
+    )
     institutions = models.ManyToManyField(
-        Institution, related_name="campus", through="InstitutionCampus", verbose_name="instituições"
+        "Institution", related_name="campus", through="InstitutionCampus", verbose_name="instituições"
     )
     academic_education = models.ManyToManyField(
-        AcademicEducation, related_name="campus", through="AcademicEducationCampus", verbose_name="formação acadêmica"
+        "AcademicEducation",
+        related_name="campus",
+        through="AcademicEducationCampus",
+        verbose_name="formação acadêmica",
     )
 
     class Meta:
@@ -47,9 +50,9 @@ class Campus(models.Model):
 
 class InstitutionCampus(models.Model):
     institution = models.ForeignKey(
-        Institution, related_name="institution_campus", on_delete=models.PROTECT, verbose_name="instituição",
+        "Institution", related_name="institution_campus", on_delete=models.PROTECT, verbose_name="instituição",
     )
-    campus = models.ForeignKey(Campus, related_name="institution_campus", on_delete=models.PROTECT)
+    campus = models.ForeignKey("Campus", related_name="institution_campus", on_delete=models.PROTECT)
 
     class Meta:
         unique_together = ["institution", "campus"]
@@ -62,9 +65,9 @@ class InstitutionCampus(models.Model):
 
 class AcademicEducationCampus(models.Model):
     academic_education = models.ForeignKey(
-        AcademicEducation, related_name="course_campus", on_delete=models.PROTECT, verbose_name="formação acadêmica",
+        "AcademicEducation", related_name="course_campus", on_delete=models.PROTECT, verbose_name="formação acadêmica",
     )
-    campus = models.ForeignKey(Campus, related_name="course_campus", on_delete=models.PROTECT)
+    campus = models.ForeignKey("Campus", related_name="course_campus", on_delete=models.PROTECT)
 
     class Meta:
         unique_together = ["campus", "academic_education"]
