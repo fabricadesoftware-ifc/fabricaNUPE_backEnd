@@ -12,7 +12,8 @@ class Person(models.Model):
 
     first_name = models.CharField(max_length=50, validators=[ONLY_LETTERS], verbose_name="nome")
     last_name = models.CharField(max_length=100, validators=[ONLY_LETTERS], verbose_name="sobrenome")
-    cpf = models.CharField(max_length=14, unique=True)
+    cpf = models.CharField(max_length=11, help_text="Somente números", unique=True)
+    rg = models.CharField(max_length=7, help_text="Somente números", validators=[ONLY_NUMBERS], unique=True)
     born_date = models.DateField(verbose_name="data de nascimento")
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     contact = models.CharField(
@@ -42,6 +43,8 @@ class Person(models.Model):
         return self.full_name
 
     def clean(self):
-        cpf = CPF()
-        if not cpf.validate(self.cpf):
-            raise ValidationError({"cpf": "cpf inválido"})
+        self.first_name = self.first_name.capitalize()
+        self.last_name = self.last_name.capitalize()
+
+        if self.cpf and not CPF().validate(self.cpf):
+            raise ValidationError({"cpf": "Este campo deve conter um CPF válido"})
