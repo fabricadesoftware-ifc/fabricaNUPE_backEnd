@@ -11,8 +11,10 @@ PERSON_RG_MAX_LENGTH = 7
 PERSON_GENDER_MAX_LENGTH = 1
 PERSON_CONTACT_MAX_LENGTH = 12
 GENDER_CHOICES = [("F", "Feminino"), ("M", "Masculino")]
+
 ONLY_NUMBERS = RegexValidator(r"^[0-9]*$", message="Este campo deve conter somente números")
 ONLY_LETTERS = RegexValidator(r"^[a-z A-Z]*$", message="Este campo deve conter somente letras")
+
 INVALID_CPF_MESSAGE = "Este campo deve conter um CPF válido"
 
 
