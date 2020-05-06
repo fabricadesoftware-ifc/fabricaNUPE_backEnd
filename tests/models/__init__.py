@@ -6,3 +6,4 @@ from tests.models.Institution import (
     InstitutionTestCase,
 )
 from tests.models.Location import CityTestCase, LocationTestCase, StateTestCase
+from tests.models.Person import PersonTestCase
