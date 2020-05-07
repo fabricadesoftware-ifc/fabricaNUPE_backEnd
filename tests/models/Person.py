@@ -5,16 +5,21 @@ from django.test import TestCase
 
 from nupe.core.models import (
     PERSON_CONTACT_MAX_LENGTH,
+    PERSON_CONTACT_MIN_LENGTH,
     PERSON_CPF_MAX_LENGTH,
+    PERSON_CPF_MIN_LENGTH,
     PERSON_FIRST_NAME_MAX_LENGTH,
     PERSON_GENDER_MAX_LENGTH,
     PERSON_LAST_NAME_MAX_LENGTH,
     PERSON_RG_MAX_LENGTH,
+    PERSON_RG_MIN_LENGTH,
     Person,
 )
 
-FIRST_NAME = "Luis"
-LAST_NAME = "Guerreiro"
+# dados válidos
+
+FIRST_NAME = "a"
+LAST_NAME = "b"
 CPF = "59886572060"
 RG = "1234567"
 DATE = {"date": "11/11/2011", "format": "%d/%m/%Y"}
@@ -27,6 +32,9 @@ FULL_NAME = "{} {}".format(FIRST_NAME, LAST_NAME)
 CPF_2 = "45820105044"
 RG_2 = "1234567"
 
+
+# dados inválidos
+
 INVALID_NAME = "jose43"
 INVALID_CPF = "11864707985"
 INVALID_RG = "abcdef@"
@@ -36,6 +44,10 @@ INVALID_NAME_2 = "jose@!"
 INVALID_CPF_2 = "118647079@l"
 INVALID_RG_2 = "123456l"
 INVALID_CONTACT_2 = "47-991682452"
+
+INVALID_CPF_LENGTH = "1" * (PERSON_CPF_MIN_LENGTH - 1)
+INVALID_RG_LENGTH = "2" * (PERSON_RG_MIN_LENGTH - 1)
+INVALID_CONTACT_LENGTH = "9" * (PERSON_CONTACT_MIN_LENGTH - 1)
 
 
 class PersonTestCase(TestCase):
@@ -49,10 +61,10 @@ class PersonTestCase(TestCase):
         self.assertEqual(Person.objects.all().count(), 1)
         self.assertEqual(person.full_clean(), None)
 
-    def test_invalid_max_length(self):
+    def test_create_invalid_max_length(self):
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME * PERSON_FIRST_NAME_MAX_LENGTH,
+                first_name=FIRST_NAME * (PERSON_FIRST_NAME_MAX_LENGTH + 1),
                 last_name=LAST_NAME,
                 cpf=CPF,
                 rg=RG,
@@ -64,7 +76,7 @@ class PersonTestCase(TestCase):
         with self.assertRaises(ValidationError):
             Person(
                 first_name=FIRST_NAME,
-                last_name=LAST_NAME * PERSON_LAST_NAME_MAX_LENGTH,
+                last_name=LAST_NAME * (PERSON_LAST_NAME_MAX_LENGTH + 1),
                 cpf=CPF,
                 rg=RG,
                 gender=GENDER,
@@ -76,7 +88,7 @@ class PersonTestCase(TestCase):
             Person(
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME,
-                cpf=CPF * PERSON_CPF_MAX_LENGTH,
+                cpf=CPF * (PERSON_CPF_MAX_LENGTH + 1),
                 rg=RG,
                 gender=GENDER,
                 contact=CONTACT,
@@ -88,7 +100,7 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME,
                 cpf=CPF,
-                rg=RG * PERSON_RG_MAX_LENGTH,
+                rg=RG * (PERSON_RG_MAX_LENGTH + 1),
                 gender=GENDER,
                 contact=CONTACT,
                 born_date=BORN_DATE,
@@ -112,7 +124,41 @@ class PersonTestCase(TestCase):
                 cpf=CPF,
                 rg=RG,
                 gender=GENDER,
-                contact=CONTACT * PERSON_CONTACT_MAX_LENGTH,
+                contact=CONTACT * (PERSON_CONTACT_MAX_LENGTH + 1),
+                born_date=BORN_DATE,
+            ).clean_fields()
+
+    def test_create_invalid_min_length(self):
+        with self.assertRaises(ValidationError):
+            Person(
+                first_name=FIRST_NAME,
+                last_name=LAST_NAME,
+                cpf=INVALID_CPF_LENGTH,
+                rg=RG,
+                gender=GENDER,
+                contact=CONTACT,
+                born_date=BORN_DATE,
+            ).clean_fields()
+
+        with self.assertRaises(ValidationError):
+            Person(
+                first_name=FIRST_NAME,
+                last_name=LAST_NAME,
+                cpf=CPF,
+                rg=INVALID_RG_LENGTH,
+                gender=GENDER,
+                contact=CONTACT,
+                born_date=BORN_DATE,
+            ).clean_fields()
+
+        with self.assertRaises(ValidationError):
+            Person(
+                first_name=FIRST_NAME,
+                last_name=LAST_NAME,
+                cpf=CPF,
+                rg=RG,
+                gender=GENDER,
+                contact=INVALID_CONTACT_LENGTH,
                 born_date=BORN_DATE,
             ).clean_fields()
 
@@ -246,7 +292,7 @@ class PersonTestCase(TestCase):
                 born_date=BORN_DATE,
             ).validate_unique()
 
-    def test_invalid_regex(self):
+    def test_create_invalid_regex(self):
         # first_name deve conter somente letras e espaço
         with self.assertRaises(ValidationError):
             Person(

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "oauth2_provider",
     "nupe.core",
 ]
 
@@ -90,6 +91,18 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ("oauth2_provider.contrib.rest_framework.OAuth2Authentication",),
+    "DEFAULT_PERMISSION_CLASSES": ("drf_action_permissions.DjangoActionPermissions",),
+}
+
+ACCESS_TOKEN_EXPIRE_SECONDS = 604800
+REFRESH_TOKEN_EXPIRE_SECONDS = 86400
+
+OAUTH2_PROVIDER = {
+    "ACCESS_TOKEN_EXPIRE_SECONDS": ACCESS_TOKEN_EXPIRE_SECONDS,
+    "REFRESH_TOKEN_EXPIRE_SECONDS": REFRESH_TOKEN_EXPIRE_SECONDS,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

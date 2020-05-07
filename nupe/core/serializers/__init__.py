@@ -1,0 +1,1 @@
+from nupe.core.serializers.Person import PersonCreateSerializer, PersonDetailSerializer, PersonListSerializer

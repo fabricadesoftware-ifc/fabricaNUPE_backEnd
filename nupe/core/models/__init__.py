@@ -10,10 +10,14 @@ from nupe.core.models.Institution import (
 from nupe.core.models.Location import CITY_MAX_LENGTH, STATE_MAX_LENGTH, City, Location, State
 from nupe.core.models.Person import (
     PERSON_CONTACT_MAX_LENGTH,
+    PERSON_CONTACT_MIN_LENGTH,
     PERSON_CPF_MAX_LENGTH,
+    PERSON_CPF_MIN_LENGTH,
     PERSON_FIRST_NAME_MAX_LENGTH,
     PERSON_GENDER_MAX_LENGTH,
+    PERSON_INVALID_CPF_MESSAGE,
     PERSON_LAST_NAME_MAX_LENGTH,
     PERSON_RG_MAX_LENGTH,
+    PERSON_RG_MIN_LENGTH,
     Person,
 )
