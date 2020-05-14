@@ -1,0 +1,1 @@
+from nupe.core.exceptions.ActionHasNoSerializer import ActionHasNoSerializer

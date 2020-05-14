@@ -1,3 +1,4 @@
+from tests.endpoints import PersonAPITestCase
 from tests.models import (
     AcademicEducationCampusTestCase,
     AcademicEducationTestCase,

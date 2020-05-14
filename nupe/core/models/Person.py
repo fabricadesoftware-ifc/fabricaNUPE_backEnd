@@ -1,21 +1,23 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django.utils import timezone
 from validate_docbr import CPF
 
+from nupe.core.utils.Regex import ONLY_LETTERS, ONLY_NUMBERS
+
 PERSON_FIRST_NAME_MAX_LENGTH = 50
 PERSON_LAST_NAME_MAX_LENGTH = 100
-PERSON_CPF_MAX_LENGTH = 11
-PERSON_RG_MAX_LENGTH = 7
+PERSON_CPF_MIN_LENGTH = PERSON_CPF_MAX_LENGTH = 11
+PERSON_RG_MIN_LENGTH = PERSON_RG_MAX_LENGTH = 7
 PERSON_GENDER_MAX_LENGTH = 1
-PERSON_CONTACT_MAX_LENGTH = 12
+PERSON_CONTACT_MIN_LENGTH = PERSON_CONTACT_MAX_LENGTH = 12
 GENDER_CHOICES = [("F", "Feminino"), ("M", "Masculino")]
 
-ONLY_NUMBERS = RegexValidator(r"^[0-9]*$", message="Este campo deve conter somente números")
-ONLY_LETTERS = RegexValidator(r"^[a-z A-Z]*$", message="Este campo deve conter somente letras")
+ONLY_NUMBERS = RegexValidator(ONLY_NUMBERS, message="Este campo deve conter somente números")
+ONLY_LETTERS = RegexValidator(ONLY_LETTERS, message="Este campo deve conter somente letras")
 
-INVALID_CPF_MESSAGE = "Este campo deve conter um CPF válido"
+PERSON_INVALID_CPF_MESSAGE = "Este campo deve conter um CPF válido"
 
 
 class Person(models.Model):
@@ -25,15 +27,23 @@ class Person(models.Model):
     last_name = models.CharField(
         max_length=PERSON_LAST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS], verbose_name="sobrenome"
     )
-    cpf = models.CharField(max_length=PERSON_CPF_MAX_LENGTH, help_text="Somente números", unique=True)
+    cpf = models.CharField(
+        max_length=PERSON_CPF_MAX_LENGTH,
+        validators=[MinLengthValidator(PERSON_CPF_MIN_LENGTH)],
+        help_text="Somente números",
+        unique=True,
+    )
     rg = models.CharField(
-        max_length=PERSON_RG_MAX_LENGTH, help_text="Somente números", validators=[ONLY_NUMBERS], unique=True
+        max_length=PERSON_RG_MAX_LENGTH,
+        validators=[ONLY_NUMBERS, MinLengthValidator(PERSON_RG_MIN_LENGTH)],
+        help_text="Somente números",
+        unique=True,
     )
     born_date = models.DateField(verbose_name="data de nascimento")
     gender = models.CharField(max_length=PERSON_GENDER_MAX_LENGTH, choices=GENDER_CHOICES)
     contact = models.CharField(
         max_length=PERSON_CONTACT_MAX_LENGTH,
-        validators=[ONLY_NUMBERS],
+        validators=[ONLY_NUMBERS, MinLengthValidator(PERSON_CONTACT_MIN_LENGTH)],
         verbose_name="contato",
         help_text="DDD + número",
         null=True,
@@ -71,4 +81,4 @@ class Person(models.Model):
         self.last_name = self.last_name.capitalize()
 
         if self.cpf and not CPF().validate(self.cpf):
-            raise ValidationError({"cpf": INVALID_CPF_MESSAGE})
+            raise ValidationError({"cpf": PERSON_INVALID_CPF_MESSAGE})

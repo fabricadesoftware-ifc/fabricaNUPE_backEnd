@@ -1,9 +1,9 @@
-from tests.models.Course import AcademicEducationTestCase, CourseTestCase, GradeTestCase
-from tests.models.Institution import (
+from .Course import AcademicEducationTestCase, CourseTestCase, GradeTestCase
+from .Institution import (
     AcademicEducationCampusTestCase,
     CampusTestCase,
     InstitutionCampusTestCase,
     InstitutionTestCase,
 )
-from tests.models.Location import CityTestCase, LocationTestCase, StateTestCase
-from tests.models.Person import PersonTestCase
+from .Location import CityTestCase, LocationTestCase, StateTestCase
+from .Person import PersonTestCase
