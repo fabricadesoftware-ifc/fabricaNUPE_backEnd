@@ -1,3 +1,4 @@
+
 # NuPe
 Projeto desenvolvido por membros da **Fábrica de Software IFC - Araquari** para melhorar o fluxo de atendimento da equipe do **Núcleo Pedagógico**.
 # Membros
@@ -52,4 +53,9 @@ Por isso, o nome da branch deve seguir a nomenclatura padrão do gitlab "**issue
 
 		Closes #1**
 	**Obs**.: O checkbox para remover a branch após o merge deve ser mantido como **checked**
+
+# Boas práticas Python
+A parte do backend do  projeto **deve** seguir as orientações estabelecidas pela regulamentação do pep8.
+
+O desenvolvimento do backend **está** e **deverá continuar** seguindo conforme o artigo https://realpython.com/python-pep8/
 
