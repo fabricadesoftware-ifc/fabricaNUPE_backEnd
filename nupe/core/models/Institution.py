@@ -5,74 +5,59 @@ CAMPUS_MAX_LENGTH = 50
 
 
 class Institution(models.Model):
-    name = models.CharField(max_length=INSTITUTION_MAX_LENGTH, unique=True, verbose_name="nome")
-
-    class Meta:
-        verbose_name = "Instituição"
-        verbose_name_plural = "Instituições"
+    name = models.CharField(max_length=INSTITUTION_MAX_LENGTH, unique=True)
 
     def __str__(self):
         return self.name
 
     def clean_fields(self, exclude=None):
-        if self.name is not None:
+        if self.name:
             self.name = self.name.strip()
+
         return super().clean_fields(exclude=exclude)
+
+    def clean(self):
+        self.name = self.name.capitalize()
 
 
 class Campus(models.Model):
-    name = models.CharField(max_length=CAMPUS_MAX_LENGTH, unique=True, verbose_name="nome")
-    location = models.ForeignKey(
-        "Location", related_name="campus", on_delete=models.PROTECT, verbose_name="localização"
-    )
-    institutions = models.ManyToManyField(
-        "Institution", related_name="campus", through="InstitutionCampus", verbose_name="instituições"
-    )
+    name = models.CharField(max_length=CAMPUS_MAX_LENGTH, unique=True)
+    location = models.ForeignKey("Location", related_name="campus", on_delete=models.PROTECT)
+    institutions = models.ManyToManyField("Institution", related_name="campus", through="InstitutionCampus")
     academic_education = models.ManyToManyField(
-        "AcademicEducation",
-        related_name="campus",
-        through="AcademicEducationCampus",
-        verbose_name="formação acadêmica",
+        "AcademicEducation", related_name="campus", through="AcademicEducationCampus",
     )
-
-    class Meta:
-        verbose_name = "Campus"
-        verbose_name_plural = "Campus"
 
     def __str__(self):
         return self.name
 
     def clean_fields(self, exclude=None):
-        if self.name is not None:
+        if self.name:
             self.name = self.name.strip()
+
         return super().clean_fields(exclude=exclude)
+
+    def clean(self):
+        self.name = self.name.capitalize()
 
 
 class InstitutionCampus(models.Model):
-    institution = models.ForeignKey(
-        "Institution", related_name="institution_campus", on_delete=models.PROTECT, verbose_name="instituição",
-    )
+    institution = models.ForeignKey("Institution", related_name="institution_campus", on_delete=models.PROTECT)
     campus = models.ForeignKey("Campus", related_name="institution_campus", on_delete=models.PROTECT)
 
     class Meta:
         unique_together = ["institution", "campus"]
-        verbose_name = "Instituição - Campus"
-        verbose_name_plural = "Instituições do Campus"
 
     def __str__(self):
-        return "{} - {}".format(self.institution, self.campus)
+        return f"{self.institution} - {self.campus}"
 
 
 class AcademicEducationCampus(models.Model):
-    academic_education = models.ForeignKey(
-        "AcademicEducation", related_name="course_campus", on_delete=models.PROTECT, verbose_name="formação acadêmica",
-    )
+    academic_education = models.ForeignKey("AcademicEducation", related_name="course_campus", on_delete=models.PROTECT)
     campus = models.ForeignKey("Campus", related_name="course_campus", on_delete=models.PROTECT)
 
     class Meta:
         unique_together = ["campus", "academic_education"]
-        verbose_name = "Formação Acadêmica - Campus"
-        verbose_name_plural = "Formações Acadêmica do Campus"
 
     def __str__(self):
-        return "Formação {} ofertada pelo Campus {}".format(self.academic_education, self.campus)
+        return f"Formação {self.academic_education} ofertada pelo Campus {self.campus}"

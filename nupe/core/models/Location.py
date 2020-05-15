@@ -5,60 +5,48 @@ STATE_MAX_LENGTH = 50
 
 
 class City(models.Model):
-    name = models.CharField(max_length=CITY_MAX_LENGTH, unique=True, verbose_name="nome")
-
-    class Meta:
-        verbose_name = "Cidade"
-        verbose_name_plural = "Cidades"
+    name = models.CharField(max_length=CITY_MAX_LENGTH, unique=True)
 
     def __str__(self):
         return self.name
 
     def clean_fields(self, exclude=None):
-        if self.name is not None:
+        if self.name:
             self.name = self.name.strip()
+
         return super().clean_fields(exclude=exclude)
+
+    def clean(self):
+        self.name = self.name.capitalize()
 
 
 class State(models.Model):
-    name = models.CharField(max_length=STATE_MAX_LENGTH, unique=True, verbose_name="nome")
-    cities = models.ManyToManyField(
-        "City", related_name="states", related_query_name="state", through="Location", verbose_name="cidades"
-    )
-
-    class Meta:
-        verbose_name = "Estado"
-        verbose_name_plural = "Estados"
+    name = models.CharField(max_length=STATE_MAX_LENGTH, unique=True)
+    cities = models.ManyToManyField("City", related_name="states", related_query_name="state", through="Location")
 
     def __str__(self):
         return self.name
 
     def clean_fields(self, exclude=None):
-        if self.name is not None:
+        if self.name:
             self.name = self.name.strip()
+
         return super().clean_fields(exclude=exclude)
+
+    def clean(self):
+        self.name = self.name.capitalize()
 
 
 class Location(models.Model):
     city = models.ForeignKey(
-        "City",
-        related_name="locations",
-        related_query_name="location",
-        on_delete=models.PROTECT,
-        verbose_name="cidade",
+        "City", related_name="locations", related_query_name="location", on_delete=models.PROTECT,
     )
     state = models.ForeignKey(
-        "State",
-        related_name="locations",
-        related_query_name="location",
-        on_delete=models.PROTECT,
-        verbose_name="estado",
+        "State", related_name="locations", related_query_name="location", on_delete=models.PROTECT,
     )
 
     class Meta:
         unique_together = ["city", "state"]
-        verbose_name = "Localização"
-        verbose_name_plural = "Localizações"
 
     def __str__(self):
-        return "{} - {}".format(self.city, self.state)
+        return f"{self.city} - {self.state}"

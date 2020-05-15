@@ -19,7 +19,7 @@ class PersonDetailSerializer(ModelSerializer):
             "last_name",
             "cpf",
             "rg",
-            "born_date",
+            "birthday_date",
             "gender",
             "contact",
         ]
@@ -28,7 +28,7 @@ class PersonDetailSerializer(ModelSerializer):
 class PersonCreateSerializer(ModelSerializer):
     class Meta:
         model = Person
-        fields = ["first_name", "last_name", "cpf", "rg", "born_date", "gender", "contact"]
+        fields = ["first_name", "last_name", "cpf", "rg", "birthday_date", "gender", "contact"]
 
     def validate_cpf(self, cpf):
         if not CPF().validate(cpf):

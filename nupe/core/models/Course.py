@@ -5,38 +5,38 @@ GRADE_MAX_LENGTH = 50
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=COURSE_MAX_LENGTH, unique=True, verbose_name="nome")
-
-    class Meta:
-        verbose_name = "Curso"
-        verbose_name_plural = "Cursos"
+    name = models.CharField(max_length=COURSE_MAX_LENGTH, unique=True)
 
     def __str__(self):
         return self.name
 
     def clean_fields(self, exclude=None):
-        if self.name is not None:
+        if self.name:
             self.name = self.name.strip()
+
         super().clean_fields(exclude=exclude)
+
+    def clean(self):
+        self.name = self.name.capitalize()
 
 
 class Grade(models.Model):
-    name = models.CharField(max_length=GRADE_MAX_LENGTH, unique=True, verbose_name="nome")
+    name = models.CharField(max_length=GRADE_MAX_LENGTH, unique=True)
     courses = models.ManyToManyField(
-        "Course", related_name="grades", related_query_name="grade", through="AcademicEducation", verbose_name="cursos"
+        "Course", related_name="grades", related_query_name="grade", through="AcademicEducation"
     )
-
-    class Meta:
-        verbose_name = "Grau"
-        verbose_name_plural = "Graus"
 
     def __str__(self):
         return self.name
 
     def clean_fields(self, exclude=None):
-        if self.name is not None:
+        if self.name:
             self.name = self.name.strip()
+
         return super().clean_fields(exclude=exclude)
+
+    def clean(self):
+        self.name = self.name.capitalize()
 
 
 class AcademicEducation(models.Model):
@@ -45,20 +45,16 @@ class AcademicEducation(models.Model):
         related_name="academics_educations",
         related_query_name="academic_education",
         on_delete=models.PROTECT,
-        verbose_name="curso",
     )
     grade = models.ForeignKey(
         "Grade",
         related_name="academics_educations",
         related_query_name="academic_education",
         on_delete=models.PROTECT,
-        verbose_name="grau",
     )
 
     class Meta:
         unique_together = ["grade", "course"]
-        verbose_name = "Formação Acadêmica"
-        verbose_name_plural = "Formações Acadêmicas"
 
     def __str__(self):
-        return "{} em {}".format(self.grade, self.course)
+        return f"{self.grade} em {self.course}"
