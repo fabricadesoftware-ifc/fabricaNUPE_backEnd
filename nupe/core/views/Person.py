@@ -22,7 +22,9 @@ class PersonViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, Update
     }
 
     def get_serializer_class(self):
-        serializer = self.per_action_serializer.get(self.action, None)
+        serializer = self.per_action_serializer.get(self.action)
+
         if serializer is None:
             raise ActionHasNoSerializer
+
         return serializer

@@ -26,30 +26,36 @@ class InstitutionTestCase(TestCase):
     def test_create_valid(self):
         institution = Institution.objects.create(name=INSTITUTION_NAME)
 
-        self.assertNotEqual(institution.id, None)
-        self.assertEqual(institution.name, INSTITUTION_NAME)
-        self.assertEqual(Institution.objects.all().count(), 1)
-        self.assertEqual(institution.full_clean(), None)
+        self.assertNotEqual(institution.id, None)  # o objeto criado deve conter um id
+        self.assertEqual(institution.name, INSTITUTION_NAME)  # o objeto criado deve conter o nome fornecido
+        self.assertEqual(Institution.objects.all().count(), 1)  # o objeto deve ser criado no banco de dados
+        self.assertEqual(institution.full_clean(), None)  # o objeto não deve conter erros de validação
 
     def test_create_invalid_max_length(self):
+        # passar do limite de caracteres deve emitir erro de validação
         with self.assertRaises(ValidationError):
             Institution(name=INSTITUTION_NAME * INSTITUTION_MAX_LENGTH).clean_fields()
 
     def test_create_invalid_null(self):
+        # deve emitir erro de que o campo não pode ser nulo
         with self.assertRaises(ValidationError):
             Institution(name=None).clean_fields()
 
     def test_create_invalid_blank(self):
+        # deve emitir erro de que o campo é obrigatório
         with self.assertRaises(ValidationError):
             Institution().clean_fields()
 
+        # deve emitir erro de que o campo não pode ser em branco
         with self.assertRaises(ValidationError):
             Institution(name="").clean_fields()
 
+        # deve emitir erro de que o campo não pode ser em branco porque espaços são ignorados
         with self.assertRaises(ValidationError):
             Institution(name=" ").clean_fields()
 
     def test_create_invalid_unique_name(self):
+        # deve emitir erro porque só pode conter um único objeto com o mesmo nome
         with self.assertRaises(ValidationError):
             Institution.objects.create(name=INSTITUTION_NAME)
             Institution(name=INSTITUTION_NAME).validate_unique()
@@ -57,6 +63,7 @@ class InstitutionTestCase(TestCase):
 
 class CampusTestCase(TestCase):
     def setUp(self):
+        # cria no banco de dados de test antes de executar os tests
         city = City.objects.create(name=CITY_NAME)
         state = State.objects.create(name=STATE_NAME)
         Location.objects.create(city=city, state=state)
@@ -134,6 +141,8 @@ class InstitutionCampusTestCase(TestCase):
             InstitutionCampus(campus=None).clean_fields()
 
     def test_create_invalid_course_and_grade_instance(self):
+        # deve emitir um erro porque deve ser fornecido uma instancia de objeto do respectivo field
+
         with self.assertRaises(ValueError):
             InstitutionCampus(institution="").clean_fields()
 
@@ -150,6 +159,7 @@ class InstitutionCampusTestCase(TestCase):
         institution = Institution.objects.all().first()
         campus = Campus.objects.all().first()
 
+        # deve emitir um erro porque só pode exitir um objeto com o mesmo instituto e campus
         with self.assertRaises(ValidationError):
             InstitutionCampus.objects.create(institution=institution, campus=campus)
             InstitutionCampus(institution=institution, campus=campus).validate_unique()

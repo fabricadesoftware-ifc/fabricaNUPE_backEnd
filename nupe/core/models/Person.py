@@ -4,65 +4,53 @@ from django.db import models
 from django.utils import timezone
 from validate_docbr import CPF
 
-from nupe.core.utils.Regex import ONLY_LETTERS, ONLY_NUMBERS
+from nupe.core.utils.Regex import ONLY_LETTERS_AND_SPACE, ONLY_NUMBERS
 
 PERSON_FIRST_NAME_MAX_LENGTH = 50
 PERSON_LAST_NAME_MAX_LENGTH = 100
+
 PERSON_CPF_MIN_LENGTH = PERSON_CPF_MAX_LENGTH = 11
 PERSON_RG_MIN_LENGTH = PERSON_RG_MAX_LENGTH = 7
+
 PERSON_GENDER_MAX_LENGTH = 1
 PERSON_CONTACT_MIN_LENGTH = PERSON_CONTACT_MAX_LENGTH = 12
 GENDER_CHOICES = [("F", "Feminino"), ("M", "Masculino")]
 
 ONLY_NUMBERS = RegexValidator(ONLY_NUMBERS, message="Este campo deve conter somente números")
-ONLY_LETTERS = RegexValidator(ONLY_LETTERS, message="Este campo deve conter somente letras")
+ONLY_LETTERS_AND_SPACE = RegexValidator(ONLY_LETTERS_AND_SPACE, message="Este campo deve conter somente letras")
 
 PERSON_INVALID_CPF_MESSAGE = "Este campo deve conter um CPF válido"
 
 
 class Person(models.Model):
-    first_name = models.CharField(
-        max_length=PERSON_FIRST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS], verbose_name="nome"
-    )
-    last_name = models.CharField(
-        max_length=PERSON_LAST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS], verbose_name="sobrenome"
-    )
+    first_name = models.CharField(max_length=PERSON_FIRST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS_AND_SPACE])
+    last_name = models.CharField(max_length=PERSON_LAST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS_AND_SPACE])
     cpf = models.CharField(
-        max_length=PERSON_CPF_MAX_LENGTH,
-        validators=[MinLengthValidator(PERSON_CPF_MIN_LENGTH)],
-        help_text="Somente números",
-        unique=True,
+        max_length=PERSON_CPF_MAX_LENGTH, validators=[MinLengthValidator(PERSON_CPF_MIN_LENGTH)], unique=True,
     )
     rg = models.CharField(
         max_length=PERSON_RG_MAX_LENGTH,
         validators=[ONLY_NUMBERS, MinLengthValidator(PERSON_RG_MIN_LENGTH)],
-        help_text="Somente números",
         unique=True,
     )
-    born_date = models.DateField(verbose_name="data de nascimento")
+    birthday_date = models.DateField()
     gender = models.CharField(max_length=PERSON_GENDER_MAX_LENGTH, choices=GENDER_CHOICES)
     contact = models.CharField(
         max_length=PERSON_CONTACT_MAX_LENGTH,
         validators=[ONLY_NUMBERS, MinLengthValidator(PERSON_CONTACT_MIN_LENGTH)],
-        verbose_name="contato",
-        help_text="DDD + número",
         null=True,
         blank=True,
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="criado em")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="atualizado em", null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Pessoa"
-        verbose_name_plural = "Pessoas"
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     @property
-    def full_name(self):
-        return "{} {}".format(self.first_name, self.last_name)
+    def full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}"
 
     @property
-    def age(self):
-        return timezone.now().year - self.born_date.year
+    def age(self) -> int:
+        return timezone.now().year - self.birthday_date.year
 
     def __str__(self):
         return self.full_name

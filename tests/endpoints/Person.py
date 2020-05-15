@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
 
-from .setup import BORN_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG
+from .setup import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG
 from .setup import SetupPerson as setup_person
 from .setup import SetupUser as setup_user
 
@@ -49,7 +49,7 @@ class PersonAPITestCase(APITestCase):
             "cpf": CPF,
             "rg": RG,
             "gender": GENDER,
-            "born_date": BORN_DATE,
+            "birthday_date": BIRTHDAY_DATE,
         }
 
         client = self.client
@@ -73,7 +73,7 @@ class PersonAPITestCase(APITestCase):
             "cpf": CPF,
             "rg": RG,
             "gender": GENDER,
-            "born_date": BORN_DATE,
+            "birthday_date": BIRTHDAY_DATE,
         }
 
         client = self.client

@@ -11,30 +11,36 @@ class CourseTestCase(TestCase):
     def test_create_valid(self):
         course = Course.objects.create(name=COURSE_NAME)
 
-        self.assertNotEqual(course.id, None)
-        self.assertEqual(course.name, COURSE_NAME)
-        self.assertEqual(Course.objects.all().count(), 1)
-        self.assertEqual(course.full_clean(), None)
+        self.assertNotEqual(course.id, None)  # o objeto criado deve conter um id
+        self.assertEqual(course.name, COURSE_NAME)  # o objeto criado deve conter o nome fornecido
+        self.assertEqual(Course.objects.all().count(), 1)  # o objeto deve ser criado no banco de dados
+        self.assertEqual(course.full_clean(), None)  # o objeto não deve conter erros de validação
 
     def test_create_invalid_max_length(self):
+        # passar do limite de caracteres deve emitir erro de validação
         with self.assertRaises(ValidationError):
             Course(name=COURSE_NAME * COURSE_MAX_LENGTH).clean_fields()
 
     def test_create_invalid_null(self):
+        # deve emitir erro de que o campo não pode ser nulo
         with self.assertRaises(ValidationError):
             Course(name=None).clean_fields()
 
     def test_create_invalid_blank(self):
+        # deve emitir erro de que o campo é obrigatório
         with self.assertRaises(ValidationError):
             Course().clean_fields()
 
+        # deve emitir erro de que o campo não pode ser em branco
         with self.assertRaises(ValidationError):
             Course(name="").clean_fields()
 
+        # deve emitir erro de que o campo não pode ser em branco porque espaços são ignorados
         with self.assertRaises(ValidationError):
             Course(name=" ").clean_fields()
 
     def test_create_invalid_unique_name(self):
+        # deve emitir erro porque só pode conter um único objeto com o mesmo nome
         with self.assertRaises(ValidationError):
             Course.objects.create(name=COURSE_NAME)
             Course(name=COURSE_NAME).validate_unique()
@@ -75,6 +81,7 @@ class GradeTestCase(TestCase):
 
 class AcademicEducationTestCase(TestCase):
     def setUp(self):
+        # cria no banco de dados de test antes de executar os tests
         Course.objects.create(name=COURSE_NAME)
         Grade.objects.create(name=GRADE_NAME)
 
@@ -98,6 +105,8 @@ class AcademicEducationTestCase(TestCase):
             AcademicEducation(grade=None).clean_fields()
 
     def test_create_invalid_course_and_grade_instance(self):
+        # deve emitir um erro porque deve ser fornecido uma instancia de objeto do respectivo field
+
         with self.assertRaises(ValueError):
             AcademicEducation(course="").clean_fields()
 
@@ -114,6 +123,7 @@ class AcademicEducationTestCase(TestCase):
         course = Course.objects.all().first()
         grade = Grade.objects.all().first()
 
+        # deve emitir um erro porque só pode exitir um objeto com o mesmo curso e grau
         with self.assertRaises(ValidationError):
             AcademicEducation.objects.create(course=course, grade=grade)
             AcademicEducation(course=course, grade=grade).validate_unique()
