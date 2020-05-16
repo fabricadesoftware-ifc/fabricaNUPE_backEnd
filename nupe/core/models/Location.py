@@ -1,10 +1,12 @@
 from django.db import models
+from safedelete.models import NO_DELETE, SafeDeleteModel
 
 CITY_MAX_LENGTH = 50
 STATE_MAX_LENGTH = 50
 
 
-class City(models.Model):
+class City(SafeDeleteModel):
+    _safedelete_policy = NO_DELETE
     name = models.CharField(max_length=CITY_MAX_LENGTH, unique=True)
 
     def __str__(self):
@@ -20,7 +22,8 @@ class City(models.Model):
         self.name = self.name.capitalize()
 
 
-class State(models.Model):
+class State(SafeDeleteModel):
+    _safedelete_policy = NO_DELETE
     name = models.CharField(max_length=STATE_MAX_LENGTH, unique=True)
     cities = models.ManyToManyField("City", related_name="states", related_query_name="state", through="Location")
 
@@ -37,7 +40,8 @@ class State(models.Model):
         self.name = self.name.capitalize()
 
 
-class Location(models.Model):
+class Location(SafeDeleteModel):
+    _safedelete_policy = NO_DELETE
     city = models.ForeignKey(
         "City", related_name="locations", related_query_name="location", on_delete=models.PROTECT,
     )

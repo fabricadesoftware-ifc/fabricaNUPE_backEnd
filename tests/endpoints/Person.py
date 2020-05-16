@@ -4,18 +4,16 @@ from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
 
-from .setup import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG
-from .setup import SetupPerson as setup_person
-from .setup import SetupUser as setup_user
+from .setup import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG, create_person, create_user_with_permissions
 
 
 class PersonAPITestCase(APITestCase):
     def test_list_person_with_permission(self):
-        setup_person.create_person()  # cria uma pessoa no banco para retornar no list
+        create_person()  # cria uma pessoa no banco para retornar no list
 
         client = self.client  # instancia de APIClient
 
-        user = setup_user.create_user_with_permissions(username="teste", permissions=["core.view_person"])
+        user = create_user_with_permissions(username="teste", permissions=["core.view_person"])
 
         url = reverse("person-list")
         client.force_authenticate(user=user)
@@ -27,10 +25,10 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(len(response.data), Person.objects.all().count())
 
     def test_retrieve_person_with_permission(self):
-        person = setup_person.create_person()  # cria uma pessoa no banco para detalhar suas informações
+        person = create_person()  # cria uma pessoa no banco para detalhar suas informações
 
         client = self.client
-        user = setup_user.create_user_with_permissions(username="teste", permissions=["core.view_person"])
+        user = create_user_with_permissions(username="teste", permissions=["core.view_person"])
 
         url = reverse("person-detail", args=[person.id])
         client.force_authenticate(user=user)
@@ -53,7 +51,7 @@ class PersonAPITestCase(APITestCase):
         }
 
         client = self.client
-        user = setup_user.create_user_with_permissions(username="teste", permissions=["core.add_person"])
+        user = create_user_with_permissions(username="teste", permissions=["core.add_person"])
 
         url = reverse("person-list")
         client.force_authenticate(user=user)
@@ -64,7 +62,7 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(Person.objects.all().count(), 1)  # verifica se foi criado no banco de dados
 
     def test_update_person_with_permission(self):
-        person = setup_person.create_person()  # cria uma pessoa no banco para poder atualizar suas informações
+        person = create_person()  # cria uma pessoa no banco para poder atualizar suas informações
 
         # informações válidas para conseguir atualizar
         person_update = {
@@ -77,7 +75,7 @@ class PersonAPITestCase(APITestCase):
         }
 
         client = self.client
-        user = setup_user.create_user_with_permissions(username="teste", permissions=["core.change_person"])
+        user = create_user_with_permissions(username="teste", permissions=["core.change_person"])
 
         url = reverse("person-detail", args=[person.id])
         client.force_authenticate(user=user)
@@ -90,7 +88,7 @@ class PersonAPITestCase(APITestCase):
 
     def test_list_person_without_permission(self):
         client = self.client
-        user = setup_user.create_user_with_permissions(username="teste", permissions=[])
+        user = create_user_with_permissions(username="teste", permissions=[])
 
         url = reverse("person-list")
         client.force_authenticate(user=user)
@@ -99,10 +97,10 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)  # não deve ter permissão para acessar
 
     def test_retrieve_person_without_permission(self):
-        person = setup_person.create_person()
+        person = create_person()
 
         client = self.client
-        user = setup_user.create_user_with_permissions(username="teste", permissions=[])
+        user = create_user_with_permissions(username="teste", permissions=[])
 
         url = reverse("person-detail", args=[person.id])
         client.force_authenticate(user=user)
@@ -112,7 +110,7 @@ class PersonAPITestCase(APITestCase):
 
     def test_create_person_without_permission(self):
         client = self.client
-        user = setup_user.create_user_with_permissions(username="teste", permissions=[])
+        user = create_user_with_permissions(username="teste", permissions=[])
 
         url = reverse("person-list")
         client.force_authenticate(user=user)
@@ -121,10 +119,10 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)  # não deve ter permissão para acessar
 
     def test_update_person_without_permission(self):
-        person = setup_person.create_person()
+        person = create_person()
 
         client = self.client
-        user = setup_user.create_user_with_permissions(username="teste", permissions=[])
+        user = create_user_with_permissions(username="teste", permissions=[])
 
         url = reverse("person-detail", args=[person.id])
         client.force_authenticate(user=user)
@@ -134,7 +132,7 @@ class PersonAPITestCase(APITestCase):
 
     def test_retrieve_id_not_found(self):
         client = self.client
-        user = setup_user.create_user_with_permissions(username="teste", permissions=["core.view_person"])
+        user = create_user_with_permissions(username="teste", permissions=["core.view_person"])
 
         url = reverse("person-detail", args=[99])  # qualquer id, o banco de dados para test é vazio
         client.force_authenticate(user=user)
@@ -144,7 +142,7 @@ class PersonAPITestCase(APITestCase):
 
     def test_update_id_not_found(self):
         client = self.client
-        user = setup_user.create_user_with_permissions(username="teste", permissions=["core.change_person"])
+        user = create_user_with_permissions(username="teste", permissions=["core.change_person"])
 
         url = reverse("person-detail", args=[99])
         client.force_authenticate(user=user)

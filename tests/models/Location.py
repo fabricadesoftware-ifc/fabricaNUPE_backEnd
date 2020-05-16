@@ -45,6 +45,21 @@ class CityTestCase(TestCase):
             City.objects.create(name=CITY_NAME)
             City(name=CITY_NAME).validate_unique()
 
+    def test_no_delete(self):
+        city = City.objects.create(name=CITY_NAME)
+        state = State.objects.create(name=STATE_NAME)
+
+        # a relação entre os objetos deve ser criada
+        state.cities.add(city)
+        self.assertEqual(state.cities.all().count(), 1)
+
+        city.delete()
+        # o objeto não deve ser mascarado e nem excluído do banco de dados
+        self.assertEqual(City.objects.all().count(), 1)
+
+        # a relação deve permanecer
+        self.assertEqual(state.cities.all().count(), 1)
+
 
 class StateTestCase(TestCase):
     def test_create_valid(self):
@@ -77,6 +92,17 @@ class StateTestCase(TestCase):
         with self.assertRaises(ValidationError):
             State.objects.create(name=STATE_NAME)
             State(name=STATE_NAME).validate_unique()
+
+    def test_no_delete(self):
+        state = State.objects.create(name=STATE_NAME)
+        city = City.objects.create(name=CITY_NAME)
+
+        city.states.add(state)
+        self.assertEqual(city.states.all().count(), 1)
+
+        state.delete()
+        self.assertEqual(State.objects.all().count(), 1)
+        self.assertEqual(city.states.all().count(), 1)
 
 
 class LocationTestCase(TestCase):
@@ -127,3 +153,12 @@ class LocationTestCase(TestCase):
         with self.assertRaises(ValidationError):
             Location.objects.create(city=city, state=state)
             Location(city=city, state=state).validate_unique()
+
+    def test_no_delete(self):
+        state = State.objects.get(name=STATE_NAME)
+        city = City.objects.get(name=CITY_NAME)
+
+        location = Location.objects.create(city=city, state=state)
+
+        location.delete()
+        self.assertEqual(Location.objects.all().count(), 1)
