@@ -1,10 +1,12 @@
 from django.db import models
+from safedelete.models import NO_DELETE, SafeDeleteModel
 
 INSTITUTION_MAX_LENGTH = 50
 CAMPUS_MAX_LENGTH = 50
 
 
-class Institution(models.Model):
+class Institution(SafeDeleteModel):
+    _safedelete_policy = NO_DELETE
     name = models.CharField(max_length=INSTITUTION_MAX_LENGTH, unique=True)
 
     def __str__(self):
@@ -20,7 +22,8 @@ class Institution(models.Model):
         self.name = self.name.capitalize()
 
 
-class Campus(models.Model):
+class Campus(SafeDeleteModel):
+    _safedelete_policy = NO_DELETE
     name = models.CharField(max_length=CAMPUS_MAX_LENGTH, unique=True)
     location = models.ForeignKey("Location", related_name="campus", on_delete=models.PROTECT)
     institutions = models.ManyToManyField("Institution", related_name="campus", through="InstitutionCampus")
@@ -41,7 +44,8 @@ class Campus(models.Model):
         self.name = self.name.capitalize()
 
 
-class InstitutionCampus(models.Model):
+class InstitutionCampus(SafeDeleteModel):
+    _safedelete_policy = NO_DELETE
     institution = models.ForeignKey("Institution", related_name="institution_campus", on_delete=models.PROTECT)
     campus = models.ForeignKey("Campus", related_name="institution_campus", on_delete=models.PROTECT)
 
@@ -52,8 +56,8 @@ class InstitutionCampus(models.Model):
         return f"{self.institution} - {self.campus}"
 
 
-class AcademicEducationCampus(models.Model):
-    academic_education = models.ForeignKey("AcademicEducation", related_name="course_campus", on_delete=models.PROTECT)
+class AcademicEducationCampus(SafeDeleteModel):
+    academic_education = models.ForeignKey("AcademicEducation", related_name="course_campus", on_delete=models.CASCADE)
     campus = models.ForeignKey("Campus", related_name="course_campus", on_delete=models.PROTECT)
 
     class Meta:

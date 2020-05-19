@@ -45,6 +45,37 @@ class CourseTestCase(TestCase):
             Course.objects.create(name=COURSE_NAME)
             Course(name=COURSE_NAME).validate_unique()
 
+    def test_soft_delete_cascade(self):
+        course = Course.objects.create(name=COURSE_NAME)
+        grade = Grade.objects.create(name=GRADE_NAME)
+
+        # a relação entre os objetos deve ser criada
+        grade.courses.add(course)
+        self.assertEqual(grade.courses.all().count(), 1)
+
+        course.delete()
+        # o objeto deve ser mascarado
+        self.assertEqual(Course.objects.all().count(), 0)
+
+        # mas deve ser mantido no banco de dados
+        self.assertEqual(Course.all_objects.all().count(), 1)
+
+        # o soft delete cascade deve ser aplicado
+        self.assertEqual(grade.courses.all().count(), 0)
+
+    def test_undelete(self):
+        course = Course.objects.create(name=COURSE_NAME)
+        grade = Grade.objects.create(name=GRADE_NAME)
+
+        grade.courses.add(course)
+
+        course.delete()
+
+        course.undelete()
+        # o objeto deve ser desmascarado
+        self.assertEqual(Course.objects.all().count(), 1)
+        self.assertEqual(grade.courses.all().count(), 1)
+
 
 class GradeTestCase(TestCase):
     def test_create_valid(self):
@@ -78,6 +109,30 @@ class GradeTestCase(TestCase):
             Grade.objects.create(name=GRADE_NAME)
             Grade(name=GRADE_NAME).validate_unique()
 
+    def test_soft_delete_cascade(self):
+        grade = Grade.objects.create(name=GRADE_NAME)
+        course = Course.objects.create(name=COURSE_NAME)
+
+        course.grades.add(grade)
+        self.assertEqual(course.grades.all().count(), 1)
+
+        grade.delete()
+        self.assertEqual(Grade.objects.all().count(), 0)
+        self.assertEqual(Grade.all_objects.all().count(), 1)
+        self.assertEqual(course.grades.all().count(), 0)
+
+    def test_undelete(self):
+        grade = Grade.objects.create(name=GRADE_NAME)
+        course = Course.objects.create(name=COURSE_NAME)
+
+        course.grades.add(grade)
+
+        grade.delete()
+
+        grade.undelete()
+        self.assertEqual(Grade.objects.all().count(), 1)
+        self.assertEqual(course.grades.all().count(), 1)
+
 
 class AcademicEducationTestCase(TestCase):
     def setUp(self):
@@ -86,8 +141,8 @@ class AcademicEducationTestCase(TestCase):
         Grade.objects.create(name=GRADE_NAME)
 
     def test_create_valid(self):
-        course = Course.objects.all().first()
-        grade = Grade.objects.all().first()
+        course = Course.objects.get(name=COURSE_NAME)
+        grade = Grade.objects.get(name=GRADE_NAME)
 
         academic_education = AcademicEducation.objects.create(course=course, grade=grade)
 
@@ -120,10 +175,44 @@ class AcademicEducationTestCase(TestCase):
             AcademicEducation(grade=1).clean_fields()
 
     def test_create_invalid_course_and_grade_unique_together(self):
-        course = Course.objects.all().first()
-        grade = Grade.objects.all().first()
+        course = Course.objects.get(name=COURSE_NAME)
+        grade = Grade.objects.get(name=GRADE_NAME)
 
         # deve emitir um erro porque só pode exitir um objeto com o mesmo curso e grau
         with self.assertRaises(ValidationError):
             AcademicEducation.objects.create(course=course, grade=grade)
             AcademicEducation(course=course, grade=grade).validate_unique()
+
+    def test_soft_delete_cascade(self):
+        grade = Grade.objects.get(name=GRADE_NAME)
+        course = Course.objects.get(name=COURSE_NAME)
+
+        academic_education = AcademicEducation.objects.create(course=course, grade=grade)
+
+        academic_education.delete()
+        self.assertEqual(AcademicEducation.objects.all().count(), 0)
+        self.assertEqual(AcademicEducation.all_objects.all().count(), 1)
+
+    def test_undelete(self):
+        grade = Grade.objects.get(name=GRADE_NAME)
+        course = Course.objects.get(name=COURSE_NAME)
+
+        academic_education = AcademicEducation.objects.create(course=course, grade=grade)
+
+        academic_education.delete()
+        self.assertEqual(AcademicEducation.objects.all().count(), 0)
+
+        academic_education.undelete()
+        self.assertEqual(AcademicEducation.objects.all().count(), 1)
+
+        grade.delete()
+        self.assertEqual(AcademicEducation.objects.all().count(), 0)
+
+        grade.undelete()
+        self.assertEqual(AcademicEducation.objects.all().count(), 1)
+
+        course.delete()
+        self.assertEqual(AcademicEducation.objects.all().count(), 0)
+
+        course.undelete()
+        self.assertEqual(AcademicEducation.objects.all().count(), 1)

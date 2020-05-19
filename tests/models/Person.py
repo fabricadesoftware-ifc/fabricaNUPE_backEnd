@@ -431,3 +431,26 @@ class PersonTestCase(TestCase):
         self.assertNotEqual(person.full_name, None)  # deve retornar uma string com o nome e o sobrenome juntos
         self.assertEqual(person.age, AGE)  # a idade deve estar correta
         self.assertEqual(person.full_name, FULL_NAME)  # o nome completo deve ser a junção do nome com o sobrenome
+
+    def test_soft_delete(self):
+        person = Person.objects.create(
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, birthday_date=BIRTHDAY_DATE, gender=GENDER,
+        )
+
+        person.delete()
+        # o objeto deve ser mascarado
+        self.assertEqual(Person.objects.all().count(), 0)
+
+        # mas deve ser mantido no banco de dados
+        self.assertEqual(Person.all_objects.all().count(), 1)
+
+    def test_undelete(self):
+        person = Person.objects.create(
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, birthday_date=BIRTHDAY_DATE, gender=GENDER,
+        )
+
+        person.delete()
+
+        person.undelete()
+        # o objeto deve ser desmascarado
+        self.assertEqual(Person.objects.all().count(), 1)

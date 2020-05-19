@@ -60,6 +60,24 @@ class InstitutionTestCase(TestCase):
             Institution.objects.create(name=INSTITUTION_NAME)
             Institution(name=INSTITUTION_NAME).validate_unique()
 
+    def test_no_delete(self):
+        city = City.objects.create(name=CITY_NAME)
+        state = State.objects.create(name=STATE_NAME)
+        location = Location.objects.create(city=city, state=state)
+
+        institution = Institution.objects.create(name=INSTITUTION_NAME)
+        campus = Campus.objects.create(name=CAMPUS_NAME, location=location)
+
+        # a relação entre os objetos deve ser criada
+        campus.institutions.add(institution)
+
+        institution.delete()
+        # o objeto não deve ser mascarado e nem excluído do banco de dados
+        self.assertEqual(Institution.objects.all().count(), 1)
+
+        # a relação deve permanecer
+        self.assertEqual(campus.institutions.all().count(), 1)
+
 
 class CampusTestCase(TestCase):
     def setUp(self):
@@ -69,7 +87,7 @@ class CampusTestCase(TestCase):
         Location.objects.create(city=city, state=state)
 
     def test_create_valid(self):
-        location = Location.objects.all().first()
+        location = Location.objects.get(city__name=CITY_NAME, state__name=STATE_NAME)
 
         campus = Campus.objects.create(name=CAMPUS_NAME, location=location)
 
@@ -80,7 +98,7 @@ class CampusTestCase(TestCase):
         self.assertEqual(campus.full_clean(), None)
 
     def test_create_invalid_max_length(self):
-        location = Location.objects.all().first()
+        location = Location.objects.get(city__name=CITY_NAME, state__name=STATE_NAME)
 
         with self.assertRaises(ValidationError):
             Campus(name=CAMPUS_NAME * CAMPUS_MAX_LENGTH, location=location).clean_fields()
@@ -93,7 +111,7 @@ class CampusTestCase(TestCase):
             Campus(location=None).clean_fields()
 
     def test_create_invalid_blank(self):
-        location = Location.objects.all().first()
+        location = Location.objects.get(city__name=CITY_NAME, state__name=STATE_NAME)
 
         with self.assertRaises(ValidationError):
             Campus().clean_fields()
@@ -105,11 +123,23 @@ class CampusTestCase(TestCase):
             Campus(location=location, name=" ").clean_fields()
 
     def test_create_invalid_unique_name(self):
-        location = Location.objects.all().first()
+        location = Location.objects.get(city__name=CITY_NAME, state__name=STATE_NAME)
 
         with self.assertRaises(ValidationError):
             Campus.objects.create(name=CAMPUS_NAME, location=location)
             Campus(name=CAMPUS_NAME, location=location).validate_unique()
+
+    def test_no_delete(self):
+        location = Location.objects.get(city__name=CITY_NAME, state__name=STATE_NAME)
+
+        campus = Campus.objects.create(name=CAMPUS_NAME, location=location)
+        institution = Institution.objects.create(name=INSTITUTION_NAME)
+
+        institution.campus.add(campus)
+
+        campus.delete()
+        self.assertEqual(Campus.objects.all().count(), 1)
+        self.assertEqual(institution.campus.all().count(), 1)
 
 
 class InstitutionCampusTestCase(TestCase):
@@ -122,8 +152,8 @@ class InstitutionCampusTestCase(TestCase):
         Campus.objects.create(name=CAMPUS_NAME, location=location)
 
     def test_create_valid(self):
-        institution = Institution.objects.all().first()
-        campus = Campus.objects.all().first()
+        institution = Institution.objects.get(name=INSTITUTION_NAME)
+        campus = Campus.objects.get(name=CAMPUS_NAME)
 
         institution_campus = InstitutionCampus.objects.create(institution=institution, campus=campus)
 
@@ -156,13 +186,22 @@ class InstitutionCampusTestCase(TestCase):
             InstitutionCampus(campus=1).clean_fields()
 
     def test_create_invalid_course_and_grade_unique_together(self):
-        institution = Institution.objects.all().first()
-        campus = Campus.objects.all().first()
+        institution = Institution.objects.get(name=INSTITUTION_NAME)
+        campus = Campus.objects.get(name=CAMPUS_NAME)
 
         # deve emitir um erro porque só pode exitir um objeto com o mesmo instituto e campus
         with self.assertRaises(ValidationError):
             InstitutionCampus.objects.create(institution=institution, campus=campus)
             InstitutionCampus(institution=institution, campus=campus).validate_unique()
+
+    def test_no_delete(self):
+        campus = Campus.objects.get(name=CAMPUS_NAME)
+        institution = Institution.objects.get(name=INSTITUTION_NAME)
+
+        institution_campus = InstitutionCampus.objects.create(institution=institution, campus=campus)
+
+        institution_campus.delete()
+        self.assertEqual(InstitutionCampus.objects.all().count(), 1)
 
 
 class AcademicEducationCampusTestCase(TestCase):
@@ -178,8 +217,8 @@ class AcademicEducationCampusTestCase(TestCase):
         Campus.objects.create(name=CAMPUS_NAME, location=location)
 
     def test_create_valid(self):
-        campus = Campus.objects.all().first()
-        academic_education = AcademicEducation.objects.all().first()
+        campus = Campus.objects.get(name=CAMPUS_NAME)
+        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
 
         academic_education_campus = AcademicEducationCampus.objects.create(
             academic_education=academic_education, campus=campus
@@ -212,9 +251,58 @@ class AcademicEducationCampusTestCase(TestCase):
             AcademicEducationCampus(campus=1).clean_fields()
 
     def test_create_invalid_course_and_grade_unique_together(self):
-        academic_education = AcademicEducation.objects.all().first()
-        campus = Campus.objects.all().first()
+        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
+        campus = Campus.objects.get(name=CAMPUS_NAME)
 
         with self.assertRaises(ValidationError):
             AcademicEducationCampus.objects.create(academic_education=academic_education, campus=campus)
             AcademicEducationCampus(academic_education=academic_education, campus=campus).validate_unique()
+
+    def test_no_delete(self):
+        campus = Campus.objects.get(name=CAMPUS_NAME)
+        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
+
+        academic_education_campus = AcademicEducationCampus.objects.create(
+            academic_education=academic_education, campus=campus
+        )
+        self.assertEqual(AcademicEducationCampus.objects.all().count(), 1)
+
+        campus.delete()
+        self.assertEqual(AcademicEducationCampus.objects.all().count(), 1)
+
+        academic_education.delete()
+        # a model AcademicEducation tem a policy definida como soft_delete_cascade, por isso, deve ser mascarado
+        self.assertEqual(AcademicEducationCampus.objects.all().count(), 0)
+
+        # mas deve ser mantido no banco de dados
+        self.assertEqual(AcademicEducationCampus.all_objects.all().count(), 1)
+
+        academic_education.undelete()  # restaura o dado para testar novamente
+
+        academic_education_campus.delete()
+        # como a model não tem especificação da policy, o default é soft delete, por isso, deve ser mascarado
+        self.assertEqual(AcademicEducationCampus.objects.all().count(), 0)
+
+        # mas deve ser mantido no banco de dados
+        self.assertEqual(AcademicEducationCampus.all_objects.all().count(), 1)
+
+    def test_undelete(self):
+        campus = Campus.objects.get(name=CAMPUS_NAME)
+        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
+
+        academic_education_campus = AcademicEducationCampus.objects.create(
+            academic_education=academic_education, campus=campus
+        )
+
+        academic_education.delete()
+        self.assertEqual(AcademicEducationCampus.objects.all().count(), 0)
+
+        academic_education.undelete()
+        # o objeto deve ser desmascarado
+        self.assertEqual(AcademicEducationCampus.objects.all().count(), 1)
+
+        academic_education_campus.delete()
+        self.assertEqual(AcademicEducationCampus.objects.all().count(), 0)
+
+        academic_education_campus.undelete()
+        self.assertEqual(AcademicEducationCampus.objects.all().count(), 1)

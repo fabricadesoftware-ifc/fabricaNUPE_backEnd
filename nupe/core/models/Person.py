@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django.utils import timezone
+from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 from validate_docbr import CPF
 
 from nupe.core.utils.Regex import ONLY_LETTERS_AND_SPACE, ONLY_NUMBERS
@@ -22,7 +23,8 @@ ONLY_LETTERS_AND_SPACE = RegexValidator(ONLY_LETTERS_AND_SPACE, message="Este ca
 PERSON_INVALID_CPF_MESSAGE = "Este campo deve conter um CPF válido"
 
 
-class Person(models.Model):
+class Person(SafeDeleteModel):
+    _safedelete_policy = SOFT_DELETE_CASCADE
     first_name = models.CharField(max_length=PERSON_FIRST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS_AND_SPACE])
     last_name = models.CharField(max_length=PERSON_LAST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS_AND_SPACE])
     cpf = models.CharField(

@@ -123,6 +123,17 @@ requests = ">=2.13.0"
 
 [[package]]
 category = "main"
+description = "Mask your objects instead of deleting them from your database."
+name = "django-safedelete"
+optional = false
+python-versions = "*"
+version = "0.5.5"
+
+[package.dependencies]
+Django = "*"
+
+[[package]]
+category = "main"
 description = "Web APIs for Django, made easy."
 name = "djangorestframework"
 optional = false
@@ -468,7 +479,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "63f44e0323f237b7b097ae7626c297c62fe955b946141aa50817ec93106b0376"
+content-hash = "63e3b66c0be6c8d9139320909e049af706980f7e5fc20e5220eda6860b201702"
 python-versions = "^3.6.1"
 
 [metadata.files]
@@ -514,6 +525,9 @@ django = [
 django-oauth-toolkit = [
     {file = "django-oauth-toolkit-1.3.2.tar.gz", hash = "sha256:28508f83385ab4313936ddedfb310eaa8a1dcb737153d2956383ce47e75c2fab"},
     {file = "django_oauth_toolkit-1.3.2-py2.py3-none-any.whl", hash = "sha256:d5a1044af9419ddc048390c5974777ea97874e5b78e33c609e17eebb8423afb2"},
+]
+django-safedelete = [
+    {file = "django-safedelete-0.5.5.tar.gz", hash = "sha256:2239969bda19df5e8507b753722523b6531faa12fe83f64478c4f3c4485faa5c"},
 ]
 djangorestframework = [
     {file = "djangorestframework-3.11.0-py3-none-any.whl", hash = "sha256:05809fc66e1c997fd9a32ea5730d9f4ba28b109b9da71fccfa5ff241201fd0a4"},
