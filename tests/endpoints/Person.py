@@ -3,8 +3,16 @@ from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_403_FORBID
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
-
-from .setup import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG, create_person, create_user_with_permissions
+from tests.endpoints.setup import (
+    BIRTHDAY_DATE,
+    CPF,
+    FIRST_NAME,
+    GENDER,
+    LAST_NAME,
+    RG,
+    create_person,
+    create_user_with_permissions,
+)
 
 
 class PersonAPITestCase(APITestCase):
