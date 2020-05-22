@@ -3,8 +3,16 @@ from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_403_FORBID
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
-
-from .setup import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG, create_person, create_user_with_permissions
+from tests.endpoints.setup import (
+    BIRTHDAY_DATE,
+    CPF,
+    FIRST_NAME,
+    GENDER,
+    LAST_NAME,
+    RG,
+    create_person,
+    create_user_with_permissions,
+)
 
 
 class PersonAPITestCase(APITestCase):
@@ -14,10 +22,10 @@ class PersonAPITestCase(APITestCase):
         client = self.client  # instancia de APIClient
 
         user = create_user_with_permissions(username="teste", permissions=["core.view_person"])
+        client.force_authenticate(user=user)
 
         url = reverse("person-list")
-        client.force_authenticate(user=user)
-        response = client.get(url)
+        response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
@@ -28,11 +36,12 @@ class PersonAPITestCase(APITestCase):
         person = create_person()  # cria uma pessoa no banco para detalhar suas informações
 
         client = self.client
+
         user = create_user_with_permissions(username="teste", permissions=["core.view_person"])
+        client.force_authenticate(user=user)
 
         url = reverse("person-detail", args=[person.id])
-        client.force_authenticate(user=user)
-        response = client.get(url)
+        response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
@@ -51,15 +60,16 @@ class PersonAPITestCase(APITestCase):
         }
 
         client = self.client
+
         user = create_user_with_permissions(username="teste", permissions=["core.add_person"])
+        client.force_authenticate(user=user)
 
         url = reverse("person-list")
-        client.force_authenticate(user=user)
-        response = client.post(url, person)
+        response = client.post(path=url, data=person)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
         self.assertEqual(response.data.get("cpf"), person.get("cpf"))
-        self.assertEqual(Person.objects.all().count(), 1)  # verifica se foi criado no banco de dados
+        self.assertEqual(Person.objects.all().count(), 1)  # deve ser criado no banco de dados
 
     def test_update_person_with_permission(self):
         person = create_person()  # cria uma pessoa no banco para poder atualizar suas informações
@@ -75,11 +85,12 @@ class PersonAPITestCase(APITestCase):
         }
 
         client = self.client
+
         user = create_user_with_permissions(username="teste", permissions=["core.change_person"])
+        client.force_authenticate(user=user)
 
         url = reverse("person-detail", args=[person.id])
-        client.force_authenticate(user=user)
-        response = client.put(url, person_update)
+        response = client.put(path=url, data=person_update)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
@@ -88,64 +99,66 @@ class PersonAPITestCase(APITestCase):
 
     def test_list_person_without_permission(self):
         client = self.client
+
         user = create_user_with_permissions(username="teste", permissions=[])
+        client.force_authenticate(user=user)
 
         url = reverse("person-list")
-        client.force_authenticate(user=user)
-        response = client.get(url)
+        response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)  # não deve ter permissão para acessar
 
     def test_retrieve_person_without_permission(self):
-        person = create_person()
-
         client = self.client
+
         user = create_user_with_permissions(username="teste", permissions=[])
-
-        url = reverse("person-detail", args=[person.id])
         client.force_authenticate(user=user)
-        response = client.get(url)
 
-        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)  # não deve ter permissão para acessar
+        url = reverse("person-detail", args=[1])
+        response = client.get(path=url)
+
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_create_person_without_permission(self):
         client = self.client
+
         user = create_user_with_permissions(username="teste", permissions=[])
+        client.force_authenticate(user=user)
 
         url = reverse("person-list")
-        client.force_authenticate(user=user)
-        response = client.post(url)
+        response = client.post(path=url)
 
-        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)  # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_update_person_without_permission(self):
-        person = create_person()
-
         client = self.client
+
         user = create_user_with_permissions(username="teste", permissions=[])
-
-        url = reverse("person-detail", args=[person.id])
         client.force_authenticate(user=user)
-        response = client.put(url)
 
-        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)  # não deve ter permissão para acessar
+        url = reverse("person-detail", args=[1])
+        response = client.put(path=url)
+
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_id_not_found(self):
         client = self.client
+
         user = create_user_with_permissions(username="teste", permissions=["core.view_person"])
+        client.force_authenticate(user=user)
 
         url = reverse("person-detail", args=[99])  # qualquer id, o banco de dados para test é vazio
-        client.force_authenticate(user=user)
-        response = client.get(url)
+        response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe
 
     def test_update_id_not_found(self):
         client = self.client
+
         user = create_user_with_permissions(username="teste", permissions=["core.change_person"])
+        client.force_authenticate(user=user)
 
         url = reverse("person-detail", args=[99])
-        client.force_authenticate(user=user)
-        response = client.put(url)
+        response = client.put(path=url)
 
-        self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe
+        self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)

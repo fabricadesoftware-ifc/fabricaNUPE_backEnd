@@ -1,6 +1,7 @@
 # Bolsista Luis Carvalho
 
 import os
+from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -73,8 +74,8 @@ REST_FRAMEWORK = {
 
 
 OAUTH2_PROVIDER = {
-    "ACCESS_TOKEN_EXPIRE_SECONDS": 604800,
-    "REFRESH_TOKEN_EXPIRE_SECONDS": 86400,
+    "ACCESS_TOKEN_EXPIRE_SECONDS": timedelta(hours=4).seconds,
+    "REFRESH_TOKEN_EXPIRE_SECONDS": timedelta(hours=8).seconds,
 }
 
 

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Permission, User
 
 
-def create_user_with_permissions(*, username, permissions) -> User:
+def create_user_with_permissions(*, username: str, permissions: list) -> User:
     user = User.objects.create_user(username=username, password=username)
 
     for permission in permissions:
