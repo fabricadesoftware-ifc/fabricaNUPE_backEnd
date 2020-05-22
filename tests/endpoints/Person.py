@@ -1,5 +1,11 @@
 from django.urls import reverse
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_403_FORBIDDEN,
+    HTTP_404_NOT_FOUND,
+)
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
@@ -97,6 +103,24 @@ class PersonAPITestCase(APITestCase):
         # verifica se atualizou no banco de dados
         self.assertEqual(Person.objects.get(id=person.id).first_name, person_update.get("first_name"))
 
+    def test_delete_person_with_permission(self):
+        person = create_person()  # cria uma pessoa no banco para poder excluir
+
+        client = self.client
+
+        user = create_user_with_permissions(username="teste", permissions=["core.delete_person"])
+        client.force_authenticate(user=user)
+
+        url = reverse("person-detail", args=[person.id])
+        response = client.delete(path=url)
+
+        # o dado deve ser mascarado
+        self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
+        self.assertEqual(Person.objects.all().count(), 0)
+
+        # mas deve ser mantido no banco de dados
+        self.assertEqual(Person.all_objects.all().count(), 1)
+
     def test_list_person_without_permission(self):
         client = self.client
 
@@ -141,6 +165,17 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
+    def test_delete_person_without_permission(self):
+        client = self.client
+
+        user = create_user_with_permissions(username="teste", permissions=[])
+        client.force_authenticate(user=user)
+
+        url = reverse("person-detail", args=[1])
+        response = client.delete(path=url)
+
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
     def test_retrieve_id_not_found(self):
         client = self.client
 
@@ -160,5 +195,16 @@ class PersonAPITestCase(APITestCase):
 
         url = reverse("person-detail", args=[99])
         response = client.put(path=url)
+
+        self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
+
+    def test_delete_id_not_found(self):
+        client = self.client
+
+        user = create_user_with_permissions(username="teste", permissions=["core.delete_person"])
+        client.force_authenticate(user=user)
+
+        url = reverse("person-detail", args=[99])
+        response = client.delete(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
