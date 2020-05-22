@@ -10,10 +10,10 @@ def get_access_token(*, authorization: str, client: APIClient, username: str, pa
     data = {"username": username, "password": password, "grant_type": "password"}
     url = reverse("oauth2_provider:token")
 
-    return client.post(url, data)
+    return client.post(path=url, data=data)
 
 
-def create_authorization_token(*, client_id: str, client_secret: str) -> str:
+def create_basic_authorization(*, client_id: str, client_secret: str) -> str:
     # por padrão o token é criado em base64 a partir da string '<client_id>:<client_secret>'
     string = f"{client_id}:{client_secret}"
     token = base64.b64encode(string.encode())

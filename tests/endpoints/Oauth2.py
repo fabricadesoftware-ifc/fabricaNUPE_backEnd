@@ -6,7 +6,7 @@ from rest_framework.test import APITestCase
 
 from tests.endpoints.setup import (
     create_application,
-    create_authorization_token,
+    create_basic_authorization,
     create_user_with_permissions,
     get_access_token,
 )
@@ -26,7 +26,7 @@ class Oauth2APITestCase(APITestCase):
     def test_get_access_token(self):
         client = self.client  # instância de APIClient
 
-        basic_authorization = create_authorization_token(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
+        basic_authorization = create_basic_authorization(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 
         # retorna um objeto HttpResponse
         response = get_access_token(
@@ -42,7 +42,7 @@ class Oauth2APITestCase(APITestCase):
     def test_refresh_token(self):
         client = self.client
 
-        basic_authorization = create_authorization_token(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
+        basic_authorization = create_basic_authorization(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 
         # necessário para obter o refresh token para enviar na requisição
         response = get_access_token(
@@ -58,7 +58,7 @@ class Oauth2APITestCase(APITestCase):
         }
         url = reverse("oauth2_provider:token")
 
-        response = client.post(url, data)
+        response = client.post(path=url, data=data)
         response_data = json.loads(response.content.decode())
 
         self.assertEqual(response.status_code, HTTP_200_OK)
@@ -67,7 +67,7 @@ class Oauth2APITestCase(APITestCase):
     def test_revoke_token(self):
         client = self.client
 
-        basic_authorization = create_authorization_token(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
+        basic_authorization = create_basic_authorization(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 
         response = get_access_token(
             authorization=basic_authorization, client=client, username=USERNAME, password=PASSWORD
@@ -80,7 +80,7 @@ class Oauth2APITestCase(APITestCase):
 
         client.credentials(HTTP_AUTHORIZATION=bearer_authorization)
         url = reverse("person-list")
-        response = client.get(url)
+        response = client.get(path=url)
 
         # com um token válido e com permissão, deve permitir acesso
         self.assertEqual(response.status_code, HTTP_200_OK)
@@ -89,13 +89,13 @@ class Oauth2APITestCase(APITestCase):
         url = reverse("oauth2_provider:revoke-token")
         data = {"token": access_token}
 
-        response = client.post(url, data)  # o token deve ser revogado, ou seja, não será mais válido
+        response = client.post(path=url, data=data)  # o token deve ser revogado, ou seja, não será mais válido
 
         self.assertEqual(response.status_code, HTTP_200_OK)  # o revoke deve ser aplicado
 
         client.credentials(HTTP_AUTHORIZATION=bearer_authorization)
         url = reverse("person-list")
-        response = client.get(url)
+        response = client.get(path=url)
 
         # com o token agora inválido, não deverá mais ter acesso
         self.assertEqual(response.status_code, HTTP_401_UNAUTHORIZED)
