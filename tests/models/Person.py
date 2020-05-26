@@ -21,16 +21,19 @@ FIRST_NAME = "a"
 LAST_NAME = "b"
 CPF = "59886572060"
 RG = "1234567"
-DATE = {"date": "11/11/2011", "format": "%d/%m/%Y"}
+DATE = {"date": "11/11/1999", "format": "%d/%m/%Y"}
 BIRTHDAY_DATE = datetime.strptime(DATE.get("date"), DATE.get("format")).date()
+UNDER_AGE_BIRTHDAY_DATE = "2010-10-10"
 GENDER = "M"
 CONTACT = "047999999999"
 AGE = datetime.now().year - BIRTHDAY_DATE.year
 FULL_NAME = f"{FIRST_NAME} {LAST_NAME}"
 
 CPF_2 = "45820105044"
-RG_2 = "1234567"
+RG_2 = "1234568"
 
+CPF_3 = "38792138012"
+RG_3 = "1234569"
 
 # dados inválidos
 INVALID_NAME = "jose43"

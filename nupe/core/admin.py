@@ -11,10 +11,13 @@ from nupe.core.models import (
     InstitutionCampus,
     Location,
     Person,
+    Responsible,
     State,
+    Student,
 )
 
 admin.site.register([City, State, Location])
 admin.site.register([Course, Grade, AcademicEducation])
 admin.site.register([Institution, Campus, InstitutionCampus, AcademicEducationCampus])
 admin.site.register(Person)
+admin.site.register([Student, Responsible])

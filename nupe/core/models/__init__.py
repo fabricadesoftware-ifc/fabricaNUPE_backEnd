@@ -21,3 +21,11 @@ from nupe.core.models.Person import (
     PERSON_RG_MIN_LENGTH,
     Person,
 )
+from nupe.core.models.Student import (
+    MYSELF_RESPONSIBLE_MESSAGE,
+    RESPONSIBLE_MIN_AGE,
+    STUDENT_REGISTRATION_MAX_LENGTH,
+    UNDER_AGE_RESPONSIBLE_MESSAGE,
+    Responsible,
+    Student,
+)

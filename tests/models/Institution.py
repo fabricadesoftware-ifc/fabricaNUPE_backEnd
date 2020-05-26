@@ -280,7 +280,6 @@ class AcademicEducationCampusTestCase(TestCase):
         academic_education.undelete()  # restaura o dado para testar novamente
 
         academic_education_campus.delete()
-        # como a model não tem especificação da policy, o default é soft delete, por isso, deve ser mascarado
         self.assertEqual(AcademicEducationCampus.objects.all().count(), 0)
 
         # mas deve ser mantido no banco de dados

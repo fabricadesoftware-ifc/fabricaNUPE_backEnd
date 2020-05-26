@@ -1,5 +1,5 @@
 from django.db import models
-from safedelete.models import NO_DELETE, SafeDeleteModel
+from safedelete.models import NO_DELETE, SOFT_DELETE_CASCADE, SafeDeleteModel
 
 INSTITUTION_MAX_LENGTH = 50
 CAMPUS_MAX_LENGTH = 50
@@ -57,6 +57,7 @@ class InstitutionCampus(SafeDeleteModel):
 
 
 class AcademicEducationCampus(SafeDeleteModel):
+    _safedelete_policy = SOFT_DELETE_CASCADE
     academic_education = models.ForeignKey("AcademicEducation", related_name="course_campus", on_delete=models.CASCADE)
     campus = models.ForeignKey("Campus", related_name="course_campus", on_delete=models.PROTECT)
 
