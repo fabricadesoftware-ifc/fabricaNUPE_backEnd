@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import MinLengthValidator, RegexValidator
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils import timezone
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
@@ -16,9 +16,6 @@ PERSON_RG_MIN_LENGTH = PERSON_RG_MAX_LENGTH = 7
 PERSON_GENDER_MAX_LENGTH = 1
 PERSON_CONTACT_MIN_LENGTH = PERSON_CONTACT_MAX_LENGTH = 12
 GENDER_CHOICES = [("F", "Feminino"), ("M", "Masculino")]
-
-ONLY_NUMBERS = RegexValidator(ONLY_NUMBERS, message="Este campo deve conter somente números")
-ONLY_LETTERS_AND_SPACE = RegexValidator(ONLY_LETTERS_AND_SPACE, message="Este campo deve conter somente letras")
 
 PERSON_INVALID_CPF_MESSAGE = "Este campo deve conter um CPF válido"
 
