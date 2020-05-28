@@ -1,20 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from nupe.core.models import (
-    STUDENT_REGISTRATION_MAX_LENGTH,
-    AcademicEducation,
-    AcademicEducationCampus,
-    Campus,
-    City,
-    Course,
-    Grade,
-    Location,
-    Person,
-    Responsible,
-    State,
-    Student,
-)
+from nupe.core.models import STUDENT_REGISTRATION_MAX_LENGTH, AcademicEducationCampus, Person, Responsible, Student
 from tests.models.Course import COURSE_NAME, GRADE_NAME
 from tests.models.Institution import CAMPUS_NAME
 from tests.models.Location import CITY_NAME, STATE_NAME
@@ -31,6 +18,7 @@ from tests.models.Person import (
     RG_3,
     UNDER_AGE_BIRTHDAY_DATE,
 )
+from tests.models.setup import setup_create_academic_education_campus
 
 REGISTRATION = "202026050001"
 INGRESS_DATE = "2020-05-26"
@@ -38,15 +26,13 @@ INGRESS_DATE = "2020-05-26"
 
 class StudentTestCase(TestCase):
     def setUp(self):
-        city = City.objects.create(name=CITY_NAME)
-        state = State.objects.create(name=STATE_NAME)
-        location = Location.objects.create(city=city, state=state)
-
-        course = Course.objects.create(name=COURSE_NAME)
-        grade = Grade.objects.create(name=GRADE_NAME)
-        AcademicEducation.objects.create(course=course, grade=grade)
-
-        Campus.objects.create(name=CAMPUS_NAME, location=location)
+        setup_create_academic_education_campus(
+            course_name=COURSE_NAME,
+            grade_name=GRADE_NAME,
+            city_name=CITY_NAME,
+            state_name=STATE_NAME,
+            campus_name=CAMPUS_NAME,
+        )
 
         Person.objects.create(
             first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, birthday_date=BIRTHDAY_DATE, gender=GENDER,
@@ -56,12 +42,7 @@ class StudentTestCase(TestCase):
         )
 
     def test_create_valid(self):
-        campus = Campus.objects.get(name=CAMPUS_NAME)
-        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
-
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
-        )
+        academic_education_campus = AcademicEducationCampus.objects.all().first()
         person = Person.objects.get(cpf=CPF)
 
         student = Student.objects.create(
@@ -77,12 +58,7 @@ class StudentTestCase(TestCase):
         self.assertEqual(student.full_clean(), None)  # o objeto não deve conter erros de validação
 
     def test_create_invalid_max_length(self):
-        campus = Campus.objects.get(name=CAMPUS_NAME)
-        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
-
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
-        )
+        academic_education_campus = AcademicEducationCampus.objects.all().first()
         person = Person.objects.get(cpf=CPF)
 
         with self.assertRaises(ValidationError):
@@ -94,12 +70,7 @@ class StudentTestCase(TestCase):
             ).clean_fields()
 
     def test_create_invalid_null(self):
-        campus = Campus.objects.get(name=CAMPUS_NAME)
-        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
-
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
-        )
+        academic_education_campus = AcademicEducationCampus.objects.all().first()
         person = Person.objects.get(cpf=CPF)
 
         with self.assertRaises(ValidationError):
@@ -132,12 +103,7 @@ class StudentTestCase(TestCase):
             ).clean_fields()
 
     def test_create_invalid_blank(self):
-        campus = Campus.objects.get(name=CAMPUS_NAME)
-        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
-
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
-        )
+        academic_education_campus = AcademicEducationCampus.objects.all().first()
         person = Person.objects.get(cpf=CPF)
 
         # deve emitir erro de que os campos são obrigatórios
@@ -182,12 +148,7 @@ class StudentTestCase(TestCase):
         testa unique para registration e
         unique together para person e academic_education_campus
         """
-        campus = Campus.objects.get(name=CAMPUS_NAME)
-        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
-
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
-        )
+        academic_education_campus = AcademicEducationCampus.objects.all().first()
         person1 = Person.objects.get(cpf=CPF)
         person2 = Person.objects.get(cpf=CPF_2)
 
@@ -217,12 +178,7 @@ class StudentTestCase(TestCase):
             ).validate_unique()
 
     def test_invalid_regex(self):
-        campus = Campus.objects.get(name=CAMPUS_NAME)
-        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
-
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
-        )
+        academic_education_campus = AcademicEducationCampus.objects.all().first()
         person1 = Person.objects.get(cpf=CPF)
 
         # registration deve conter somente números
@@ -235,12 +191,7 @@ class StudentTestCase(TestCase):
             ).clean_fields()
 
     def test_properties(self):
-        campus = Campus.objects.get(name=CAMPUS_NAME)
-        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
-
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
-        )
+        academic_education_campus = AcademicEducationCampus.objects.all().first()
         person1 = Person.objects.get(cpf=CPF)
 
         student = Student.objects.create(
@@ -251,16 +202,10 @@ class StudentTestCase(TestCase):
         )
 
         self.assertEqual(student.age, person1.age)
-        self.assertEqual(student.academic_education, str(academic_education))
+        self.assertEqual(student.academic_education, str(academic_education_campus.academic_education))
 
     def test_soft_delete_cascade(self):
-        campus = Campus.objects.get(name=CAMPUS_NAME)
-        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
-
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
-        )
-
+        academic_education_campus = AcademicEducationCampus.objects.all().first()
         person1 = Person.objects.get(cpf=CPF)
         person2 = Person.objects.get(cpf=CPF_2)
 
@@ -294,13 +239,7 @@ class StudentTestCase(TestCase):
         self.assertEqual(Student.objects.all().count(), 0)
 
     def test_undelete(self):
-        campus = Campus.objects.get(name=CAMPUS_NAME)
-        academic_education = AcademicEducation.objects.get(course__name=COURSE_NAME, grade__name=GRADE_NAME)
-
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
-        )
-
+        academic_education_campus = AcademicEducationCampus.objects.all().first()
         person1 = Person.objects.get(cpf=CPF)
         person2 = Person.objects.get(cpf=CPF_2)
 
@@ -338,17 +277,12 @@ class StudentTestCase(TestCase):
 
 class ResponsibleTestCase(TestCase):
     def setUp(self):
-        city = City.objects.create(name=CITY_NAME)
-        state = State.objects.create(name=STATE_NAME)
-        location = Location.objects.create(city=city, state=state)
-
-        course = Course.objects.create(name=COURSE_NAME)
-        grade = Grade.objects.create(name=GRADE_NAME)
-        academic_education = AcademicEducation.objects.create(course=course, grade=grade)
-
-        campus = Campus.objects.create(name=CAMPUS_NAME, location=location)
-        academic_education_campus = AcademicEducationCampus.objects.create(
-            academic_education=academic_education, campus=campus
+        academic_education_campus = setup_create_academic_education_campus(
+            course_name=COURSE_NAME,
+            grade_name=GRADE_NAME,
+            city_name=CITY_NAME,
+            state_name=STATE_NAME,
+            campus_name=CAMPUS_NAME,
         )
 
         person1 = Person.objects.create(
@@ -359,9 +293,11 @@ class ResponsibleTestCase(TestCase):
             birthday_date=UNDER_AGE_BIRTHDAY_DATE,
             gender=GENDER,
         )
+
         Person.objects.create(
             first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF_2, rg=RG_2, birthday_date=BIRTHDAY_DATE, gender=GENDER,
         )
+
         Person.objects.create(
             first_name=FIRST_NAME,
             last_name=LAST_NAME,
@@ -436,6 +372,7 @@ class ResponsibleTestCase(TestCase):
     def test_soft_delete(self):
         student = Student.objects.get(registration=REGISTRATION)
         person = Person.objects.get(cpf=CPF_2)
+
         responsible = Responsible.objects.create(student=student, person=person)
 
         self.assertEqual(Responsible.objects.all().count(), 1)
@@ -448,6 +385,7 @@ class ResponsibleTestCase(TestCase):
     def test_undelete(self):
         student = Student.objects.get(registration=REGISTRATION)
         person = Person.objects.get(cpf=CPF_2)
+
         responsible = Responsible.objects.create(student=student, person=person)
 
         responsible.delete()

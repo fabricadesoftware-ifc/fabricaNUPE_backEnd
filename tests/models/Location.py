@@ -112,8 +112,8 @@ class LocationTestCase(TestCase):
         State.objects.create(name=STATE_NAME)
 
     def test_create_valid(self):
-        city = City.objects.all().first()
-        state = State.objects.all().first()
+        city = City.objects.get(name=CITY_NAME)
+        state = State.objects.get(name=STATE_NAME)
 
         location = Location.objects.create(city=city, state=state)
 
@@ -146,8 +146,8 @@ class LocationTestCase(TestCase):
             Location.objects.create(state=1)
 
     def test_create_invalid_city_and_state_unique_together(self):
-        city = City.objects.all().first()
-        state = State.objects.all().first()
+        city = City.objects.get(name=CITY_NAME)
+        state = State.objects.get(name=STATE_NAME)
 
         # deve emitir um erro porque só pode exitir um objeto com a mesma cidade e estado
         with self.assertRaises(ValidationError):
