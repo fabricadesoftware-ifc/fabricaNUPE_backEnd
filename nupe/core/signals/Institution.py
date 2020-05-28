@@ -25,8 +25,8 @@ def academic_education_campus_pre_delete(sender, **kwargs):
 @receiver(signal=post_undelete, sender=AcademicEducationCampus, dispatch_uid="academic_education_campus_post_undelete")
 def academic_education_campus_post_undelete(sender, **kwargs):
     """
-    todos os estudantes que tinham relação com o objeto de academic education campus que está sendo restaurado
-    tem seu atributo "academic_education_campus" setado com o valor original
+    todos os estudantes que tinham relação com o objeto de academic education campus que está sendo
+    restaurado, tem seu atributo "academic_education_campus" setado com o valor original
     """
     academic_education_campus_undeleted = kwargs.get("instance")
     students = Student.objects.filter(academic_education_campus=None)
