@@ -7,16 +7,13 @@ from nupe.core.models import (
     AcademicEducation,
     AcademicEducationCampus,
     Campus,
-    City,
-    Course,
-    Grade,
     Institution,
     InstitutionCampus,
     Location,
-    State,
 )
 from tests.models.Course import COURSE_NAME, GRADE_NAME
 from tests.models.Location import CITY_NAME, STATE_NAME
+from tests.models.setup import setup_create_academic_education, setup_create_location
 
 INSTITUTION_NAME = "Instituto Federal Catarinense"
 CAMPUS_NAME = "Araquari"
@@ -61,9 +58,7 @@ class InstitutionTestCase(TestCase):
             Institution(name=INSTITUTION_NAME).validate_unique()
 
     def test_no_delete(self):
-        city = City.objects.create(name=CITY_NAME)
-        state = State.objects.create(name=STATE_NAME)
-        location = Location.objects.create(city=city, state=state)
+        location = setup_create_location(city_name=CITY_NAME, state_name=STATE_NAME)
 
         institution = Institution.objects.create(name=INSTITUTION_NAME)
         campus = Campus.objects.create(name=CAMPUS_NAME, location=location)
@@ -82,9 +77,7 @@ class InstitutionTestCase(TestCase):
 class CampusTestCase(TestCase):
     def setUp(self):
         # cria no banco de dados de test antes de executar os tests
-        city = City.objects.create(name=CITY_NAME)
-        state = State.objects.create(name=STATE_NAME)
-        Location.objects.create(city=city, state=state)
+        setup_create_location(city_name=CITY_NAME, state_name=STATE_NAME)
 
     def test_create_valid(self):
         location = Location.objects.get(city__name=CITY_NAME, state__name=STATE_NAME)
@@ -144,9 +137,7 @@ class CampusTestCase(TestCase):
 
 class InstitutionCampusTestCase(TestCase):
     def setUp(self):
-        city = City.objects.create(name=CITY_NAME)
-        state = State.objects.create(name=STATE_NAME)
-        location = Location.objects.create(city=city, state=state)
+        location = setup_create_location(city_name=CITY_NAME, state_name=STATE_NAME)
 
         Institution.objects.create(name=INSTITUTION_NAME)
         Campus.objects.create(name=CAMPUS_NAME, location=location)
@@ -206,13 +197,8 @@ class InstitutionCampusTestCase(TestCase):
 
 class AcademicEducationCampusTestCase(TestCase):
     def setUp(self):
-        city = City.objects.create(name=CITY_NAME)
-        state = State.objects.create(name=STATE_NAME)
-        location = Location.objects.create(city=city, state=state)
-
-        course = Course.objects.create(name=COURSE_NAME)
-        grade = Grade.objects.create(name=GRADE_NAME)
-        AcademicEducation.objects.create(course=course, grade=grade)
+        setup_create_academic_education(course_name=COURSE_NAME, grade_name=GRADE_NAME)
+        location = setup_create_location(city_name=CITY_NAME, state_name=STATE_NAME)
 
         Campus.objects.create(name=CAMPUS_NAME, location=location)
 
