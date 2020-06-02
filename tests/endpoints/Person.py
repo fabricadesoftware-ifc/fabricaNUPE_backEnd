@@ -9,16 +9,8 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
-from tests.endpoints.setup import (
-    BIRTHDAY_DATE,
-    CPF,
-    FIRST_NAME,
-    GENDER,
-    LAST_NAME,
-    RG,
-    create_person,
-    create_user_with_permissions,
-)
+from tests.endpoints.setup import create_person, create_user_with_permissions
+from tests.endpoints.setup.Person import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG
 
 
 class PersonAPITestCase(APITestCase):

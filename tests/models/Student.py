@@ -2,9 +2,6 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from nupe.core.models import STUDENT_REGISTRATION_MAX_LENGTH, AcademicEducationCampus, Person, Responsible, Student
-from tests.models.Course import COURSE_NAME, GRADE_NAME
-from tests.models.Institution import CAMPUS_NAME
-from tests.models.Location import CITY_NAME, STATE_NAME
 from tests.models.Person import (
     BIRTHDAY_DATE,
     CPF,
@@ -18,7 +15,7 @@ from tests.models.Person import (
     RG_3,
     UNDER_AGE_BIRTHDAY_DATE,
 )
-from tests.models.setup import setup_create_academic_education_campus
+from tests.models.setup import create_academic_education_campus
 
 REGISTRATION = "202026050001"
 INGRESS_DATE = "2020-05-26"
@@ -26,13 +23,7 @@ INGRESS_DATE = "2020-05-26"
 
 class StudentTestCase(TestCase):
     def setUp(self):
-        setup_create_academic_education_campus(
-            course_name=COURSE_NAME,
-            grade_name=GRADE_NAME,
-            city_name=CITY_NAME,
-            state_name=STATE_NAME,
-            campus_name=CAMPUS_NAME,
-        )
+        create_academic_education_campus()
 
         Person.objects.create(
             first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, birthday_date=BIRTHDAY_DATE, gender=GENDER,
@@ -277,13 +268,7 @@ class StudentTestCase(TestCase):
 
 class ResponsibleTestCase(TestCase):
     def setUp(self):
-        academic_education_campus = setup_create_academic_education_campus(
-            course_name=COURSE_NAME,
-            grade_name=GRADE_NAME,
-            city_name=CITY_NAME,
-            state_name=STATE_NAME,
-            campus_name=CAMPUS_NAME,
-        )
+        academic_education_campus = create_academic_education_campus()
 
         person1 = Person.objects.create(
             first_name=FIRST_NAME,

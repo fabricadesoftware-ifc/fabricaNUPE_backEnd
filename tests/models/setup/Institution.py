@@ -1,17 +1,21 @@
 from nupe.core.models import AcademicEducation, AcademicEducationCampus, Campus, Course, Grade
-from tests.models.setup import setup_create_location
+from tests.models.Course import COURSE_NAME, GRADE_NAME
+from tests.models.setup.Location import create_location
+
+CAMPUS_NAME = "Araquari"
 
 
-def setup_create_academic_education(*, course_name, grade_name):
+def create_academic_education(*, course_name=COURSE_NAME, grade_name=GRADE_NAME):
     course = Course.objects.create(name=course_name)
     grade = Grade.objects.create(name=grade_name)
 
     return AcademicEducation.objects.create(course=course, grade=grade)
 
 
-def setup_create_academic_education_campus(*, course_name, grade_name, city_name, state_name, campus_name):
-    academic_education = setup_create_academic_education(course_name=course_name, grade_name=grade_name)
-    location = setup_create_location(city_name=city_name, state_name=state_name)
-    campus = Campus.objects.create(name=campus_name, location=location)
+def create_academic_education_campus():
+    location = create_location()
+    campus = Campus.objects.create(name=CAMPUS_NAME, location=location)
+
+    academic_education = create_academic_education()
 
     return AcademicEducationCampus.objects.create(academic_education=academic_education, campus=campus)

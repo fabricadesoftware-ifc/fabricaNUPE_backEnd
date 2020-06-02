@@ -58,7 +58,7 @@ class Oauth2APITestCase(APITestCase):
         }
         url = reverse("oauth2_provider:token")
 
-        response = client.post(path=url, data=data)
+        response = client.post(path=url, data=data, format="multipart")
         response_data = json.loads(response.content.decode())
 
         self.assertEqual(response.status_code, HTTP_200_OK)
@@ -89,7 +89,8 @@ class Oauth2APITestCase(APITestCase):
         url = reverse("oauth2_provider:revoke-token")
         data = {"token": access_token}
 
-        response = client.post(path=url, data=data)  # o token deve ser revogado, ou seja, não será mais válido
+        # o token deve ser revogado, ou seja, não será mais válido
+        response = client.post(path=url, data=data, format="multipart")
 
         self.assertEqual(response.status_code, HTTP_200_OK)  # o revoke deve ser aplicado
 
