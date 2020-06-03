@@ -1,5 +1,5 @@
 from nupe.core.models import Person
-from tests.models.Person import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG
+from resources.const.datas.Person import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG
 
 
 def create_person(*, cpf: str = CPF, rg: str = RG) -> Person:

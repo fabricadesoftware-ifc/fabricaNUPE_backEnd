@@ -6,6 +6,7 @@ from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 from validate_docbr import CPF
 
 from nupe.core.utils.Regex import ONLY_LETTERS_AND_SPACE, ONLY_NUMBERS
+from resources.const.Messages import PERSON_INVALID_CPF_MESSAGE
 
 PERSON_FIRST_NAME_MAX_LENGTH = 50
 PERSON_LAST_NAME_MAX_LENGTH = 100
@@ -16,8 +17,6 @@ PERSON_RG_MIN_LENGTH = PERSON_RG_MAX_LENGTH = 7
 PERSON_GENDER_MAX_LENGTH = 1
 PERSON_CONTACT_MIN_LENGTH = PERSON_CONTACT_MAX_LENGTH = 12
 GENDER_CHOICES = [("F", "Feminino"), ("M", "Masculino")]
-
-PERSON_INVALID_CPF_MESSAGE = "Este campo deve conter um CPF válido"
 
 
 class Person(SafeDeleteModel):

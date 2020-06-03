@@ -4,17 +4,11 @@ from django.urls import reverse
 from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from rest_framework.test import APITestCase
 
-from tests.endpoints.setup import (
-    create_application,
-    create_basic_authorization,
-    create_user_with_permissions,
-    get_access_token,
-)
-
-CLIENT_ID = "teste"
-CLIENT_SECRET = "teste"
-USERNAME = "teste123"
-PASSWORD = USERNAME
+from resources.const.datas.Oauth2 import CLIENT_ID, CLIENT_SECRET
+from resources.const.datas.User import PASSWORD, USERNAME
+from tests.endpoints.setup.Application import create_application
+from tests.endpoints.setup.Token import create_basic_authorization, get_access_token
+from tests.endpoints.setup.User import create_user_with_permissions
 
 
 class Oauth2APITestCase(APITestCase):

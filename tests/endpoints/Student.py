@@ -10,10 +10,12 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Student
-from tests.endpoints.setup import client_force_authenticate, create_person, create_student
-from tests.models.Person import CPF_2, RG_2
-from tests.models.setup import create_academic_education_campus
-from tests.models.Student import INGRESS_DATE, REGISTRATION
+from resources.const.datas.Person import CPF_2, RG_2
+from resources.const.datas.Student import INGRESS_DATE, REGISTRATION
+from tests.endpoints.setup.Person import create_person
+from tests.endpoints.setup.Student import create_student
+from tests.endpoints.setup.User import client_force_authenticate
+from tests.models.setup.Institution import create_academic_education_campus
 
 
 class StudentAPITestCase(APITestCase):

@@ -2,8 +2,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
-from nupe.core.exceptions.InvalidResponsible import MYSELF_RESPONSIBLE_MESSAGE, UNDER_AGE_RESPONSIBLE_MESSAGE
 from nupe.core.utils.Regex import ONLY_NUMBERS
+from resources.const.Messages import MYSELF_RESPONSIBLE_MESSAGE, UNDER_AGE_RESPONSIBLE_MESSAGE
 
 STUDENT_REGISTRATION_MAX_LENGTH = 35
 RESPONSIBLE_MIN_AGE = 18
