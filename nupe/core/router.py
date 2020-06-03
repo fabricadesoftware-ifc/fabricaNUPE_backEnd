@@ -1,6 +1,7 @@
 from rest_framework.routers import SimpleRouter
 
-from nupe.core.views import PersonViewSet
+from nupe.core.views import PersonViewSet, StudentViewSet
 
 router = SimpleRouter()
 router.register("person", PersonViewSet, basename="person")
+router.register("student", StudentViewSet, basename="student")

@@ -13,10 +13,10 @@ from nupe.core.models import (
 )
 from tests.models.Course import COURSE_NAME, GRADE_NAME
 from tests.models.Location import CITY_NAME, STATE_NAME
-from tests.models.setup import setup_create_academic_education, setup_create_location
+from tests.models.setup import create_academic_education, create_location
+from tests.models.setup.Institution import CAMPUS_NAME
 
 INSTITUTION_NAME = "Instituto Federal Catarinense"
-CAMPUS_NAME = "Araquari"
 
 
 class InstitutionTestCase(TestCase):
@@ -58,7 +58,7 @@ class InstitutionTestCase(TestCase):
             Institution(name=INSTITUTION_NAME).validate_unique()
 
     def test_no_delete(self):
-        location = setup_create_location(city_name=CITY_NAME, state_name=STATE_NAME)
+        location = create_location(city_name=CITY_NAME, state_name=STATE_NAME)
 
         institution = Institution.objects.create(name=INSTITUTION_NAME)
         campus = Campus.objects.create(name=CAMPUS_NAME, location=location)
@@ -77,7 +77,7 @@ class InstitutionTestCase(TestCase):
 class CampusTestCase(TestCase):
     def setUp(self):
         # cria no banco de dados de test antes de executar os tests
-        setup_create_location(city_name=CITY_NAME, state_name=STATE_NAME)
+        create_location(city_name=CITY_NAME, state_name=STATE_NAME)
 
     def test_create_valid(self):
         location = Location.objects.get(city__name=CITY_NAME, state__name=STATE_NAME)
@@ -137,7 +137,7 @@ class CampusTestCase(TestCase):
 
 class InstitutionCampusTestCase(TestCase):
     def setUp(self):
-        location = setup_create_location(city_name=CITY_NAME, state_name=STATE_NAME)
+        location = create_location(city_name=CITY_NAME, state_name=STATE_NAME)
 
         Institution.objects.create(name=INSTITUTION_NAME)
         Campus.objects.create(name=CAMPUS_NAME, location=location)
@@ -197,8 +197,8 @@ class InstitutionCampusTestCase(TestCase):
 
 class AcademicEducationCampusTestCase(TestCase):
     def setUp(self):
-        setup_create_academic_education(course_name=COURSE_NAME, grade_name=GRADE_NAME)
-        location = setup_create_location(city_name=CITY_NAME, state_name=STATE_NAME)
+        create_academic_education(course_name=COURSE_NAME, grade_name=GRADE_NAME)
+        location = create_location(city_name=CITY_NAME, state_name=STATE_NAME)
 
         Campus.objects.create(name=CAMPUS_NAME, location=location)
 

@@ -65,4 +65,4 @@ class AcademicEducationCampus(SafeDeleteModel):
         unique_together = ["campus", "academic_education"]
 
     def __str__(self):
-        return f"Formação {self.academic_education} ofertada pelo Campus {self.campus}"
+        return f"{self.academic_education} - {self.campus}"

@@ -2,13 +2,11 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
+from nupe.core.exceptions.InvalidResponsible import MYSELF_RESPONSIBLE_MESSAGE, UNDER_AGE_RESPONSIBLE_MESSAGE
 from nupe.core.utils.Regex import ONLY_NUMBERS
 
 STUDENT_REGISTRATION_MAX_LENGTH = 35
 RESPONSIBLE_MIN_AGE = 18
-
-MYSELF_RESPONSIBLE_MESSAGE = "O estudante deve conter um responsável diferente de sí"
-UNDER_AGE_RESPONSIBLE_MESSAGE = "O estudante deve conter um responsável maior de idade"
 
 
 class Student(SafeDeleteModel):

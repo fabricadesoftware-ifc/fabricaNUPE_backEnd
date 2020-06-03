@@ -7,7 +7,7 @@ from nupe.core.models import PERSON_INVALID_CPF_MESSAGE, Person
 class PersonListSerializer(ModelSerializer):
     class Meta:
         model = Person
-        fields = ["id", "first_name", "last_name", "contact"]
+        fields = ["id", "full_name", "contact"]
 
 
 class PersonDetailSerializer(ModelSerializer):
@@ -15,12 +15,10 @@ class PersonDetailSerializer(ModelSerializer):
         model = Person
         fields = [
             "id",
-            "first_name",
-            "last_name",
+            "full_name",
             "cpf",
             "rg",
             "birthday_date",
-            "gender",
             "contact",
         ]
 
@@ -28,7 +26,8 @@ class PersonDetailSerializer(ModelSerializer):
 class PersonCreateSerializer(ModelSerializer):
     class Meta:
         model = Person
-        fields = ["first_name", "last_name", "cpf", "rg", "birthday_date", "gender", "contact"]
+        fields = ["id", "first_name", "last_name", "cpf", "rg", "birthday_date", "gender", "contact"]
+        read_only_fields = ["id"]
 
     def validate_cpf(self, cpf):
         if not CPF().validate(cpf):

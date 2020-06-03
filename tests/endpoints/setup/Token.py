@@ -10,7 +10,7 @@ def get_access_token(*, authorization: str, client: APIClient, username: str, pa
     data = {"username": username, "password": password, "grant_type": "password"}
     url = reverse("oauth2_provider:token")
 
-    return client.post(path=url, data=data)
+    return client.post(path=url, data=data, format="multipart")
 
 
 def create_basic_authorization(*, client_id: str, client_secret: str) -> str:
