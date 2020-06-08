@@ -1,2 +1,2 @@
-from nupe.core.exceptions.ActionHasNoSerializer import ActionHasNoSerializer
+from nupe.core.exceptions.ActionNotImplemented import ActionNotImplemented
 from nupe.core.exceptions.InvalidResponsible import InvalidResponsible, MyselfResponsible, UnderAgeResponsible

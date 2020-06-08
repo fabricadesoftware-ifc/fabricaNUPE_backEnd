@@ -7,7 +7,7 @@ from rest_framework.mixins import (
 )
 from rest_framework.viewsets import GenericViewSet
 
-from nupe.core.exceptions import ActionHasNoSerializer
+from nupe.core.exceptions import ActionNotImplemented
 from nupe.core.models import Student
 from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializer, StudentListSerializer
 
@@ -34,6 +34,6 @@ class StudentViewSet(
         serializer = self.per_action_serializer.get(self.action)
 
         if serializer is None:
-            raise ActionHasNoSerializer
+            raise ActionNotImplemented
 
         return serializer
