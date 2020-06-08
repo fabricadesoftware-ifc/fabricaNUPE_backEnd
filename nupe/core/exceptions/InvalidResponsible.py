@@ -5,7 +5,6 @@ from resources.const.Messages import MYSELF_RESPONSIBLE_MESSAGE, UNDER_AGE_RESPO
 
 class InvalidResponsible(APIException):
     status_code = 400
-    default_code = "responsavel_invalido"
 
 
 class UnderAgeResponsible(InvalidResponsible):
