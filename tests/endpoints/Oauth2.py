@@ -4,28 +4,19 @@ from django.urls import reverse
 from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from rest_framework.test import APITestCase
 
-from resources.const.datas.Oauth2 import CLIENT_ID, CLIENT_SECRET
 from resources.const.datas.User import PASSWORD, USERNAME
-from tests.endpoints.setup.Application import create_application
-from tests.endpoints.setup.Token import create_basic_authorization, get_access_token
+from tests.endpoints.setup.Token import get_access_token, revoke_access_token
 from tests.endpoints.setup.User import create_user_with_permissions
 
 
 class Oauth2APITestCase(APITestCase):
     def setUp(self):
-        create_application(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
         # permissão de list atribuída para testar o revoke token
         create_user_with_permissions(username=USERNAME, permissions=["core.view_person"])
 
     def test_get_access_token(self):
-        client = self.client  # instância de APIClient
-
-        basic_authorization = create_basic_authorization(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
-
         # retorna um objeto HttpResponse
-        response = get_access_token(
-            authorization=basic_authorization, client=client, username=USERNAME, password=PASSWORD
-        )
+        response, client = get_access_token(username=USERNAME, password=PASSWORD)
 
         # HttpResponse.content retorna um bytestring, por isso, é necessário obter a string e converter em dict
         response_data = json.loads(response.content.decode())
@@ -34,14 +25,8 @@ class Oauth2APITestCase(APITestCase):
         self.assertNotEqual(response_data.get("access_token"), None)  # deve retornar um token de acesso
 
     def test_refresh_token(self):
-        client = self.client
-
-        basic_authorization = create_basic_authorization(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
-
         # necessário para obter o refresh token para enviar na requisição
-        response = get_access_token(
-            authorization=basic_authorization, client=client, username=USERNAME, password=PASSWORD
-        )
+        response, client = get_access_token(username=USERNAME, password=PASSWORD)
         response_data = json.loads(response.content.decode())
 
         data = {
@@ -59,16 +44,10 @@ class Oauth2APITestCase(APITestCase):
         self.assertNotEqual(response_data.get("access_token"), None)  # deve retornar um novo token de acesso
 
     def test_revoke_token(self):
-        client = self.client
-
-        basic_authorization = create_basic_authorization(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
-
-        response = get_access_token(
-            authorization=basic_authorization, client=client, username=USERNAME, password=PASSWORD
-        )
+        response, client = get_access_token(username=USERNAME, password=PASSWORD)
         response_data = json.loads(response.content.decode())
 
-        # autorização necessária para consumir os endpoints
+        # header necessário para consumir os endpoints
         access_token = response_data.get("access_token")
         bearer_authorization = f"Bearer {access_token}"
 
@@ -79,18 +58,12 @@ class Oauth2APITestCase(APITestCase):
         # com um token válido e com permissão, deve permitir acesso
         self.assertEqual(response.status_code, HTTP_200_OK)
 
-        client.credentials(HTTP_AUTHORIZATION=basic_authorization)
-        url = reverse("oauth2_provider:revoke-token")
-        data = {"token": access_token}
-
         # o token deve ser revogado, ou seja, não será mais válido
-        response = client.post(path=url, data=data, format="multipart")
+        response = revoke_access_token(access_token=access_token)
 
         self.assertEqual(response.status_code, HTTP_200_OK)  # o revoke deve ser aplicado
 
-        client.credentials(HTTP_AUTHORIZATION=bearer_authorization)
-        url = reverse("person-list")
+        # com o token agora inválido, não deverá mais ter acesso
         response = client.get(path=url)
 
-        # com o token agora inválido, não deverá mais ter acesso
         self.assertEqual(response.status_code, HTTP_401_UNAUTHORIZED)
