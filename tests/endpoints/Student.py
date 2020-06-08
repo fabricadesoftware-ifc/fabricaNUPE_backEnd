@@ -52,6 +52,8 @@ class StudentAPITestCase(APITestCase):
         person2 = create_person(cpf=CPF_2, rg=RG_2)
         academic_education_campus = create_academic_education_campus()
 
+        client = create_user_and_do_authentication(permissions=["core.add_student"])
+
         student = {
             "registration": REGISTRATION,
             "person": person1.id,
@@ -59,8 +61,6 @@ class StudentAPITestCase(APITestCase):
             "academic_education_campus": academic_education_campus.id,
             "ingress_date": INGRESS_DATE,
         }
-
-        client = create_user_and_do_authentication(permissions=["core.add_student"])
 
         url = reverse("student-list")
         response = client.post(path=url, data=student)
@@ -73,19 +73,21 @@ class StudentAPITestCase(APITestCase):
         # cria um estudante no banco para poder atualiza-lo
         student = create_student()
 
+        client = create_user_and_do_authentication(permissions=["core.change_student"])
+
         new_registration = REGISTRATION + "1"
         student_data = {
             "registration": new_registration,
         }
-
-        client = create_user_and_do_authentication(permissions=["core.change_student"])
 
         url = reverse("student-detail", args=[student.id])
         response = client.patch(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(response.data.get("registration"), new_registration)
-        self.assertEqual(Student.objects.all().first().registration, new_registration)  # deve ser atualizado no banco
+
+        # deve ser atualizado no banco
+        self.assertEqual(Student.objects.get(id=student.id).registration, new_registration)
 
     def test_destroy_student_with_permission(self):
         # cria um estudante no banco para poder mascara-lo
@@ -170,12 +172,12 @@ class StudentAPITestCase(APITestCase):
         # cria um estudante no banco para poder atualiza-lo
         student = create_student()
 
+        client = create_user_and_do_authentication(permissions=["core.change_student"])
+
         invalid_registration = "invalid_registration"
         student_data = {
             "registration": invalid_registration,
         }
-
-        client = create_user_and_do_authentication(permissions=["core.change_student"])
 
         url = reverse("student-detail", args=[student.id])
         response = client.patch(path=url, data=student_data)

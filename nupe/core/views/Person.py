@@ -20,14 +20,14 @@ class PersonViewSet(
         "list": ["core.view_person"],
         "retrieve": ["core.view_person"],
         "create": ["core.add_person"],
-        "update": ["core.change_person"],
+        "partial_update": ["core.change_person"],
         "destroy": ["core.delete_person"],
     }
     per_action_serializer = {
         "list": PersonListSerializer,
         "retrieve": PersonDetailSerializer,
         "create": PersonCreateSerializer,
-        "update": PersonCreateSerializer,
+        "partial_update": PersonCreateSerializer,
     }
 
     def get_serializer_class(self):
