@@ -1,8 +1,9 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from nupe.core.models import STUDENT_REGISTRATION_MAX_LENGTH, AcademicEducationCampus, Person, Responsible, Student
-from tests.models.Person import (
+from nupe.core.models import AcademicEducationCampus, Person, Responsible, Student
+from nupe.core.models.Student import STUDENT_REGISTRATION_MAX_LENGTH
+from resources.const.datas.Person import (
     BIRTHDAY_DATE,
     CPF,
     CPF_2,
@@ -15,10 +16,8 @@ from tests.models.Person import (
     RG_3,
     UNDER_AGE_BIRTHDAY_DATE,
 )
-from tests.models.setup import create_academic_education_campus
-
-REGISTRATION = "202026050001"
-INGRESS_DATE = "2020-05-26"
+from resources.const.datas.Student import INGRESS_DATE, REGISTRATION
+from tests.models.setup.Institution import create_academic_education_campus
 
 
 class StudentTestCase(TestCase):

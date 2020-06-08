@@ -16,7 +16,8 @@ def academic_education_campus_pre_delete(sender, **kwargs):
 
     if students:
         for student in students:
-            # armazena o id do objeto removido para caso seja restaurado, consiga atualizar o atributo com o objeto anterior corretamente
+            # armazena o id do objeto removido para caso seja restaurado, consiga atualizar o atributo com
+            # o objeto anterior corretamente
             student._academic_education_campus_deleted_id = academic_education_campus_deleted.id
             student.academic_education_campus = None  # aplica on_delete=models.SET_NULL
             student.save(force_update=True)

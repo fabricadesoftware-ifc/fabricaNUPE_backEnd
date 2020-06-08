@@ -1,7 +1,6 @@
 from rest_framework.exceptions import APIException
 
-UNDER_AGE_RESPONSIBLE_MESSAGE = "O estudante deve conter um responsável maior de idade"
-MYSELF_RESPONSIBLE_MESSAGE = "O estudante deve conter um responsável diferente de sí"
+from resources.const.Messages import MYSELF_RESPONSIBLE_MESSAGE, UNDER_AGE_RESPONSIBLE_MESSAGE
 
 
 class InvalidResponsible(APIException):

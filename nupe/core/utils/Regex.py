@@ -1,4 +1,6 @@
 from django.core.validators import RegexValidator
 
-ONLY_NUMBERS = RegexValidator(r"^[0-9]*$", message="Este campo deve conter somente números")
-ONLY_LETTERS_AND_SPACE = RegexValidator(r"^[a-z A-Z]*$", message="Este campo deve conter somente letras")
+from resources.const.Messages import ONLY_LETTER_AND_SPACE_MESSAGE, ONLY_NUMBERS_MESSAGE
+
+ONLY_NUMBERS = RegexValidator(r"^[0-9]*$", message=ONLY_NUMBERS_MESSAGE)
+ONLY_LETTERS_AND_SPACE = RegexValidator(r"^[a-z A-Z]*$", message=ONLY_LETTER_AND_SPACE_MESSAGE)

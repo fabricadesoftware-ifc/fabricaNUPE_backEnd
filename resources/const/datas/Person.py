@@ -1,0 +1,39 @@
+from datetime import datetime
+
+from nupe.core.models.Person import PERSON_CONTACT_MIN_LENGTH, PERSON_CPF_MIN_LENGTH, PERSON_RG_MIN_LENGTH
+
+# dados válidos
+FIRST_NAME = "a"
+LAST_NAME = "b"
+CPF = "59886572060"
+RG = "1234567"
+
+DATE = {"date": "11/11/1999", "format": "%d/%m/%Y"}
+BIRTHDAY_DATE = datetime.strptime(DATE.get("date"), DATE.get("format")).date()
+AGE = datetime.now().year - BIRTHDAY_DATE.year
+
+UNDER_AGE_BIRTHDAY_DATE = "2010-10-10"
+GENDER = "M"
+CONTACT = "047999999999"
+FULL_NAME = f"{FIRST_NAME} {LAST_NAME}"
+
+CPF_2 = "45820105044"
+RG_2 = "1234568"
+
+CPF_3 = "38792138012"
+RG_3 = "1234569"
+
+# dados inválidos
+INVALID_NAME = "jose43"
+INVALID_CPF = "11864707985"
+INVALID_RG = "abcdef@"
+INVALID_CONTACT = "9 9168-2452"
+
+INVALID_NAME_2 = "jose@!"
+INVALID_CPF_2 = "118647079@l"
+INVALID_RG_2 = "123456l"
+INVALID_CONTACT_2 = "47-991682452"
+
+INVALID_CPF_LENGTH = "1" * (PERSON_CPF_MIN_LENGTH - 1)
+INVALID_RG_LENGTH = "2" * (PERSON_RG_MIN_LENGTH - 1)
+INVALID_CONTACT_LENGTH = "9" * (PERSON_CONTACT_MIN_LENGTH - 1)

@@ -2,8 +2,6 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from nupe.core.models import (
-    CAMPUS_MAX_LENGTH,
-    INSTITUTION_MAX_LENGTH,
     AcademicEducation,
     AcademicEducationCampus,
     Campus,
@@ -11,12 +9,12 @@ from nupe.core.models import (
     InstitutionCampus,
     Location,
 )
-from tests.models.Course import COURSE_NAME, GRADE_NAME
-from tests.models.Location import CITY_NAME, STATE_NAME
-from tests.models.setup import create_academic_education, create_location
-from tests.models.setup.Institution import CAMPUS_NAME
-
-INSTITUTION_NAME = "Instituto Federal Catarinense"
+from nupe.core.models.Institution import CAMPUS_MAX_LENGTH, INSTITUTION_MAX_LENGTH
+from resources.const.datas.Course import COURSE_NAME, GRADE_NAME
+from resources.const.datas.Institution import CAMPUS_NAME, INSTITUTION_NAME
+from resources.const.datas.Location import CITY_NAME, STATE_NAME
+from tests.models.setup.Institution import create_academic_education
+from tests.models.setup.Location import create_location
 
 
 class InstitutionTestCase(TestCase):

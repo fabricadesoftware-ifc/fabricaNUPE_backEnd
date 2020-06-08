@@ -1,5 +1,5 @@
 from nupe.core.models import City, Location, State
-from tests.models.Location import CITY_NAME, STATE_NAME
+from resources.const.datas.Location import CITY_NAME, STATE_NAME
 
 
 def create_location(*, city_name=CITY_NAME, state_name=STATE_NAME):

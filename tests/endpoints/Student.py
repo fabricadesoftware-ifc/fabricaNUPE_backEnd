@@ -10,20 +10,20 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Student
-from tests.endpoints.setup import client_force_authenticate, create_person, create_student
-from tests.models.Person import CPF_2, RG_2
-from tests.models.setup import create_academic_education_campus
-from tests.models.Student import INGRESS_DATE, REGISTRATION
+from resources.const.datas.Person import CPF_2, RG_2
+from resources.const.datas.Student import INGRESS_DATE, REGISTRATION
+from tests.endpoints.setup.Person import create_person
+from tests.endpoints.setup.Student import create_student
+from tests.endpoints.setup.User import create_user_and_do_authentication
+from tests.models.setup.Institution import create_academic_education_campus
 
 
 class StudentAPITestCase(APITestCase):
-    """Teste de caso válido"""
-
     def test_list_student_with_permission(self):
         # cria um estudante no banco para retornar no list
         create_student()
 
-        client = client_force_authenticate(permissions=["core.view_student"])
+        client = create_user_and_do_authentication(permissions=["core.view_student"])
 
         url = reverse("student-list")
         response = client.get(path=url)
@@ -37,7 +37,7 @@ class StudentAPITestCase(APITestCase):
         # cria um estudante no banco para detalhar suas informações
         student = create_student()
 
-        client = client_force_authenticate(permissions=["core.view_student"])
+        client = create_user_and_do_authentication(permissions=["core.view_student"])
 
         url = reverse("student-detail", args=[student.id])
         response = client.get(path=url)
@@ -60,13 +60,12 @@ class StudentAPITestCase(APITestCase):
             "ingress_date": INGRESS_DATE,
         }
 
-        client = client_force_authenticate(client=self.client, permissions=["core.add_student"])
+        client = create_user_and_do_authentication(permissions=["core.add_student"])
 
         url = reverse("student-list")
         response = client.post(path=url, data=student)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
-        self.assertNotEqual(response.data.get("id"), None)
         self.assertEqual(response.data.get("person"), person1.id)
         self.assertEqual(Student.objects.all().count(), 1)  # o estudante deve ser criado no banco de dados
 
@@ -79,7 +78,7 @@ class StudentAPITestCase(APITestCase):
             "registration": new_registration,
         }
 
-        client = client_force_authenticate(client=self.client, permissions=["core.change_student"])
+        client = create_user_and_do_authentication(permissions=["core.change_student"])
 
         url = reverse("student-detail", args=[student.id])
         response = client.patch(path=url, data=student_data)
@@ -92,7 +91,7 @@ class StudentAPITestCase(APITestCase):
         # cria um estudante no banco para poder mascara-lo
         student = create_student()
 
-        client = client_force_authenticate(permissions=["core.delete_student"])
+        client = create_user_and_do_authentication(permissions=["core.delete_student"])
 
         url = reverse("student-detail", args=[student.id])
         response = client.delete(path=url)
@@ -101,14 +100,12 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(Student.objects.all().count(), 0)  # deve ser mascarado
         self.assertEqual(Student.all_objects.all().count(), 1)  # mas deve ser mantido no banco de dados
 
-    """Teste de caso inválido"""
-
     def test_create_invalid_student_with_permission(self):
         person1 = create_person()
         person2 = create_person(cpf=CPF_2, rg=RG_2)
         academic_education_campus = create_academic_education_campus()
 
-        client = client_force_authenticate(client=self.client, permissions=["core.add_student"])
+        client = create_user_and_do_authentication(permissions=["core.add_student"])
 
         invalid_pk_academic_education_campus = 99
         student = {
@@ -178,7 +175,7 @@ class StudentAPITestCase(APITestCase):
             "registration": invalid_registration,
         }
 
-        client = client_force_authenticate(client=self.client, permissions=["core.change_student"])
+        client = create_user_and_do_authentication(permissions=["core.change_student"])
 
         url = reverse("student-detail", args=[student.id])
         response = client.patch(path=url, data=student_data)
@@ -187,7 +184,7 @@ class StudentAPITestCase(APITestCase):
         self.assertNotEqual(response.data.get("registration"), None)
 
     def test_list_student_without_permission(self):
-        client = client_force_authenticate(client=self.client, permissions=[])
+        client = create_user_and_do_authentication(permissions=[])
 
         url = reverse("student-list")
         response = client.get(path=url)
@@ -195,7 +192,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)  # não deve ter permissão para acessar
 
     def test_retrieve_student_without_permission(self):
-        client = client_force_authenticate(client=self.client, permissions=[])
+        client = create_user_and_do_authentication(permissions=[])
 
         url = reverse("student-detail", args=[99])
         response = client.get(path=url)
@@ -203,7 +200,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_create_student_without_permission(self):
-        client = client_force_authenticate(client=self.client, permissions=[])
+        client = create_user_and_do_authentication(permissions=[])
 
         url = reverse("student-list")
         response = client.post(path=url, data={})
@@ -211,7 +208,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_partial_update_student_without_permission(self):
-        client = client_force_authenticate(client=self.client, permissions=[])
+        client = create_user_and_do_authentication(permissions=[])
 
         url = reverse("student-detail", args=[99])
         response = client.patch(path=url)
@@ -219,7 +216,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_destroy_student_without_permission(self):
-        client = client_force_authenticate(client=self.client, permissions=[])
+        client = create_user_and_do_authentication(permissions=[])
 
         url = reverse("student-detail", args=[99])
         response = client.delete(path=url)
@@ -227,7 +224,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_id_not_found(self):
-        client = client_force_authenticate(client=self.client, permissions=["core.view_student"])
+        client = create_user_and_do_authentication(permissions=["core.view_student"])
 
         url = reverse("student-detail", args=[99])  # qualquer id, o banco de dados para test é vazio
         response = client.get(path=url)
@@ -235,7 +232,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe
 
     def test_partial_update_id_not_found(self):
-        client = client_force_authenticate(client=self.client, permissions=["core.change_student"])
+        client = create_user_and_do_authentication(permissions=["core.change_student"])
 
         url = reverse("student-detail", args=[99])
         response = client.patch(path=url)
@@ -243,7 +240,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
 
     def test_destroy_id_not_found(self):
-        client = client_force_authenticate(client=self.client, permissions=["core.delete_student"])
+        client = create_user_and_do_authentication(permissions=["core.delete_student"])
 
         url = reverse("student-detail", args=[99])
         response = client.delete(path=url)

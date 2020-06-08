@@ -1,2 +1,0 @@
-from tests.models.setup.Institution import create_academic_education, create_academic_education_campus
-from tests.models.setup.Location import create_location

@@ -1,7 +1,8 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 from validate_docbr import CPF
 
-from nupe.core.models import PERSON_INVALID_CPF_MESSAGE, Person
+from nupe.core.models import Person
+from resources.const.Messages import PERSON_INVALID_CPF_MESSAGE
 
 
 class PersonListSerializer(ModelSerializer):

@@ -1,11 +1,10 @@
 from django.contrib.auth.models import Permission, User
 from rest_framework.test import APIClient
 
-USERNAME = "teste"
+from resources.const.datas.User import USERNAME
 
 
 def create_user_with_permissions(*, username: str = USERNAME, permissions: list) -> User:
-    """cria um usuário no banco com as permissões fornecidas"""
     user = User.objects.create_user(username=username, password=username)
 
     for permission in permissions:
@@ -15,10 +14,10 @@ def create_user_with_permissions(*, username: str = USERNAME, permissions: list)
     return user
 
 
-def client_force_authenticate(*, client: APIClient = APIClient(), permissions: list) -> APIClient:
-    """cria um usuário no banco com as permissões fornecidas e autentica ele para as requisições futuras"""
-    user = create_user_with_permissions(permissions=permissions)
+def create_user_and_do_authentication(permissions: list) -> APIClient:
+    client = APIClient()
 
+    user = create_user_with_permissions(username="teste", permissions=permissions)
     client.force_authenticate(user=user)
 
     return client

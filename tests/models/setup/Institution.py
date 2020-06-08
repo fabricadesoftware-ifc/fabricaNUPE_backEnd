@@ -1,8 +1,7 @@
 from nupe.core.models import AcademicEducation, AcademicEducationCampus, Campus, Course, Grade
-from tests.models.Course import COURSE_NAME, GRADE_NAME
+from resources.const.datas.Course import COURSE_NAME, GRADE_NAME
+from resources.const.datas.Institution import CAMPUS_NAME
 from tests.models.setup.Location import create_location
-
-CAMPUS_NAME = "Araquari"
 
 
 def create_academic_education(*, course_name=COURSE_NAME, grade_name=GRADE_NAME):

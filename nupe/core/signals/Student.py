@@ -3,7 +3,8 @@ from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 
 from nupe.core.exceptions import MyselfResponsible, UnderAgeResponsible
-from nupe.core.models import RESPONSIBLE_MIN_AGE, Person, Responsible, Student
+from nupe.core.models import Person, Responsible, Student
+from nupe.core.models.Student import RESPONSIBLE_MIN_AGE
 
 
 @receiver(signal=m2m_changed, sender=Responsible, dispatch_uid="student_responsibles_add")
