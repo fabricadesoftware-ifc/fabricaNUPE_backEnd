@@ -84,6 +84,20 @@ SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {
         "NUPE Authentication": {"type": "oauth2", "tokenUrl": "/oauth/token/", "flow": "password"}
     },
+    "DEFAULT_FIELD_INSPECTORS": [
+        "drf_yasg.inspectors.CamelCaseJSONFilter",
+        "drf_yasg.inspectors.InlineSerializerInspector",  # não exibe a definição das models no swagger ui
+        "drf_yasg.inspectors.RelatedFieldInspector",
+        "drf_yasg.inspectors.ChoiceFieldInspector",
+        "drf_yasg.inspectors.FileFieldInspector",
+        "drf_yasg.inspectors.DictFieldInspector",
+        "drf_yasg.inspectors.JSONFieldInspector",
+        "drf_yasg.inspectors.HiddenFieldInspector",
+        "drf_yasg.inspectors.RecursiveFieldInspector",
+        "drf_yasg.inspectors.SerializerMethodFieldInspector",
+        "drf_yasg.inspectors.SimpleFieldInspector",
+        "drf_yasg.inspectors.StringDefaultFieldInspector",
+    ],
 }
 
 
