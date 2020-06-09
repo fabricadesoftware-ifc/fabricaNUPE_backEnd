@@ -16,6 +16,7 @@ class PersonViewSet(
     ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet
 ):
     queryset = Person.objects.all()
+    http_method_names = ["get", "post", "patch", "delete"]
     perms_map_action = {
         "list": ["core.view_person"],
         "retrieve": ["core.view_person"],

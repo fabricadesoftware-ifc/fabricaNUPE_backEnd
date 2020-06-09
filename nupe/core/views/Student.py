@@ -16,6 +16,7 @@ class StudentViewSet(
     GenericViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 ):
     queryset = Student.objects.all()
+    http_method_names = ["get", "post", "patch", "delete"]
     perms_map_action = {
         "list": ["core.view_student"],
         "retrieve": ["core.view_student"],
