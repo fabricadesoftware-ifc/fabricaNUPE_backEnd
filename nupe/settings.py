@@ -1,4 +1,4 @@
-# Bolsista Luis Carvalho
+# Bolsista Luis Guerreiro
 
 import os
 from datetime import timedelta
@@ -71,8 +71,11 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ("oauth2_provider.contrib.rest_framework.OAuth2Authentication",),
     "DEFAULT_PERMISSION_CLASSES": ("drf_action_permissions.DjangoActionPermissions",),
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
+
 
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
