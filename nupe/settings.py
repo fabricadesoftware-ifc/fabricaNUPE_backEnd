@@ -9,7 +9,9 @@ SECRET_KEY = "6+4+9k!)@5$pkosu^5x7_aq(4bnkqrmxlkkextfs*13je9=#2!"
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# DEBUG = False
+
+# ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 INSTALLED_APPS = [
