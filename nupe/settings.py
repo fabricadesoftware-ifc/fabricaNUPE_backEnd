@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "oauth2_provider",
     "safedelete",
     "nupe.core",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -92,3 +93,5 @@ USE_TZ = True
 
 
 STATIC_URL = "/static/"
+
+LOGIN_URL = "/admin/login/"
