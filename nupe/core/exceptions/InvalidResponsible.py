@@ -1,6 +1,6 @@
 from rest_framework.exceptions import APIException
 
-from resources.const.Messages import MYSELF_RESPONSIBLE_MESSAGE, UNDER_AGE_RESPONSIBLE_MESSAGE
+from resources.const.messages.Responsible import MYSELF_RESPONSIBLE_MESSAGE, UNDER_AGE_RESPONSIBLE_MESSAGE
 
 
 class InvalidResponsible(APIException):

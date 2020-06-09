@@ -1,7 +1,9 @@
-from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField
+from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField, ValidationError
 
 from nupe.core.models import Person, Student
+from nupe.core.models.Student import RESPONSIBLE_MIN_AGE
 from nupe.core.serializers import PersonDetailSerializer, PersonListSerializer
+from resources.const.messages.Responsible import UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE
 
 
 class StudentListSerializer(ModelSerializer):
@@ -39,3 +41,13 @@ class StudentCreateSerializer(ModelSerializer):
         model = Student
         fields = ["id", "registration", "person", "academic_education_campus", "responsibles_persons", "ingress_date"]
         read_only_fields = ["id"]
+
+    def validate(self, data):
+        person = data.get("person")
+        responsibles = data.get("responsibles_persons")
+
+        if person:
+            if person.age < RESPONSIBLE_MIN_AGE and not responsibles:
+                raise ValidationError({"responsibles_persons": UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE})
+
+        return data

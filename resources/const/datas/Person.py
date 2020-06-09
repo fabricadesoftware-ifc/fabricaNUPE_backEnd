@@ -10,7 +10,8 @@ RG = "1234567"
 
 DATE = {"date": "11/11/1999", "format": "%d/%m/%Y"}
 BIRTHDAY_DATE = datetime.strptime(DATE.get("date"), DATE.get("format")).date()
-AGE = datetime.now().year - BIRTHDAY_DATE.year
+TODAY = datetime.now()
+AGE = TODAY.year - BIRTHDAY_DATE.year - ((TODAY.month, TODAY.day) < (BIRTHDAY_DATE.month, BIRTHDAY_DATE.day))
 
 UNDER_AGE_BIRTHDAY_DATE = "2010-10-10"
 GENDER = "M"

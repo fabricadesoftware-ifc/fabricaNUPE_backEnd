@@ -168,6 +168,25 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertNotEqual(response.data.get("registration"), None)
 
+        person1.birthday_date = "2005-06-10"
+        person1.save()
+
+        student = {
+            "registration": "123",
+            "person": person1.id,
+            "responsibles_persons": [],
+            "academic_education_campus": academic_education_campus.id,
+            "ingress_date": INGRESS_DATE,
+        }
+
+        url = reverse("student-list")
+        response = client.post(path=url, data=student)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+
+        # estudante menor de idade sem responsável deve emitir mensagem de erro do campo inválido
+        self.assertNotEqual(response.data.get("responsibles_persons"), None)
+
     def test_partial_update_invalid_student_with_permission(self):
         # cria um estudante no banco para poder atualiza-lo
         student = create_student()
