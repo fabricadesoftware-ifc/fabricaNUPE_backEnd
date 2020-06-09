@@ -1,4 +1,4 @@
-# Bolsista Luis Carvalho
+# Bolsista Luis Guerreiro
 
 import os
 from datetime import timedelta
@@ -9,7 +9,9 @@ SECRET_KEY = "6+4+9k!)@5$pkosu^5x7_aq(4bnkqrmxlkkextfs*13je9=#2!"
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# DEBUG = False
+
+# ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 INSTALLED_APPS = [
@@ -71,7 +73,31 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ("oauth2_provider.contrib.rest_framework.OAuth2Authentication",),
     "DEFAULT_PERMISSION_CLASSES": ("drf_action_permissions.DjangoActionPermissions",),
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+}
+
+
+SWAGGER_SETTINGS = {
+    "USE_SESSION_AUTH": False,
+    "SECURITY_DEFINITIONS": {
+        "NUPE Authentication": {"type": "oauth2", "tokenUrl": "/oauth/token/", "flow": "password"}
+    },
+    "DEFAULT_FIELD_INSPECTORS": [
+        "drf_yasg.inspectors.CamelCaseJSONFilter",
+        "drf_yasg.inspectors.InlineSerializerInspector",  # não exibe a definição das models no swagger ui
+        "drf_yasg.inspectors.RelatedFieldInspector",
+        "drf_yasg.inspectors.ChoiceFieldInspector",
+        "drf_yasg.inspectors.FileFieldInspector",
+        "drf_yasg.inspectors.DictFieldInspector",
+        "drf_yasg.inspectors.JSONFieldInspector",
+        "drf_yasg.inspectors.HiddenFieldInspector",
+        "drf_yasg.inspectors.RecursiveFieldInspector",
+        "drf_yasg.inspectors.SerializerMethodFieldInspector",
+        "drf_yasg.inspectors.SimpleFieldInspector",
+        "drf_yasg.inspectors.StringDefaultFieldInspector",
+    ],
 }
 
 
