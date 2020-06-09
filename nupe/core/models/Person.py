@@ -6,7 +6,7 @@ from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 from validate_docbr import CPF
 
 from nupe.core.utils.Regex import ONLY_LETTERS_AND_SPACE, ONLY_NUMBERS
-from resources.const.Messages import PERSON_INVALID_CPF_MESSAGE
+from resources.const.messages.Person import PERSON_INVALID_CPF_MESSAGE
 
 PERSON_FIRST_NAME_MAX_LENGTH = 50
 PERSON_LAST_NAME_MAX_LENGTH = 100
@@ -48,7 +48,17 @@ class Person(SafeDeleteModel):
 
     @property
     def age(self) -> int:
-        return timezone.now().year - self.birthday_date.year
+        """
+        se o mês ou o dia atual for menor do que o mês ou o dia da data de nascimento, é subtraído 1 da idade
+        para obter a idade atual da pessoa
+        """
+        today = timezone.now()
+
+        return (
+            today.year
+            - self.birthday_date.year
+            - ((today.month, today.day) < (self.birthday_date.month, self.birthday_date.day))
+        )
 
     def __str__(self):
         return self.full_name
