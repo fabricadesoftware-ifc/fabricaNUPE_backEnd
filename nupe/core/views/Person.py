@@ -17,6 +17,8 @@ class PersonViewSet(
 ):
     queryset = Person.objects.all()
     http_method_names = ["get", "post", "patch", "delete"]
+    search_fields = ["=cpf", "=rg", "first_name", "last_name"]
+
     perms_map_action = {
         "list": ["core.view_person"],
         "retrieve": ["core.view_person"],
@@ -24,6 +26,7 @@ class PersonViewSet(
         "partial_update": ["core.change_person"],
         "destroy": ["core.delete_person"],
     }
+
     per_action_serializer = {
         "list": PersonListSerializer,
         "retrieve": PersonDetailSerializer,

@@ -17,6 +17,8 @@ class StudentViewSet(
 ):
     queryset = Student.objects.all()
     http_method_names = ["get", "post", "patch", "delete"]
+    search_fields = ["=registration", "=person__cpf", "=person__rg", "person__first_name", "person__last_name"]
+
     perms_map_action = {
         "list": ["core.view_student"],
         "retrieve": ["core.view_student"],
@@ -24,6 +26,7 @@ class StudentViewSet(
         "partial_update": ["core.change_student"],
         "destroy": ["core.delete_student"],
     }
+
     per_action_serializer = {
         "list": StudentListSerializer,
         "retrieve": StudentDetailSerializer,
