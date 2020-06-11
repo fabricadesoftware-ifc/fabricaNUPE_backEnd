@@ -19,6 +19,9 @@ class PersonViewSet(
     queryset = Person.objects.all()
     filterset_class = PersonFilter
     search_fields = ["=cpf", "=rg", "first_name", "last_name"]
+    ordering_fields = ["first_name", "last_name"]
+    ordering = ["first_name", "last_name"]
+
     http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {

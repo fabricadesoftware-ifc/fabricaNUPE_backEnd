@@ -19,6 +19,9 @@ class StudentViewSet(
     queryset = Student.objects.all()
     filterset_class = StudentFilter
     search_fields = ["=registration", "=person__cpf", "=person__rg", "person__first_name", "person__last_name"]
+    ordering_fields = ["registration", "person__first_name", "person__last_name"]
+    ordering = ["person__first_name", "person__last_name"]
+
     http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {
