@@ -8,6 +8,7 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 
 from nupe.core.exceptions import ActionNotImplemented
+from nupe.core.filters import PersonFilter
 from nupe.core.models import Person
 from nupe.core.serializers import PersonCreateSerializer, PersonDetailSerializer, PersonListSerializer
 
@@ -16,8 +17,9 @@ class PersonViewSet(
     ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet
 ):
     queryset = Person.objects.all()
-    http_method_names = ["get", "post", "patch", "delete"]
+    filterset_class = PersonFilter
     search_fields = ["=cpf", "=rg", "first_name", "last_name"]
+    http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {
         "list": ["core.view_person"],
