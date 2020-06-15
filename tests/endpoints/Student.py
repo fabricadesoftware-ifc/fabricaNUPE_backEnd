@@ -31,7 +31,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve retornar todos os estudantes do banco de dados
-        self.assertEqual(len(response.data.get("results")), Student.objects.all().count())
+        self.assertEqual(response.data.get("count"), Student.objects.all().count())
 
     def test_retrieve_student_with_permission(self):
         # cria um estudante no banco para detalhar suas informações
@@ -281,7 +281,7 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # os 3 estudantes tem o mesmo nome
-        self.assertEqual(len(response.data.get("results")), 3)
+        self.assertEqual(response.data.get("count"), 3)
 
     def test_param_filter(self):
         ingress_date = "2020-06-15"
@@ -298,7 +298,7 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # todos os estudante ainda não se formaram
-        self.assertEqual(len(response.data.get("results")), 3)
+        self.assertEqual(response.data.get("count"), 3)
 
         filter_by_range_date = f"?ingress_date_after={ingress_date}"  # _after usa >= e _before usa <=
         url = reverse("student-list") + filter_by_range_date
@@ -306,7 +306,7 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # apenas 1 estudante ingressou a partir da data 2020-06-05
-        self.assertEqual(len(response.data.get("results")), 1)
+        self.assertEqual(response.data.get("count"), 1)
 
         filter_by_course_id = f"?course_id={1}"
         url = reverse("student-list") + filter_by_course_id
@@ -314,7 +314,7 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # todos os estudantes fazem o mesmo curso
-        self.assertEqual(len(response.data.get("results")), 3)
+        self.assertEqual(response.data.get("count"), 3)
 
         filter_by_campus_name = f"?campus_name={'araquari'}"  # case insensitive
         url = reverse("student-list") + filter_by_campus_name
@@ -322,7 +322,7 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # todos os estudantes estão no mesmo campus
-        self.assertEqual(len(response.data.get("results")), 3)
+        self.assertEqual(response.data.get("count"), 3)
 
     def test_not_found_search_filter(self):
         create_student()
@@ -335,7 +335,7 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # nenhum estudante com esse nome
-        self.assertEqual(len(response.data.get("results")), 0)
+        self.assertEqual(response.data.get("count"), 0)
 
     def test_not_found_param_filter(self):
         ingress_date = "2020-06-15"
@@ -351,7 +351,7 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # todos os estudante ainda não se formaram
-        self.assertEqual(len(response.data.get("results")), 0)
+        self.assertEqual(response.data.get("count"), 0)
 
         filter_by_range_date = f"?ingress_date_after={ingress_date}"  # _after usa >= e _before usa <=
         url = reverse("student-list") + filter_by_range_date
@@ -359,7 +359,7 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # nenhum estudante ingressou a partir da data 2020-06-05
-        self.assertEqual(len(response.data.get("results")), 0)
+        self.assertEqual(response.data.get("count"), 0)
 
         filter_by_course_id = f"?course_id={2}"
         url = reverse("student-list") + filter_by_course_id
@@ -367,7 +367,7 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # todos os estudantes fazem o curso com o id 1
-        self.assertEqual(len(response.data.get("results")), 0)
+        self.assertEqual(response.data.get("count"), 0)
 
         filter_by_campus_name = f"?campus_name={'joinville'}"  # case insensitive
         url = reverse("student-list") + filter_by_campus_name
@@ -375,4 +375,4 @@ class StudentAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # nenhum estudante do campus passado como parâmetro
-        self.assertEqual(len(response.data.get("results")), 0)
+        self.assertEqual(response.data.get("count"), 0)

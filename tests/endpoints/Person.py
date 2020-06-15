@@ -38,7 +38,7 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve retornar todos os dados do banco de dados
-        self.assertEqual(len(response.data.get("results")), Person.objects.all().count())
+        self.assertEqual(response.data.get("count"), Person.objects.all().count())
 
     def test_retrieve_person_with_permission(self):
         person = create_person()  # cria uma pessoa no banco para detalhar suas informações
@@ -285,7 +285,7 @@ class PersonAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # as 3 pessoas tem o mesmo nome, por isso deve retornar todos
-        self.assertEqual(len(response.data.get("results")), 3)
+        self.assertEqual(response.data.get("count"), 3)
 
     def test_param_filter(self):
         female_gender = "F"
@@ -303,7 +303,7 @@ class PersonAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # no banco contém 2 pessoas do gênero feminino e 1 masculino
-        self.assertEqual(len(response.data.get("results")), 2)
+        self.assertEqual(response.data.get("count"), 2)
 
         filter_by_range_date = f"?birthday_date_after={birthday_date}"  # _after usa >= e _before usa <=
         url = reverse("person-list") + filter_by_range_date
@@ -311,7 +311,7 @@ class PersonAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # só existe uma pessoa no banco que nasceu a partir de 2005-10-10
-        self.assertEqual(len(response.data.get("results")), 1)
+        self.assertEqual(response.data.get("count"), 1)
 
     def test_not_found_search_filter(self):
         create_person()
@@ -324,7 +324,7 @@ class PersonAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # por não ter nenhuma pessoa com esse nome no banco de dados, deve retornar uma lista vazia
-        self.assertEqual(len(response.data.get("results")), 0)
+        self.assertEqual(response.data.get("count"), 0)
 
     def test_not_found_param_filter(self):
         female_gender = "F"
@@ -340,7 +340,7 @@ class PersonAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # no banco contém 2 pessoas e do gênero masculino, por isso, deve retornar uma lista vazia
-        self.assertEqual(len(response.data.get("results")), 0)
+        self.assertEqual(response.data.get("count"), 0)
 
         filter_by_range_date = f"?birthday_date_after={'2020-06-15'}"
         url = reverse("person-list") + filter_by_range_date
@@ -348,4 +348,4 @@ class PersonAPITestCase(APITestCase):
         response = client.get(path=url)
 
         # no banco não há nenhuma pessoa que nasceu a partir de 2020-06-15, por isso, deve retornar uma lista vazia
-        self.assertEqual(len(response.data.get("results")), 0)
+        self.assertEqual(response.data.get("count"), 0)
