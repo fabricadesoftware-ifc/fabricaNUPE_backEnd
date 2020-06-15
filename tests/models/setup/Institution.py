@@ -4,17 +4,23 @@ from resources.const.datas.Institution import CAMPUS_NAME
 from tests.models.setup.Location import create_location
 
 
-def create_academic_education(*, course_name=COURSE_NAME, grade_name=GRADE_NAME):
-    course = Course.objects.create(name=course_name)
-    grade = Grade.objects.create(name=grade_name)
+def create_academic_education(*, course_name: str = COURSE_NAME, grade_name: str = GRADE_NAME):
+    course, created = Course.objects.get_or_create(name=course_name)
+    grade, created = Grade.objects.get_or_create(name=grade_name)
 
-    return AcademicEducation.objects.create(course=course, grade=grade)
+    academic_education, created = AcademicEducation.objects.get_or_create(course=course, grade=grade)
+
+    return academic_education
 
 
 def create_academic_education_campus():
     location = create_location()
-    campus = Campus.objects.create(name=CAMPUS_NAME, location=location)
+    campus, created = Campus.objects.get_or_create(name=CAMPUS_NAME, location=location)
 
     academic_education = create_academic_education()
 
-    return AcademicEducationCampus.objects.create(academic_education=academic_education, campus=campus)
+    academic_education_campus, created = AcademicEducationCampus.objects.get_or_create(
+        academic_education=academic_education, campus=campus
+    )
+
+    return academic_education_campus

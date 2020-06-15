@@ -6,8 +6,8 @@ from tests.endpoints.setup.Person import create_person
 from tests.models.setup.Institution import create_academic_education_campus
 
 
-def create_student(*, registration: str = REGISTRATION, ingress_date: date = INGRESS_DATE) -> Student:
-    person = create_person()
+def create_student(*, registration: str = REGISTRATION, ingress_date: date = INGRESS_DATE, **kwargs) -> Student:
+    person = create_person(**kwargs)
     academic_education_campus = create_academic_education_campus()
 
     return Student.objects.create(
