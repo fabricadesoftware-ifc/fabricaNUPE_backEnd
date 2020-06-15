@@ -31,7 +31,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve retornar todos os estudantes do banco de dados
-        self.assertEqual(len(response.data), Student.objects.all().count())
+        self.assertEqual(len(response.data.get("results")), Student.objects.all().count())
 
     def test_retrieve_student_with_permission(self):
         # cria um estudante no banco para detalhar suas informações

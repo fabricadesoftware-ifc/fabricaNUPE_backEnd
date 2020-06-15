@@ -27,20 +27,20 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve retornar todos os dados do banco de dados
-        self.assertEqual(len(response.data), Person.objects.all().count())
+        self.assertEqual(len(response.data.get("results")), Person.objects.all().count())
 
     def test_retrieve_person_with_permission(self):
         person = create_person()  # cria uma pessoa no banco para detalhar suas informações
 
         client = client = create_user_and_do_authentication(permissions=["core.view_person"])
 
-        url = reverse("person-detail", args=[person.id])
+        url = reverse("person-detail", args=[person.cpf])
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve retornar as informações do usuário do id fornecido
-        self.assertEqual(response.data.get("id"), person.id)
+        self.assertEqual(response.data.get("cpf"), person.cpf)
 
     def test_create_person_with_permission(self):
         # pessoa com informações válidas para conseguir criar
@@ -71,20 +71,20 @@ class PersonAPITestCase(APITestCase):
         new_first_name = "first name updated"
         person_update = {"first_name": new_first_name}
 
-        url = reverse("person-detail", args=[person.id])
+        url = reverse("person-detail", args=[person.cpf])
         response = client.patch(path=url, data=person_update)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # verifica se atualizou no banco de dados
-        self.assertEqual(Person.objects.get(id=person.id).first_name, new_first_name)
+        self.assertEqual(Person.objects.get(cpf=person.cpf).first_name, new_first_name)
 
     def test_destroy_person_with_permission(self):
         person = create_person()  # cria uma pessoa no banco para poder excluir
 
         client = create_user_and_do_authentication(permissions=["core.delete_person"])
 
-        url = reverse("person-detail", args=[person.id])
+        url = reverse("person-detail", args=[person.cpf])
         response = client.delete(path=url)
 
         # o dado deve ser mascarado
@@ -191,7 +191,7 @@ class PersonAPITestCase(APITestCase):
             "first_name": invalid_first_name,
         }
 
-        url = reverse("person-detail", args=[person.id])
+        url = reverse("person-detail", args=[person.cpf])
         response = client.patch(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
@@ -240,7 +240,7 @@ class PersonAPITestCase(APITestCase):
     def test_retrieve_id_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.view_person"])
 
-        url = reverse("person-detail", args=[99])  # qualquer id, o banco de dados para test é vazio
+        url = reverse("person-detail", args=["fdsf"])  # qualquer id, o banco de dados para test é vazio
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe
