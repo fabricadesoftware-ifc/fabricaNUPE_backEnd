@@ -50,7 +50,7 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
-        # deve retornar as informações do usuário do id fornecido
+        # deve retornar as informações do usuário do cpf fornecido
         self.assertEqual(response.data.get("cpf"), person.cpf)
 
     def test_create_person_with_permission(self):
@@ -248,15 +248,15 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
-    def test_retrieve_id_not_found(self):
+    def test_retrieve_registration_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.view_person"])
 
-        url = reverse("person-detail", args=["fdsf"])  # qualquer id, o banco de dados para test é vazio
+        url = reverse("person-detail", args=[99])  # qualquer registration, o banco de dados para test é vazio
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe
 
-    def test_partial_update_id_not_found(self):
+    def test_partial_update_registration_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.change_person"])
 
         url = reverse("person-detail", args=[99])
@@ -264,7 +264,7 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
 
-    def test_destroy_id_not_found(self):
+    def test_destroy_registration_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.delete_person"])
 
         url = reverse("person-detail", args=[99])

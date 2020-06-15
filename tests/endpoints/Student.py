@@ -39,13 +39,13 @@ class StudentAPITestCase(APITestCase):
 
         client = create_user_and_do_authentication(permissions=["core.view_student"])
 
-        url = reverse("student-detail", args=[student.id])
+        url = reverse("student-detail", args=[student.registration])
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
-        # deve retornar as informações do estudante do id fornecido
-        self.assertEqual(response.data.get("id"), student.id)
+        # deve retornar as informações do estudante do registration fornecido
+        self.assertEqual(response.data.get("registration"), student.registration)
 
     def test_create_student_with_permission(self):
         person1 = create_person()
@@ -80,7 +80,7 @@ class StudentAPITestCase(APITestCase):
             "registration": new_registration,
         }
 
-        url = reverse("student-detail", args=[student.id])
+        url = reverse("student-detail", args=[student.registration])
         response = client.patch(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
@@ -95,7 +95,7 @@ class StudentAPITestCase(APITestCase):
 
         client = create_user_and_do_authentication(permissions=["core.delete_student"])
 
-        url = reverse("student-detail", args=[student.id])
+        url = reverse("student-detail", args=[student.registration])
         response = client.delete(path=url)
 
         self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
@@ -198,7 +198,7 @@ class StudentAPITestCase(APITestCase):
             "registration": invalid_registration,
         }
 
-        url = reverse("student-detail", args=[student.id])
+        url = reverse("student-detail", args=[student.registration])
         response = client.patch(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
@@ -244,15 +244,15 @@ class StudentAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
-    def test_retrieve_id_not_found(self):
+    def test_retrieve_registration_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.view_student"])
 
-        url = reverse("student-detail", args=[99])  # qualquer id, o banco de dados para test é vazio
+        url = reverse("student-detail", args=[99])  # qualquer registration, o banco de dados para test é vazio
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe
 
-    def test_partial_update_id_not_found(self):
+    def test_partial_update_registration_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.change_student"])
 
         url = reverse("student-detail", args=[99])
@@ -260,7 +260,7 @@ class StudentAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
 
-    def test_destroy_id_not_found(self):
+    def test_destroy_registration_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.delete_student"])
 
         url = reverse("student-detail", args=[99])
