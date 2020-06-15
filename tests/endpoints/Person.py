@@ -10,7 +10,18 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
-from resources.const.datas.Person import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG
+from resources.const.datas.Person import (
+    BIRTHDAY_DATE,
+    CPF,
+    CPF_2,
+    CPF_3,
+    FIRST_NAME,
+    GENDER,
+    LAST_NAME,
+    RG,
+    RG_2,
+    RG_3,
+)
 from tests.endpoints.setup.Person import create_person
 from tests.endpoints.setup.User import create_user_and_do_authentication
 
@@ -27,20 +38,20 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve retornar todos os dados do banco de dados
-        self.assertEqual(len(response.data), Person.objects.all().count())
+        self.assertEqual(response.data.get("count"), Person.objects.all().count())
 
     def test_retrieve_person_with_permission(self):
         person = create_person()  # cria uma pessoa no banco para detalhar suas informações
 
         client = client = create_user_and_do_authentication(permissions=["core.view_person"])
 
-        url = reverse("person-detail", args=[person.id])
+        url = reverse("person-detail", args=[person.cpf])
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
-        # deve retornar as informações do usuário do id fornecido
-        self.assertEqual(response.data.get("id"), person.id)
+        # deve retornar as informações do usuário do cpf fornecido
+        self.assertEqual(response.data.get("cpf"), person.cpf)
 
     def test_create_person_with_permission(self):
         # pessoa com informações válidas para conseguir criar
@@ -71,20 +82,20 @@ class PersonAPITestCase(APITestCase):
         new_first_name = "first name updated"
         person_update = {"first_name": new_first_name}
 
-        url = reverse("person-detail", args=[person.id])
+        url = reverse("person-detail", args=[person.cpf])
         response = client.patch(path=url, data=person_update)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # verifica se atualizou no banco de dados
-        self.assertEqual(Person.objects.get(id=person.id).first_name, new_first_name)
+        self.assertEqual(Person.objects.get(cpf=person.cpf).first_name, new_first_name)
 
     def test_destroy_person_with_permission(self):
         person = create_person()  # cria uma pessoa no banco para poder excluir
 
         client = create_user_and_do_authentication(permissions=["core.delete_person"])
 
-        url = reverse("person-detail", args=[person.id])
+        url = reverse("person-detail", args=[person.cpf])
         response = client.delete(path=url)
 
         # o dado deve ser mascarado
@@ -191,7 +202,7 @@ class PersonAPITestCase(APITestCase):
             "first_name": invalid_first_name,
         }
 
-        url = reverse("person-detail", args=[person.id])
+        url = reverse("person-detail", args=[person.cpf])
         response = client.patch(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
@@ -237,15 +248,15 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
-    def test_retrieve_id_not_found(self):
+    def test_retrieve_registration_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.view_person"])
 
-        url = reverse("person-detail", args=[99])  # qualquer id, o banco de dados para test é vazio
+        url = reverse("person-detail", args=[99])  # qualquer registration, o banco de dados para test é vazio
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe
 
-    def test_partial_update_id_not_found(self):
+    def test_partial_update_registration_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.change_person"])
 
         url = reverse("person-detail", args=[99])
@@ -253,10 +264,88 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
 
-    def test_destroy_id_not_found(self):
+    def test_destroy_registration_not_found(self):
         client = create_user_and_do_authentication(permissions=["core.delete_person"])
 
         url = reverse("person-detail", args=[99])
         response = client.delete(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
+
+    def test_search_filter(self):
+        person1 = create_person()
+        create_person(cpf=CPF_2, rg=RG_2)
+        create_person(cpf=CPF_3, rg=RG_3)
+
+        client = create_user_and_do_authentication(permissions=["core.view_person"])
+
+        search_by_first_name = f"?search={person1.first_name}"
+        url = reverse("person-list") + search_by_first_name
+
+        response = client.get(path=url)
+
+        # as 3 pessoas tem o mesmo nome, por isso deve retornar todos
+        self.assertEqual(response.data.get("count"), 3)
+
+    def test_param_filter(self):
+        female_gender = "F"
+        birthday_date = "2005-10-10"
+
+        create_person(gender=female_gender, birthday_date=birthday_date)
+        create_person(cpf=CPF_2, rg=RG_2, gender=female_gender)
+        create_person(cpf=CPF_3, rg=RG_3)
+
+        client = create_user_and_do_authentication(permissions=["core.view_person"])
+
+        filter_by_gender = f"?gender={female_gender}"
+        url = reverse("person-list") + filter_by_gender
+
+        response = client.get(path=url)
+
+        # no banco contém 2 pessoas do gênero feminino e 1 masculino
+        self.assertEqual(response.data.get("count"), 2)
+
+        filter_by_range_date = f"?birthday_date_after={birthday_date}"  # _after usa >= e _before usa <=
+        url = reverse("person-list") + filter_by_range_date
+
+        response = client.get(path=url)
+
+        # só existe uma pessoa no banco que nasceu a partir de 2005-10-10
+        self.assertEqual(response.data.get("count"), 1)
+
+    def test_not_found_search_filter(self):
+        create_person()
+
+        client = create_user_and_do_authentication(permissions=["core.view_person"])
+
+        search_by_first_name_not_in_database = f"?search={'not in database'}"
+        url = reverse("person-list") + search_by_first_name_not_in_database
+
+        response = client.get(path=url)
+
+        # por não ter nenhuma pessoa com esse nome no banco de dados, deve retornar uma lista vazia
+        self.assertEqual(response.data.get("count"), 0)
+
+    def test_not_found_param_filter(self):
+        female_gender = "F"
+
+        create_person()
+        create_person(cpf=CPF_2, rg=RG_2)
+
+        client = create_user_and_do_authentication(permissions=["core.view_person"])
+
+        filter_by_gender = f"?gender={female_gender}"
+        url = reverse("person-list") + filter_by_gender
+
+        response = client.get(path=url)
+
+        # no banco contém 2 pessoas e do gênero masculino, por isso, deve retornar uma lista vazia
+        self.assertEqual(response.data.get("count"), 0)
+
+        filter_by_range_date = f"?birthday_date_after={'2020-06-15'}"
+        url = reverse("person-list") + filter_by_range_date
+
+        response = client.get(path=url)
+
+        # no banco não há nenhuma pessoa que nasceu a partir de 2020-06-15, por isso, deve retornar uma lista vazia
+        self.assertEqual(response.data.get("count"), 0)

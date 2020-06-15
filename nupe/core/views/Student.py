@@ -8,6 +8,7 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 
 from nupe.core.exceptions import ActionNotImplemented
+from nupe.core.filters import StudentFilter
 from nupe.core.models import Student
 from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializer, StudentListSerializer
 
@@ -16,7 +17,14 @@ class StudentViewSet(
     GenericViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 ):
     queryset = Student.objects.all()
+    lookup_field = "registration"
+    filterset_class = StudentFilter
+    search_fields = ["person__first_name", "person__last_name"]
+    ordering_fields = ["registration", "person__first_name", "person__last_name"]
+    ordering = ["person__first_name", "person__last_name"]
+
     http_method_names = ["get", "post", "patch", "delete"]
+
     perms_map_action = {
         "list": ["core.view_student"],
         "retrieve": ["core.view_student"],
@@ -24,6 +32,7 @@ class StudentViewSet(
         "partial_update": ["core.change_student"],
         "destroy": ["core.delete_student"],
     }
+
     per_action_serializer = {
         "list": StudentListSerializer,
         "retrieve": StudentDetailSerializer,
