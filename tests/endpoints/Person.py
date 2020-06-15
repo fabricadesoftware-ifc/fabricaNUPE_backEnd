@@ -10,7 +10,18 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
-from resources.const.datas.Person import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME, RG
+from resources.const.datas.Person import (
+    BIRTHDAY_DATE,
+    CPF,
+    CPF_2,
+    CPF_3,
+    FIRST_NAME,
+    GENDER,
+    LAST_NAME,
+    RG,
+    RG_2,
+    RG_3,
+)
 from tests.endpoints.setup.Person import create_person
 from tests.endpoints.setup.User import create_user_and_do_authentication
 
@@ -260,3 +271,81 @@ class PersonAPITestCase(APITestCase):
         response = client.delete(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
+
+    def test_search_filter(self):
+        person1 = create_person()
+        create_person(cpf=CPF_2, rg=RG_2)
+        create_person(cpf=CPF_3, rg=RG_3)
+
+        client = create_user_and_do_authentication(permissions=["core.view_person"])
+
+        search_by_first_name = f"?search={person1.first_name}"
+        url = reverse("person-list") + search_by_first_name
+
+        response = client.get(path=url)
+
+        # as 3 pessoas tem o mesmo nome, por isso deve retornar todos
+        self.assertEqual(len(response.data.get("results")), 3)
+
+    def test_param_filter(self):
+        female_gender = "F"
+        birthday_date = "2005-10-10"
+
+        create_person(gender=female_gender, birthday_date=birthday_date)
+        create_person(cpf=CPF_2, rg=RG_2, gender=female_gender)
+        create_person(cpf=CPF_3, rg=RG_3)
+
+        client = create_user_and_do_authentication(permissions=["core.view_person"])
+
+        filter_by_gender = f"?gender={female_gender}"
+        url = reverse("person-list") + filter_by_gender
+
+        response = client.get(path=url)
+
+        # no banco contém 2 pessoas do gênero feminino e 1 masculino
+        self.assertEqual(len(response.data.get("results")), 2)
+
+        filter_by_range_date = f"?birthday_date_after={birthday_date}"  # _after usa >= e _before usa <=
+        url = reverse("person-list") + filter_by_range_date
+
+        response = client.get(path=url)
+
+        # só existe uma pessoa no banco que nasceu a partir de 2005-10-10
+        self.assertEqual(len(response.data.get("results")), 1)
+
+    def test_not_found_search_filter(self):
+        create_person()
+
+        client = create_user_and_do_authentication(permissions=["core.view_person"])
+
+        search_by_first_name_not_in_database = f"?search={'not in database'}"
+        url = reverse("person-list") + search_by_first_name_not_in_database
+
+        response = client.get(path=url)
+
+        # por não ter nenhuma pessoa com esse nome no banco de dados, deve retornar uma lista vazia
+        self.assertEqual(len(response.data.get("results")), 0)
+
+    def test_not_found_param_filter(self):
+        female_gender = "F"
+
+        create_person()
+        create_person(cpf=CPF_2, rg=RG_2)
+
+        client = create_user_and_do_authentication(permissions=["core.view_person"])
+
+        filter_by_gender = f"?gender={female_gender}"
+        url = reverse("person-list") + filter_by_gender
+
+        response = client.get(path=url)
+
+        # no banco contém 2 pessoas e do gênero masculino, por isso, deve retornar uma lista vazia
+        self.assertEqual(len(response.data.get("results")), 0)
+
+        filter_by_range_date = f"?birthday_date_after={'2020-06-15'}"
+        url = reverse("person-list") + filter_by_range_date
+
+        response = client.get(path=url)
+
+        # no banco não há nenhuma pessoa que nasceu a partir de 2020-06-15, por isso, deve retornar uma lista vazia
+        self.assertEqual(len(response.data.get("results")), 0)
