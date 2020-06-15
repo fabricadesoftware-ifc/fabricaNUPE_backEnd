@@ -17,8 +17,9 @@ class StudentViewSet(
     GenericViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 ):
     queryset = Student.objects.all()
+    lookup_field = "registration"
     filterset_class = StudentFilter
-    search_fields = ["=registration", "=person__cpf", "=person__rg", "person__first_name", "person__last_name"]
+    search_fields = ["person__first_name", "person__last_name"]
     ordering_fields = ["registration", "person__first_name", "person__last_name"]
     ordering = ["person__first_name", "person__last_name"]
 
