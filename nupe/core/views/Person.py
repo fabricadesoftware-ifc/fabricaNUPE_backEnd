@@ -17,8 +17,9 @@ class PersonViewSet(
     ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet
 ):
     queryset = Person.objects.all()
+    lookup_field = "cpf"
     filterset_class = PersonFilter
-    search_fields = ["=cpf", "=rg", "first_name", "last_name"]
+    search_fields = ["first_name", "last_name"]
     ordering_fields = ["first_name", "last_name"]
     ordering = ["first_name", "last_name"]
 
