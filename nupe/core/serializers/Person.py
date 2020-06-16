@@ -16,10 +16,12 @@ class PersonDetailSerializer(ModelSerializer):
         model = Person
         fields = [
             "id",
-            "full_name",
+            "first_name",
+            "last_name",
             "cpf",
             "rg",
             "birthday_date",
+            "gender",
             "contact",
         ]
 

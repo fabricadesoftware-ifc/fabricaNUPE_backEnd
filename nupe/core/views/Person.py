@@ -1,11 +1,4 @@
-from rest_framework.mixins import (
-    CreateModelMixin,
-    DestroyModelMixin,
-    ListModelMixin,
-    RetrieveModelMixin,
-    UpdateModelMixin,
-)
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from nupe.core.exceptions import ActionNotImplemented
 from nupe.core.filters import PersonFilter
@@ -13,9 +6,7 @@ from nupe.core.models import Person
 from nupe.core.serializers import PersonCreateSerializer, PersonDetailSerializer, PersonListSerializer
 
 
-class PersonViewSet(
-    ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet
-):
+class PersonViewSet(ModelViewSet, GenericViewSet):
     queryset = Person.objects.all()
     lookup_field = "cpf"
     filterset_class = PersonFilter
