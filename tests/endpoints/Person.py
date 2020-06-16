@@ -77,18 +77,52 @@ class PersonAPITestCase(APITestCase):
         person = create_person()  # cria uma pessoa no banco para poder atualizar suas informações
 
         client = create_user_and_do_authentication(permissions=["core.change_person"])
+        url = reverse("person-detail", args=[person.cpf])
 
-        # informações válidas para conseguir atualizar
+        # somente um campo e com informações válidas para conseguir atualizar
         new_first_name = "first name updated"
         person_update = {"first_name": new_first_name}
 
-        url = reverse("person-detail", args=[person.cpf])
         response = client.patch(path=url, data=person_update)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # verifica se atualizou no banco de dados
-        self.assertEqual(Person.objects.get(cpf=person.cpf).first_name, new_first_name)
+        self.assertEqual(Person.objects.get(id=person.id).first_name, new_first_name)
+
+        # todos os campos e com informações válidas para conseguir atualizar
+        new_first_name = "first name updated"
+        new_last_name = "last name updated"
+        new_cpf = CPF_2
+        new_rg = RG_2
+        actual_birthday_date = person.birthday_date
+        actual_gender = person.gender
+        actual_contact = person.contact
+
+        person_update = {
+            "first_name": new_first_name,
+            "last_name": new_last_name,
+            "cpf": new_cpf,
+            "rg": new_rg,
+            "birthday_date": actual_birthday_date,
+            "gender": actual_gender,
+            "contact": actual_contact,
+        }
+
+        response = client.patch(path=url, data=person_update)
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # verifica se todos os campos atualizou no banco de dados
+        person_database = Person.objects.get(id=person.id)
+
+        self.assertEqual(person_database.first_name, new_first_name)
+        self.assertEqual(person_database.last_name, new_last_name)
+        self.assertEqual(person_database.cpf, new_cpf)
+        self.assertEqual(person_database.rg, new_rg)
+        self.assertEqual(person_database.birthday_date, actual_birthday_date)
+        self.assertEqual(person_database.gender, actual_gender)
+        self.assertEqual(person_database.contact, actual_contact)
 
     def test_destroy_person_with_permission(self):
         person = create_person()  # cria uma pessoa no banco para poder excluir
@@ -107,10 +141,11 @@ class PersonAPITestCase(APITestCase):
 
     def test_create_invalid_person_with_permission(self):
         client = create_user_and_do_authentication(permissions=["core.add_person"])
+        url = reverse("person-list")
 
         # first_name e last_name devem conter somente letras e espaço
         invalid_first_name = "1nv@lid"
-        person = {
+        person_data = {
             "first_name": invalid_first_name,
             "last_name": LAST_NAME,
             "cpf": CPF,
@@ -119,8 +154,7 @@ class PersonAPITestCase(APITestCase):
             "birthday_date": BIRTHDAY_DATE,
         }
 
-        url = reverse("person-list")
-        response = client.post(path=url, data=person)
+        response = client.post(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
@@ -128,7 +162,7 @@ class PersonAPITestCase(APITestCase):
         self.assertNotEqual(response.data.get("first_name"), None)
 
         invalid_cpf = "12345678910"  # o dígito verificador deve ser válido
-        person = {
+        person_data = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": invalid_cpf,
@@ -137,14 +171,13 @@ class PersonAPITestCase(APITestCase):
             "birthday_date": BIRTHDAY_DATE,
         }
 
-        url = reverse("person-list")
-        response = client.post(path=url, data=person)
+        response = client.post(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertNotEqual(response.data.get("cpf"), None)
 
         invalid_rg = "invalid_rg"  # deve conter somente números
-        person = {
+        person_data = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
@@ -153,14 +186,13 @@ class PersonAPITestCase(APITestCase):
             "birthday_date": BIRTHDAY_DATE,
         }
 
-        url = reverse("person-list")
-        response = client.post(path=url, data=person)
+        response = client.post(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertNotEqual(response.data.get("rg"), None)
 
         invalid_gender = "invalid_gender"  # valor válido: F ou M
-        person = {
+        person_data = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
@@ -169,14 +201,13 @@ class PersonAPITestCase(APITestCase):
             "birthday_date": BIRTHDAY_DATE,
         }
 
-        url = reverse("person-list")
-        response = client.post(path=url, data=person)
+        response = client.post(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertNotEqual(response.data.get("gender"), None)
 
         invalid_birthday_date = "14/02/1999"  # formato válido: yyyy-MM-dd
-        person = {
+        person_data = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
@@ -185,28 +216,95 @@ class PersonAPITestCase(APITestCase):
             "birthday_date": invalid_birthday_date,
         }
 
-        url = reverse("person-list")
-        response = client.post(path=url, data=person)
+        response = client.post(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertNotEqual(response.data.get("birthday_date"), None)
+
+        invalid_contact = "999999999"  # deve conter 12 números. Ex: 047999999999
+        person_data = {
+            "first_name": FIRST_NAME,
+            "last_name": LAST_NAME,
+            "cpf": CPF,
+            "rg": RG,
+            "gender": GENDER,
+            "birthday_date": BIRTHDAY_DATE,
+            "contact": invalid_contact,
+        }
+
+        response = client.post(path=url, data=person_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("contact"), None)
 
     def test_partial_update_invalid_with_permission(self):
         # cria uma pessoa no banco para poder atualiza-lo
         person = create_person()
 
         client = create_user_and_do_authentication(permissions=["core.change_person"])
+        url = reverse("person-detail", args=[person.cpf])
 
         invalid_first_name = "1nv@lid"
         person_data = {
             "first_name": invalid_first_name,
         }
 
-        url = reverse("person-detail", args=[person.cpf])
         response = client.patch(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+
+        # deve emitir mensagem de erro do campo inválido
         self.assertNotEqual(response.data.get("first_name"), None)
+
+        invalid_cpf = "12345678910"
+        person_data = {
+            "cpf": invalid_cpf,
+        }
+
+        response = client.patch(path=url, data=person_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("cpf"), None)
+
+        invalid_rg = "invalid_rg"
+        person_data = {
+            "rg": invalid_rg,
+        }
+
+        response = client.patch(path=url, data=person_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("rg"), None)
+
+        invalid_gender = "invalid_gender"
+        person_data = {
+            "gender": invalid_gender,
+        }
+
+        response = client.patch(path=url, data=person_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("gender"), None)
+
+        invalid_birthday_date = "14/02/1999"
+        person_data = {
+            "birthday_date": invalid_birthday_date,
+        }
+
+        response = client.patch(path=url, data=person_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("birthday_date"), None)
+
+        invalid_contact = "999999999"
+        person_data = {
+            "contact": invalid_contact,
+        }
+
+        response = client.patch(path=url, data=person_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("contact"), None)
 
     def test_list_person_without_permission(self):
         client = create_user_and_do_authentication(permissions=[])
