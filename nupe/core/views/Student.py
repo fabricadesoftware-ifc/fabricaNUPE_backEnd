@@ -1,11 +1,4 @@
-from rest_framework.mixins import (
-    CreateModelMixin,
-    DestroyModelMixin,
-    ListModelMixin,
-    RetrieveModelMixin,
-    UpdateModelMixin,
-)
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from nupe.core.exceptions import ActionNotImplemented
 from nupe.core.filters import StudentFilter
@@ -13,9 +6,7 @@ from nupe.core.models import Student
 from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializer, StudentListSerializer
 
 
-class StudentViewSet(
-    GenericViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
-):
+class StudentViewSet(GenericViewSet, ModelViewSet):
     queryset = Student.objects.all()
     lookup_field = "registration"
     filterset_class = StudentFilter
