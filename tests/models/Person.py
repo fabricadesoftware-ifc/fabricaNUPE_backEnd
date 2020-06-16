@@ -22,8 +22,6 @@ from resources.const.datas.Person import (
     INVALID_CONTACT,
     INVALID_CONTACT_2,
     INVALID_CONTACT_LENGTH,
-    INVALID_CPF,
-    INVALID_CPF_2,
     INVALID_CPF_LENGTH,
     INVALID_NAME,
     INVALID_NAME_2,
@@ -206,20 +204,9 @@ class PersonTestCase(TestCase):
                 first_name="", last_name=LAST_NAME, cpf=CPF, rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
-        # deve emitir erro de que o campo não pode ser em branco porque espaços são ignorados
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=" ", last_name=LAST_NAME, cpf=CPF, rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
         with self.assertRaises(ValidationError):
             Person(
                 first_name=FIRST_NAME, last_name="", cpf=CPF, rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME, last_name=" ", cpf=CPF, rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
@@ -229,22 +216,7 @@ class PersonTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=" ", rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
-            ).full_clean()
-
-        with self.assertRaises(ValidationError):
-            Person(
                 first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg="", gender=GENDER, birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=CPF,
-                rg=" ",
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
@@ -254,17 +226,7 @@ class PersonTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, gender=" ", birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Person(
                 first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, gender=GENDER, birthday_date="",
-            ).clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, gender=GENDER, birthday_date=" ",
             ).clean_fields()
 
     def test_create_invalid_unique_cpf_and_rg(self):
@@ -344,27 +306,6 @@ class PersonTestCase(TestCase):
                 gender=GENDER,
                 birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
-
-        # cpf deve ser um documento válido
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=INVALID_CPF,
-                rg=RG,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
-            ).clean()
-
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=INVALID_CPF_2,
-                rg=RG,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
-            ).clean()
 
         # rg deve conter somente numeros
         with self.assertRaises(ValidationError):
