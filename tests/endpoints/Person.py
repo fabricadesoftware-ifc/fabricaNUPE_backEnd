@@ -87,26 +87,22 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
-        # verifica se atualizou no banco de dados
+        # deve ser atualizado no banco
         self.assertEqual(Person.objects.get(id=person.id).first_name, new_first_name)
 
         # todos os campos e com informações válidas para conseguir atualizar
-        new_first_name = "first name updated"
         new_last_name = "last name updated"
         new_cpf = CPF_2
         new_rg = RG_2
-        actual_birthday_date = person.birthday_date
-        actual_gender = person.gender
-        actual_contact = person.contact
 
         person_update = {
             "first_name": new_first_name,
             "last_name": new_last_name,
             "cpf": new_cpf,
             "rg": new_rg,
-            "birthday_date": actual_birthday_date,
-            "gender": actual_gender,
-            "contact": actual_contact,
+            "birthday_date": person.birthday_date,
+            "gender": person.gender,
+            "contact": person.contact,
         }
 
         response = client.patch(path=url, data=person_update)
@@ -120,9 +116,9 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(person_database.last_name, new_last_name)
         self.assertEqual(person_database.cpf, new_cpf)
         self.assertEqual(person_database.rg, new_rg)
-        self.assertEqual(person_database.birthday_date, actual_birthday_date)
-        self.assertEqual(person_database.gender, actual_gender)
-        self.assertEqual(person_database.contact, actual_contact)
+        self.assertEqual(person_database.birthday_date, person.birthday_date)
+        self.assertEqual(person_database.gender, person.gender)
+        self.assertEqual(person_database.contact, person.contact)
 
     def test_destroy_person_with_permission(self):
         person = create_person()  # cria uma pessoa no banco para poder excluir
