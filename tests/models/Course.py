@@ -34,10 +34,6 @@ class CourseTestCase(TestCase):
         with self.assertRaises(ValidationError):
             Course(name="").clean_fields()
 
-        # deve emitir erro de que o campo não pode ser em branco porque espaços são ignorados
-        with self.assertRaises(ValidationError):
-            Course(name=" ").clean_fields()
-
     def test_create_invalid_unique_name(self):
         # deve emitir erro porque só pode conter um único objeto com o mesmo nome
         with self.assertRaises(ValidationError):
@@ -99,9 +95,6 @@ class GradeTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             Grade(name="").clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Grade(name=" ").clean_fields()
 
     def test_create_invalid_unique_name(self):
         with self.assertRaises(ValidationError):
