@@ -1,4 +1,3 @@
-
 # NuPe
 Projeto desenvolvido por membros da **Fábrica de Software IFC - Araquari** para melhorar o fluxo de atendimento da equipe do **Núcleo Pedagógico**.
 # Membros
@@ -59,3 +58,44 @@ A parte do backend do  projeto **deve** seguir as orientações estabelecidas pe
 
 O desenvolvimento do backend **está** e **deverá continuar** seguindo conforme o artigo https://realpython.com/python-pep8/
 
+# Inicialização  do backend
+É necessário instalar a versão 3.6+ do Python e o Poetry para gerenciar as dependências do projeto.
+
+### Instalando o Python
+Verifique se já tem o Python instalado, se você usa GNU/Linux, provavelmente já possui alguma versão do Python instalada por padrão. Para conferir, abra o terminal e digite o seguinte comando:
+
+`$ which python`
+
+ou
+
+`$ which python3`
+
+que deve retornar algo como  `/usr/bin/python`. Isso significa que o Python está instalado nesse endereço.
+
+Caso contrário, será necessário realizar a instalação. Para isso, com o terminal aberto digite o seguinte comando:
+
+`$ sudo apt-get install python3.6`
+
+(`Optional`) Para instalar o gerenciador de pacotes pip, digite o comando:
+
+`$ sudo apt-get install python3-pip`
+
+### Instalando o Poetry
+É possível instalar o Poetry utilizando o gerenciador de pacotes  `pip`. Para isso, no terminal digite o comando:
+
+`pip3 install --user poetry`
+
+Para verificar se o Poetry foi instalado com sucesso, utilize o comando:
+
+`poetry --version`
+
+### Executando o projeto
+Dentro do diretório do projeto execute os seguintes comandos:
+
+`poetry install` - cria uma virtualenv e instala as dependências
+
+`poetry shell` - entra na virtualenv 
+
+`./manage.py migrate` - cria as tabelas no banco de dados
+
+`./manage.py runserver` - inicia um servidor web para executar o projeto. Estará rodando no endereço: 127.0.0.1:8000 (`default`)
