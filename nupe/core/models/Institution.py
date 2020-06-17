@@ -12,15 +12,6 @@ class Institution(SafeDeleteModel):
     def __str__(self):
         return self.name
 
-    def clean_fields(self, exclude=None):
-        if self.name:
-            self.name = self.name.strip()
-
-        return super().clean_fields(exclude=exclude)
-
-    def clean(self):
-        self.name = self.name.capitalize()
-
 
 class Campus(SafeDeleteModel):
     _safedelete_policy = NO_DELETE
@@ -33,15 +24,6 @@ class Campus(SafeDeleteModel):
 
     def __str__(self):
         return self.name
-
-    def clean_fields(self, exclude=None):
-        if self.name:
-            self.name = self.name.strip()
-
-        return super().clean_fields(exclude=exclude)
-
-    def clean(self):
-        self.name = self.name.capitalize()
 
 
 class InstitutionCampus(SafeDeleteModel):

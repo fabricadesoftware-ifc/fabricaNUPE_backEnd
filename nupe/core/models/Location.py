@@ -12,15 +12,6 @@ class City(SafeDeleteModel):
     def __str__(self):
         return self.name
 
-    def clean_fields(self, exclude=None):
-        if self.name:
-            self.name = self.name.strip()
-
-        return super().clean_fields(exclude=exclude)
-
-    def clean(self):
-        self.name = self.name.capitalize()
-
 
 class State(SafeDeleteModel):
     _safedelete_policy = NO_DELETE
@@ -29,15 +20,6 @@ class State(SafeDeleteModel):
 
     def __str__(self):
         return self.name
-
-    def clean_fields(self, exclude=None):
-        if self.name:
-            self.name = self.name.strip()
-
-        return super().clean_fields(exclude=exclude)
-
-    def clean(self):
-        self.name = self.name.capitalize()
 
 
 class Location(SafeDeleteModel):
