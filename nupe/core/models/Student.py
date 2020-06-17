@@ -1,9 +1,7 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
 from nupe.core.utils.Regex import ONLY_NUMBERS
-from resources.const.messages.Responsible import MYSELF_RESPONSIBLE_MESSAGE, UNDER_AGE_RESPONSIBLE_MESSAGE
 
 STUDENT_REGISTRATION_MAX_LENGTH = 35
 RESPONSIBLE_MIN_AGE = 18
@@ -51,15 +49,6 @@ class Responsible(SafeDeleteModel):
 
     class Meta:
         unique_together = ["student", "person"]
-
-    def clean(self):
-        # o responsável não pode ser o próprio estudante se o estudante for menor de idade
-        if self.student.age < RESPONSIBLE_MIN_AGE and self.student.person.id is self.person.id:
-            raise ValidationError({"person": MYSELF_RESPONSIBLE_MESSAGE})
-
-        # o responsável não pode ser menor de idade
-        elif self.person.age < RESPONSIBLE_MIN_AGE:
-            raise ValidationError({"person": UNDER_AGE_RESPONSIBLE_MESSAGE})
 
     def __str__(self):
         return f"{self.person} responsável de {self.student.person}"

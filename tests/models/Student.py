@@ -340,19 +340,6 @@ class ResponsibleTestCase(TestCase):
             Responsible.objects.create(student=student, person=person)
             Responsible(student=student, person=person).validate_unique()
 
-    def test_create_invalid_responsible(self):
-        student = Student.objects.get(registration=REGISTRATION)
-        student_person = Person.objects.get(cpf=CPF)
-        under_age_person = Person.objects.get(cpf=CPF_3)
-
-        # deve emitir um erro porque o responsável não pode ser o próprio estudante se o estudante for menor de idade
-        with self.assertRaises(ValidationError):
-            Responsible(student=student, person=student_person).clean()
-
-        # deve emitir um erro porque o responsável não pode ser menor de idade
-        with self.assertRaises(ValidationError):
-            Responsible(student=student, person=under_age_person).clean()
-
     def test_soft_delete(self):
         student = Student.objects.get(registration=REGISTRATION)
         person = Person.objects.get(cpf=CPF_2)

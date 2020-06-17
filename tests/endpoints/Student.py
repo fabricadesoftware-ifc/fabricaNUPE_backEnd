@@ -54,7 +54,7 @@ class StudentAPITestCase(APITestCase):
 
         client = create_user_and_do_authentication(permissions=["core.add_student"])
 
-        student = {
+        student_data = {
             "registration": REGISTRATION,
             "person": person1.id,
             "responsibles_persons": [person1.id, person2.id],
@@ -63,7 +63,7 @@ class StudentAPITestCase(APITestCase):
         }
 
         url = reverse("student-list")
-        response = client.post(path=url, data=student)
+        response = client.post(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
         self.assertEqual(response.data.get("person"), person1.id)
@@ -72,22 +72,49 @@ class StudentAPITestCase(APITestCase):
     def test_partial_update_student_with_permission(self):
         # cria um estudante no banco para poder atualiza-lo
         student = create_student()
+        person1 = create_person(cpf=CPF_2, rg=RG_2)
+        person2 = create_person(cpf=CPF_3, rg=RG_3)
+        academic_education_campus = create_academic_education_campus()
 
         client = create_user_and_do_authentication(permissions=["core.change_student"])
+        url = reverse("student-detail", args=[student.registration])
 
-        new_registration = REGISTRATION + "1"
+        # somente um campo e com informações válidas para conseguir atualizar
+        new_person = person2
         student_data = {
-            "registration": new_registration,
+            "person": new_person.id,
         }
 
-        url = reverse("student-detail", args=[student.registration])
         response = client.patch(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
-        self.assertEqual(response.data.get("registration"), new_registration)
 
         # deve ser atualizado no banco
-        self.assertEqual(Student.objects.get(id=student.id).registration, new_registration)
+        self.assertEqual(Student.objects.get(id=student.id).person, new_person)
+
+        # todos os campos e com informações válidas para conseguir atualizar
+        new_registration = REGISTRATION + "1"
+        new_ingress_date = "2015-01-01"
+
+        student_data = {
+            "registration": new_registration,
+            "person": person1.id,
+            "responsibles_persons": [person1.id, person2.id],
+            "academic_education_campus": academic_education_campus.id,
+            "ingress_date": new_ingress_date,
+        }
+
+        response = client.patch(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # verifica se todos os campos atualizou no banco de dados
+        student_database = Student.objects.get(id=student.id)
+
+        self.assertEqual(student_database.registration, new_registration)
+        self.assertEqual(student_database.person, person1)
+        self.assertEqual(student_database.academic_education_campus, academic_education_campus)
+        self.assertEqual(str(student_database.ingress_date), new_ingress_date)
 
     def test_destroy_student_with_permission(self):
         # cria um estudante no banco para poder mascara-lo
@@ -108,51 +135,7 @@ class StudentAPITestCase(APITestCase):
         academic_education_campus = create_academic_education_campus()
 
         client = create_user_and_do_authentication(permissions=["core.add_student"])
-
-        invalid_pk_academic_education_campus = 99
-        student = {
-            "registration": REGISTRATION,
-            "person": person1.id,
-            "responsibles_persons": [person1.id, person2.id],
-            "academic_education_campus": invalid_pk_academic_education_campus,
-            "ingress_date": INGRESS_DATE,
-        }
-
         url = reverse("student-list")
-        response = client.post(path=url, data=student)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-
-        # deve emitir mensagem de erro do campo inválido
-        self.assertNotEqual(response.data.get("academic_education_campus"), None)
-
-        invalid_pk_responsible = 99
-        student = {
-            "registration": REGISTRATION,
-            "person": person1.id,
-            "responsibles_persons": [person1.id, invalid_pk_responsible],
-            "academic_education_campus": academic_education_campus.id,
-            "ingress_date": INGRESS_DATE,
-        }
-
-        response = client.post(path=url, data=student)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.data.get("responsibles_persons"), None)
-
-        invalid_pk_person = 99
-        student = {
-            "registration": REGISTRATION,
-            "person": invalid_pk_person,
-            "responsibles_persons": [person1.id, person2.id],
-            "academic_education_campus": academic_education_campus.id,
-            "ingress_date": INGRESS_DATE,
-        }
-
-        response = client.post(path=url, data=student)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.data.get("person"), None)
 
         invalid_registration = "teste"  # registration deve conter somente números
         student = {
@@ -166,10 +149,75 @@ class StudentAPITestCase(APITestCase):
         response = client.post(path=url, data=student)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+
+        # deve emitir mensagem de erro do campo inválido
         self.assertNotEqual(response.data.get("registration"), None)
 
-        person1.birthday_date = "2005-06-10"
-        person1.save()
+        invalid_pk_person = 99  # Não existe no banco
+        student = {
+            "registration": REGISTRATION,
+            "person": invalid_pk_person,
+            "responsibles_persons": [person1.id, person2.id],
+            "academic_education_campus": academic_education_campus.id,
+            "ingress_date": INGRESS_DATE,
+        }
+
+        response = client.post(path=url, data=student)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("person"), None)
+
+        invalid_pk_responsible = 99  # Não existe no banco
+        student = {
+            "registration": REGISTRATION,
+            "person": person1.id,
+            "responsibles_persons": [person1.id, invalid_pk_responsible],
+            "academic_education_campus": academic_education_campus.id,
+            "ingress_date": INGRESS_DATE,
+        }
+
+        response = client.post(path=url, data=student)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("responsibles_persons"), None)
+
+        invalid_pk_academic_education_campus = 99  # Não existe no banco
+        student = {
+            "registration": REGISTRATION,
+            "person": person1.id,
+            "responsibles_persons": [person1.id, person2.id],
+            "academic_education_campus": invalid_pk_academic_education_campus,
+            "ingress_date": INGRESS_DATE,
+        }
+
+        response = client.post(path=url, data=student)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("academic_education_campus"), None)
+
+        invalid_ingress_date = "14/02/1999"  # formato válido: yyyy-MM-dd
+        student = {
+            "registration": REGISTRATION,
+            "person": person1.id,
+            "responsibles_persons": [person1.id, person2.id],
+            "academic_education_campus": academic_education_campus.id,
+            "ingress_date": invalid_ingress_date,
+        }
+
+        response = client.post(path=url, data=student)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("ingress_date"), None)
+
+        # TESTES PARA ESTUDANTES MENORES DE IDADE
+
+        under_age_date = "2005-06-10"
+
+        person1.birthday_date = under_age_date
+        person1.save(force_update=True)
+
+        person2.birthday_date = under_age_date
+        person2.save(force_update=True)
 
         student = {
             "registration": "123",
@@ -179,7 +227,6 @@ class StudentAPITestCase(APITestCase):
             "ingress_date": INGRESS_DATE,
         }
 
-        url = reverse("student-list")
         response = client.post(path=url, data=student)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
@@ -187,22 +234,132 @@ class StudentAPITestCase(APITestCase):
         # estudante menor de idade sem responsável deve emitir mensagem de erro do campo inválido
         self.assertNotEqual(response.data.get("responsibles_persons"), None)
 
+        student = {
+            "registration": "123",
+            "person": person1.id,
+            "responsibles_persons": [person1.id],
+            "academic_education_campus": academic_education_campus.id,
+            "ingress_date": INGRESS_DATE,
+        }
+
+        response = client.post(path=url, data=student)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+
+        # estudante menor de idade não pode ser responsável de sí
+        self.assertNotEqual(response.data.get("responsibles_persons"), None)
+
+        student = {
+            "registration": "123",
+            "person": person1.id,
+            "responsibles_persons": [person2.id],
+            "academic_education_campus": academic_education_campus.id,
+            "ingress_date": INGRESS_DATE,
+        }
+
+        response = client.post(path=url, data=student)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+
+        # estudante menor de idade não pode ter nenhum responsável menor de idade
+        self.assertNotEqual(response.data.get("responsibles_persons"), None)
+
     def test_partial_update_invalid_student_with_permission(self):
         # cria um estudante no banco para poder atualiza-lo
         student = create_student()
+        person1 = create_person(cpf=CPF_2, rg=RG_2)
 
         client = create_user_and_do_authentication(permissions=["core.change_student"])
+        url = reverse("student-detail", args=[student.registration])
 
         invalid_registration = "invalid_registration"
         student_data = {
             "registration": invalid_registration,
         }
 
-        url = reverse("student-detail", args=[student.registration])
         response = client.patch(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+
+        # deve emitir mensagem de erro do campo inválido
         self.assertNotEqual(response.data.get("registration"), None)
+
+        invalid_pk_person = 99
+        student_data = {
+            "person": invalid_pk_person,
+        }
+
+        response = client.patch(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("person"), None)
+
+        invalid_pk_responsible = 99
+        student_data = {
+            "responsibles_persons": [invalid_pk_responsible],
+        }
+
+        response = client.patch(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("responsibles_persons"), None)
+
+        invalid_pk_academic_education_campus = 99
+        student_data = {
+            "academic_education_campus": invalid_pk_academic_education_campus,
+        }
+
+        response = client.patch(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("academic_education_campus"), None)
+
+        invalid_ingress_date = "14/02/1999"
+        student_data = {
+            "ingress_date": invalid_ingress_date,
+        }
+
+        response = client.patch(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("ingress_date"), None)
+
+        # TESTES PARA ESTUDANTES MENORES DE IDADE
+
+        under_age_date = "2005-01-10"
+
+        student.person.birthday_date = under_age_date
+        student.person.save(force_update=True)
+
+        person1.birthday_date = under_age_date
+        person1.save(force_update=True)
+
+        student_data = {
+            "responsibles_persons": [],
+        }
+
+        response = client.patch(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("responsibles_persons"), None)
+
+        student_data = {
+            "responsibles_persons": [student.person.id],
+        }
+
+        response = client.patch(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("responsibles_persons"), None)
+
+        student_data = {
+            "responsibles_persons": [person1.id],
+        }
+
+        response = client.patch(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.data.get("responsibles_persons"), None)
 
     def test_list_student_without_permission(self):
         client = create_user_and_do_authentication(permissions=[])

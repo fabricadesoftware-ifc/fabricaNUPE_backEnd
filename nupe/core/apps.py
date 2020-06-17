@@ -5,5 +5,4 @@ class CoreConfig(AppConfig):
     name = "nupe.core"
 
     def ready(self):
-        import nupe.core.signals.Student  # noqa
         import nupe.core.signals.Institution  # noqa

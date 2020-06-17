@@ -6,7 +6,7 @@ from nupe.core.models import Student
 from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializer, StudentListSerializer
 
 
-class StudentViewSet(GenericViewSet, ModelViewSet):
+class StudentViewSet(ModelViewSet, GenericViewSet):
     queryset = Student.objects.all()
     lookup_field = "registration"
     filterset_class = StudentFilter
