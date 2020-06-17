@@ -12,15 +12,6 @@ class Course(SafeDeleteModel):
     def __str__(self):
         return self.name
 
-    def clean_fields(self, exclude=None):
-        if self.name:
-            self.name = self.name.strip()
-
-        super().clean_fields(exclude=exclude)
-
-    def clean(self):
-        self.name = self.name.capitalize()
-
 
 class Grade(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE_CASCADE
@@ -31,15 +22,6 @@ class Grade(SafeDeleteModel):
 
     def __str__(self):
         return self.name
-
-    def clean_fields(self, exclude=None):
-        if self.name:
-            self.name = self.name.strip()
-
-        return super().clean_fields(exclude=exclude)
-
-    def clean(self):
-        self.name = self.name.capitalize()
 
 
 class AcademicEducation(SafeDeleteModel):

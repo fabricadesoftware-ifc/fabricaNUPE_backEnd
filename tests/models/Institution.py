@@ -45,10 +45,6 @@ class InstitutionTestCase(TestCase):
         with self.assertRaises(ValidationError):
             Institution(name="").clean_fields()
 
-        # deve emitir erro de que o campo não pode ser em branco porque espaços são ignorados
-        with self.assertRaises(ValidationError):
-            Institution(name=" ").clean_fields()
-
     def test_create_invalid_unique_name(self):
         # deve emitir erro porque só pode conter um único objeto com o mesmo nome
         with self.assertRaises(ValidationError):
@@ -109,9 +105,6 @@ class CampusTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             Campus(location=location, name="").clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Campus(location=location, name=" ").clean_fields()
 
     def test_create_invalid_unique_name(self):
         location = Location.objects.get(city__name=CITY_NAME, state__name=STATE_NAME)
