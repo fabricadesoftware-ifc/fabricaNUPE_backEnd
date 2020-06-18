@@ -83,21 +83,46 @@ Caso contrário, será necessário realizar a instalação. Para isso, com o ter
 ### Instalando o Poetry
 É possível instalar o Poetry utilizando o gerenciador de pacotes `pip`. Para isso, no terminal digite o comando:
 
-`pip3 install --user poetry`
+`$ pip3 install --user poetry`
 
-`echo 'export PATH="$HOME/.poetry/bin:$PATH"' >> ~/.bashrc`
+`$ echo 'export PATH="$HOME/.poetry/bin:$PATH"' >> ~/.bashrc`
 
 Para verificar se o Poetry foi instalado com sucesso, é necessário fechar e abrir novamente o terminal e executar o comando:
 
-`poetry --version`
+`$ poetry --version`
 
 ### Executando o projeto
+Os arquivos necessários para executar a API se encontra na branch **dev-backend**.
+
+Para clonar o repositório da branch, é necessário ter o git instalado. Verifique se já está instalado com o comando:
+
+`$ git --version`
+
+Caso não tenha instalado, é necessário executar os seguintes comandos:
+
+`$ sudo apt-get update`
+
+`$ sudo apt-get install git`
+
+Para clonar o repositório da branch dev-backend, execute:
+
+`$ git clone --single-branch --branch dev-backend https://git.fabricadesoftware.ifc.edu.br/nupe/nupe.git`
+
+
+É necessário entrar no diretório do projeto para executar os passos a seguir, para isso, execute:
+
+`$ cd nupe/`
+
 Dentro do diretório do projeto execute os seguintes comandos:
 
-`poetry install` - cria uma virtualenv e instala as dependências
+`$ poetry install` - cria uma virtualenv e instala as dependências
 
-`poetry shell` - entra na virtualenv 
+`$ poetry shell` - entra na virtualenv 
 
-`./manage.py migrate` - cria as tabelas no banco de dados
+`$ ./manage.py migrate` - cria as tabelas no banco de dados
 
-`./manage.py runserver` - inicia um servidor web para executar o projeto. Estará rodando no endereço: 127.0.0.1:8000 (`default`)
+`$ ./manage.py runserver` - inicia um servidor web para executar o projeto. Estará rodando no endereço: 127.0.0.1:8000 (`default`)
+
+
+### Obs
+Não é permitido dar commit e nem push dentro do repositório clonado da branch dev-backend, a não ser que você esteja trabalhando em alguma issue dessa branch
