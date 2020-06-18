@@ -85,7 +85,7 @@ Caso contrário, será necessário realizar a instalação. Para isso, com o ter
 
 `pip3 install --user poetry`
 
-`echo export PATH="$HOME/.poetry/bin:$PATH" >> ~/.bashrc`
+`echo 'export PATH="$HOME/.poetry/bin:$PATH"' >> ~/.bashrc`
 
 Para verificar se o Poetry foi instalado com sucesso, utilize o comando:
 
