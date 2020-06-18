@@ -81,13 +81,13 @@ Caso contrário, será necessário realizar a instalação. Para isso, com o ter
 `$ sudo apt-get install python3-pip`
 
 ### Instalando o Poetry
-É possível instalar o Poetry utilizando o gerenciador de pacotes  `pip`. Para isso, no terminal digite o comando:
+É possível instalar o Poetry utilizando o gerenciador de pacotes `pip`. Para isso, no terminal digite o comando:
 
 `pip3 install --user poetry`
 
 `echo 'export PATH="$HOME/.poetry/bin:$PATH"' >> ~/.bashrc`
 
-Para verificar se o Poetry foi instalado com sucesso, utilize o comando:
+Para verificar se o Poetry foi instalado com sucesso, é necessário fechar e abrir novamente o terminal e executar o comando:
 
 `poetry --version`
 
