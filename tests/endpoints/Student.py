@@ -114,6 +114,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(student_database.registration, new_registration)
         self.assertEqual(student_database.person, person1)
         self.assertEqual(student_database.academic_education_campus, academic_education_campus)
+        self.assertEqual(list(student_database.responsibles_persons.all()), [person1, person2])
         self.assertEqual(str(student_database.ingress_date), new_ingress_date)
 
     def test_destroy_student_with_permission(self):
