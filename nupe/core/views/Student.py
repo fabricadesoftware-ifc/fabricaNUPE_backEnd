@@ -1,4 +1,4 @@
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.exceptions import ActionNotImplemented
 from nupe.core.filters import StudentFilter
@@ -6,7 +6,7 @@ from nupe.core.models import Student
 from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializer, StudentListSerializer
 
 
-class StudentViewSet(ModelViewSet, GenericViewSet):
+class StudentViewSet(ModelViewSet):
     queryset = Student.objects.all()
     lookup_field = "registration"
     filterset_class = StudentFilter

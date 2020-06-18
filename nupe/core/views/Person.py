@@ -1,4 +1,4 @@
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.exceptions import ActionNotImplemented
 from nupe.core.filters import PersonFilter
@@ -6,7 +6,7 @@ from nupe.core.models import Person
 from nupe.core.serializers import PersonCreateSerializer, PersonDetailSerializer, PersonListSerializer
 
 
-class PersonViewSet(ModelViewSet, GenericViewSet):
+class PersonViewSet(ModelViewSet):
     queryset = Person.objects.all()
     lookup_field = "cpf"
     filterset_class = PersonFilter
