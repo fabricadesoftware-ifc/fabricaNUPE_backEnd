@@ -21,12 +21,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # terceiros
     "rest_framework",
     "oauth2_provider",
     "safedelete",
-    "nupe.core",
     "drf_yasg",
     "django_filters",
+    # apps
+    "nupe.core",
+    "nupe.file",
 ]
 
 MIDDLEWARE = [
@@ -129,3 +132,6 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 LOGIN_URL = "/admin/login/"  # temporário
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"

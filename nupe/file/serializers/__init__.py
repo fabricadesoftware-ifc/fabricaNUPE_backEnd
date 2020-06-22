@@ -1,0 +1,1 @@
+from nupe.file.serializers.ImageUpload import ProfileImageCreateSerializer
