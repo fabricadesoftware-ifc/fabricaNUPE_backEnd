@@ -16,17 +16,19 @@ class UploadImage(models.Model):
 def make_path_profile_image(instance, filename):
     filename, extension = filename.rsplit(".", 1)
 
-    string_hashed = sha256(filename.encode()).hexdigest()
+    filename_hashed = sha256(filename.encode()).hexdigest()
 
-    return f"images/profiles/{string_hashed}.{extension}"
+    new_filename = f"{filename_hashed}.{extension}"
+
+    return f"images/profiles/{new_filename}"
 
 
 class ProfileImage(UploadImage):
     image = models.ImageField(upload_to=make_path_profile_image)
 
+    def __str__(self):
+        return self.url
+
     @property
     def url(self):
         return self.image.url
-
-    def __str__(self):
-        return self.url
