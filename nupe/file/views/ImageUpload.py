@@ -14,6 +14,11 @@ class ProfileImageViewSet(GenericViewSet, CreateModelMixin, DestroyModelMixin):
     serializer_class = ProfileImageCreateSerializer
     parser_classes = [MultiPartParser]
 
+    perms_map_action = {
+        "create": ["file.add_profileimage"],
+        "destroy": ["file.delete_profileimage"],
+    }
+
     def destroy(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
 
