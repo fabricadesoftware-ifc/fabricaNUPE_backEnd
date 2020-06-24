@@ -10,18 +10,7 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
-from resources.const.datas.Person import (
-    BIRTHDAY_DATE,
-    CPF,
-    CPF_2,
-    CPF_3,
-    FIRST_NAME,
-    GENDER,
-    LAST_NAME,
-    RG,
-    RG_2,
-    RG_3,
-)
+from resources.const.datas.Person import BIRTHDAY_DATE, CPF, CPF_2, CPF_3, FIRST_NAME, GENDER, LAST_NAME
 from tests.endpoints.setup.Person import create_person
 from tests.endpoints.setup.User import create_user_and_do_authentication
 
@@ -59,7 +48,6 @@ class PersonAPITestCase(APITestCase):
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
-            "rg": RG,
             "gender": GENDER,
             "birthday_date": BIRTHDAY_DATE,
         }
@@ -93,13 +81,11 @@ class PersonAPITestCase(APITestCase):
         # todos os campos e com informações válidas para conseguir atualizar
         new_last_name = "last name updated"
         new_cpf = CPF_2
-        new_rg = RG_2
 
         person_update = {
             "first_name": new_first_name,
             "last_name": new_last_name,
             "cpf": new_cpf,
-            "rg": new_rg,
             "birthday_date": person.birthday_date,
             "gender": person.gender,
             "contact": person.contact,
@@ -115,7 +101,6 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(person_database.first_name, new_first_name)
         self.assertEqual(person_database.last_name, new_last_name)
         self.assertEqual(person_database.cpf, new_cpf)
-        self.assertEqual(person_database.rg, new_rg)
         self.assertEqual(person_database.birthday_date, person.birthday_date)
         self.assertEqual(person_database.gender, person.gender)
         self.assertEqual(person_database.contact, person.contact)
@@ -145,7 +130,6 @@ class PersonAPITestCase(APITestCase):
             "first_name": invalid_first_name,
             "last_name": LAST_NAME,
             "cpf": CPF,
-            "rg": RG,
             "gender": GENDER,
             "birthday_date": BIRTHDAY_DATE,
         }
@@ -162,7 +146,6 @@ class PersonAPITestCase(APITestCase):
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": invalid_cpf,
-            "rg": RG,
             "gender": GENDER,
             "birthday_date": BIRTHDAY_DATE,
         }
@@ -172,27 +155,11 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertNotEqual(response.data.get("cpf"), None)
 
-        invalid_rg = "invalid_rg"  # deve conter somente números
-        person_data = {
-            "first_name": FIRST_NAME,
-            "last_name": LAST_NAME,
-            "cpf": CPF,
-            "rg": invalid_rg,
-            "gender": GENDER,
-            "birthday_date": BIRTHDAY_DATE,
-        }
-
-        response = client.post(path=url, data=person_data)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.data.get("rg"), None)
-
         invalid_gender = "invalid_gender"  # valor válido: F ou M
         person_data = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
-            "rg": RG,
             "gender": invalid_gender,
             "birthday_date": BIRTHDAY_DATE,
         }
@@ -207,7 +174,6 @@ class PersonAPITestCase(APITestCase):
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
-            "rg": RG,
             "gender": GENDER,
             "birthday_date": invalid_birthday_date,
         }
@@ -222,7 +188,6 @@ class PersonAPITestCase(APITestCase):
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
-            "rg": RG,
             "gender": GENDER,
             "birthday_date": BIRTHDAY_DATE,
             "contact": invalid_contact,
@@ -261,16 +226,6 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertNotEqual(response.data.get("cpf"), None)
-
-        invalid_rg = "invalid_rg"
-        person_data = {
-            "rg": invalid_rg,
-        }
-
-        response = client.patch(path=url, data=person_data)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.data.get("rg"), None)
 
         invalid_gender = "invalid_gender"
         person_data = {
@@ -368,8 +323,8 @@ class PersonAPITestCase(APITestCase):
 
     def test_search_filter(self):
         person1 = create_person()
-        create_person(cpf=CPF_2, rg=RG_2)
-        create_person(cpf=CPF_3, rg=RG_3)
+        create_person(cpf=CPF_2)
+        create_person(cpf=CPF_3)
 
         client = create_user_and_do_authentication(permissions=["core.view_person"])
 
@@ -386,8 +341,8 @@ class PersonAPITestCase(APITestCase):
         birthday_date = "2005-10-10"
 
         create_person(gender=female_gender, birthday_date=birthday_date)
-        create_person(cpf=CPF_2, rg=RG_2, gender=female_gender)
-        create_person(cpf=CPF_3, rg=RG_3)
+        create_person(cpf=CPF_2, gender=female_gender)
+        create_person(cpf=CPF_3)
 
         client = create_user_and_do_authentication(permissions=["core.view_person"])
 
@@ -424,7 +379,7 @@ class PersonAPITestCase(APITestCase):
         female_gender = "F"
 
         create_person()
-        create_person(cpf=CPF_2, rg=RG_2)
+        create_person(cpf=CPF_2)
 
         client = create_user_and_do_authentication(permissions=["core.view_person"])
 

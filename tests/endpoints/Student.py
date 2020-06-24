@@ -10,7 +10,7 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Student
-from resources.const.datas.Person import CPF_2, CPF_3, RG_2, RG_3
+from resources.const.datas.Person import CPF_2, CPF_3
 from resources.const.datas.Student import INGRESS_DATE, REGISTRATION
 from tests.endpoints.setup.Person import create_person
 from tests.endpoints.setup.Student import create_student
@@ -49,7 +49,7 @@ class StudentAPITestCase(APITestCase):
 
     def test_create_student_with_permission(self):
         person1 = create_person()
-        person2 = create_person(cpf=CPF_2, rg=RG_2)
+        person2 = create_person(cpf=CPF_2)
         academic_education_campus = create_academic_education_campus()
 
         client = create_user_and_do_authentication(permissions=["core.add_student"])
@@ -72,8 +72,8 @@ class StudentAPITestCase(APITestCase):
     def test_partial_update_student_with_permission(self):
         # cria um estudante no banco para poder atualiza-lo
         student = create_student()
-        person1 = create_person(cpf=CPF_2, rg=RG_2)
-        person2 = create_person(cpf=CPF_3, rg=RG_3)
+        person1 = create_person(cpf=CPF_2)
+        person2 = create_person(cpf=CPF_3)
         academic_education_campus = create_academic_education_campus()
 
         client = create_user_and_do_authentication(permissions=["core.change_student"])
@@ -132,7 +132,7 @@ class StudentAPITestCase(APITestCase):
 
     def test_create_invalid_student_with_permission(self):
         person1 = create_person()
-        person2 = create_person(cpf=CPF_2, rg=RG_2)
+        person2 = create_person(cpf=CPF_2)
         academic_education_campus = create_academic_education_campus()
 
         client = create_user_and_do_authentication(permissions=["core.add_student"])
@@ -268,7 +268,7 @@ class StudentAPITestCase(APITestCase):
     def test_partial_update_invalid_student_with_permission(self):
         # cria um estudante no banco para poder atualiza-lo
         student = create_student()
-        person1 = create_person(cpf=CPF_2, rg=RG_2)
+        person1 = create_person(cpf=CPF_2)
 
         client = create_user_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
@@ -428,8 +428,8 @@ class StudentAPITestCase(APITestCase):
 
     def test_search_filter(self):
         student = create_student()
-        create_student(registration="2", cpf=CPF_2, rg=RG_2)
-        create_student(registration="3", cpf=CPF_3, rg=RG_3)
+        create_student(registration="2", cpf=CPF_2)
+        create_student(registration="3", cpf=CPF_3)
 
         client = create_user_and_do_authentication(permissions=["core.view_student"])
 
@@ -445,8 +445,8 @@ class StudentAPITestCase(APITestCase):
         ingress_date = "2020-06-15"
 
         create_student(ingress_date=ingress_date)
-        create_student(registration="2", cpf=CPF_2, rg=RG_2)
-        create_student(registration="3", cpf=CPF_3, rg=RG_3)
+        create_student(registration="2", cpf=CPF_2)
+        create_student(registration="3", cpf=CPF_3)
 
         client = create_user_and_do_authentication(permissions=["core.view_student"])
 
@@ -499,7 +499,7 @@ class StudentAPITestCase(APITestCase):
         ingress_date = "2020-06-15"
 
         create_student()
-        create_student(registration="2", cpf=CPF_2, rg=RG_2)
+        create_student(registration="2", cpf=CPF_2)
 
         client = create_user_and_do_authentication(permissions=["core.view_student"])
 

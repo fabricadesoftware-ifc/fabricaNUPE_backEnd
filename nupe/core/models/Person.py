@@ -9,7 +9,6 @@ PERSON_FIRST_NAME_MAX_LENGTH = 50
 PERSON_LAST_NAME_MAX_LENGTH = 100
 
 PERSON_CPF_MIN_LENGTH = PERSON_CPF_MAX_LENGTH = 11
-PERSON_RG_MIN_LENGTH = PERSON_RG_MAX_LENGTH = 7
 
 PERSON_GENDER_MAX_LENGTH = 1
 PERSON_CONTACT_MIN_LENGTH = PERSON_CONTACT_MAX_LENGTH = 12
@@ -30,11 +29,6 @@ class Person(SafeDeleteModel):
     last_name = models.CharField(max_length=PERSON_LAST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS_AND_SPACE])
     cpf = models.CharField(
         max_length=PERSON_CPF_MAX_LENGTH, validators=[MinLengthValidator(PERSON_CPF_MIN_LENGTH)], unique=True,
-    )
-    rg = models.CharField(
-        max_length=PERSON_RG_MAX_LENGTH,
-        validators=[ONLY_NUMBERS, MinLengthValidator(PERSON_RG_MIN_LENGTH)],
-        unique=True,
     )
     birthday_date = models.DateField()
     gender = models.CharField(max_length=PERSON_GENDER_MAX_LENGTH, choices=GENDER_CHOICES)

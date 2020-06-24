@@ -11,9 +11,6 @@ from resources.const.datas.Person import (
     FIRST_NAME,
     GENDER,
     LAST_NAME,
-    RG,
-    RG_2,
-    RG_3,
     UNDER_AGE_BIRTHDAY_DATE,
 )
 from resources.const.datas.Student import INGRESS_DATE, REGISTRATION
@@ -25,10 +22,10 @@ class StudentTestCase(TestCase):
         create_academic_education_campus()
 
         Person.objects.create(
-            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, birthday_date=BIRTHDAY_DATE, gender=GENDER,
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, birthday_date=BIRTHDAY_DATE, gender=GENDER,
         )
         Person.objects.create(
-            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF_2, rg=RG_2, birthday_date=BIRTHDAY_DATE, gender=GENDER,
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF_2, birthday_date=BIRTHDAY_DATE, gender=GENDER,
         )
 
     def test_create_valid(self):
@@ -270,23 +267,17 @@ class ResponsibleTestCase(TestCase):
         academic_education_campus = create_academic_education_campus()
 
         person1 = Person.objects.create(
-            first_name=FIRST_NAME,
-            last_name=LAST_NAME,
-            cpf=CPF,
-            rg=RG,
-            birthday_date=UNDER_AGE_BIRTHDAY_DATE,
-            gender=GENDER,
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, birthday_date=UNDER_AGE_BIRTHDAY_DATE, gender=GENDER,
         )
 
         Person.objects.create(
-            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF_2, rg=RG_2, birthday_date=BIRTHDAY_DATE, gender=GENDER,
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF_2, birthday_date=BIRTHDAY_DATE, gender=GENDER,
         )
 
         Person.objects.create(
             first_name=FIRST_NAME,
             last_name=LAST_NAME,
             cpf=CPF_3,
-            rg=RG_3,
             birthday_date=UNDER_AGE_BIRTHDAY_DATE,
             gender=GENDER,
         )

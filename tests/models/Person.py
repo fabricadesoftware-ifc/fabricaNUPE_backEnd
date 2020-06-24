@@ -8,14 +8,12 @@ from nupe.core.models.Person import (
     PERSON_FIRST_NAME_MAX_LENGTH,
     PERSON_GENDER_MAX_LENGTH,
     PERSON_LAST_NAME_MAX_LENGTH,
-    PERSON_RG_MAX_LENGTH,
 )
 from resources.const.datas.Person import (
     AGE,
     BIRTHDAY_DATE,
     CONTACT,
     CPF,
-    CPF_2,
     FIRST_NAME,
     FULL_NAME,
     GENDER,
@@ -25,19 +23,14 @@ from resources.const.datas.Person import (
     INVALID_CPF_LENGTH,
     INVALID_NAME,
     INVALID_NAME_2,
-    INVALID_RG,
-    INVALID_RG_2,
-    INVALID_RG_LENGTH,
     LAST_NAME,
-    RG,
-    RG_2,
 )
 
 
 class PersonTestCase(TestCase):
     def test_create_valid(self):
         person = Person.objects.create(
-            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, birthday_date=BIRTHDAY_DATE, gender=GENDER,
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, birthday_date=BIRTHDAY_DATE, gender=GENDER,
         )
 
         self.assertNotEqual(person.id, None)  # o objeto criado deve conter um id
@@ -53,7 +46,6 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME * (PERSON_FIRST_NAME_MAX_LENGTH + 1),
                 last_name=LAST_NAME,
                 cpf=CPF,
-                rg=RG,
                 gender=GENDER,
                 contact=CONTACT,
                 birthday_date=BIRTHDAY_DATE,
@@ -64,7 +56,6 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME * (PERSON_LAST_NAME_MAX_LENGTH + 1),
                 cpf=CPF,
-                rg=RG,
                 gender=GENDER,
                 contact=CONTACT,
                 birthday_date=BIRTHDAY_DATE,
@@ -75,7 +66,6 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME,
                 cpf=CPF * (PERSON_CPF_MAX_LENGTH + 1),
-                rg=RG,
                 gender=GENDER,
                 contact=CONTACT,
                 birthday_date=BIRTHDAY_DATE,
@@ -86,18 +76,6 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME,
                 cpf=CPF,
-                rg=RG * (PERSON_RG_MAX_LENGTH + 1),
-                gender=GENDER,
-                contact=CONTACT,
-                birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=CPF,
-                rg=RG,
                 gender=GENDER * (PERSON_GENDER_MAX_LENGTH + 1),
                 contact=CONTACT,
                 birthday_date=BIRTHDAY_DATE,
@@ -108,7 +86,6 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME,
                 cpf=CPF,
-                rg=RG,
                 gender=GENDER,
                 contact=CONTACT * (PERSON_CONTACT_MAX_LENGTH + 1),
                 birthday_date=BIRTHDAY_DATE,
@@ -122,31 +99,8 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME,
                 cpf=INVALID_CPF_LENGTH,
-                rg=RG,
                 gender=GENDER,
                 contact=CONTACT,
-                birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=CPF,
-                rg=INVALID_RG_LENGTH,
-                gender=GENDER,
-                contact=CONTACT,
-                birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=CPF,
-                rg=RG,
-                gender=GENDER,
-                contact=INVALID_CONTACT_LENGTH,
                 birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
@@ -155,42 +109,27 @@ class PersonTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=None, last_name=LAST_NAME, cpf=CPF, rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
+                first_name=None, last_name=LAST_NAME, cpf=CPF, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME, last_name=None, cpf=CPF, rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
+                first_name=FIRST_NAME, last_name=None, cpf=CPF, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=None,
-                rg=RG,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
+                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=None, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=CPF,
-                rg=None,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
+                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, gender=None, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, gender=None, birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, gender=GENDER, birthday_date=None,
+                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, gender=GENDER, birthday_date=None,
             ).clean_fields()
 
     def test_create_invalid_blank(self):
@@ -201,40 +140,34 @@ class PersonTestCase(TestCase):
         # deve emitir erro de que o campo não pode ser em branco
         with self.assertRaises(ValidationError):
             Person(
-                first_name="", last_name=LAST_NAME, cpf=CPF, rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
+                first_name="", last_name=LAST_NAME, cpf=CPF, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME, last_name="", cpf=CPF, rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
+                first_name=FIRST_NAME, last_name="", cpf=CPF, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME, last_name=LAST_NAME, cpf="", rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
+                first_name=FIRST_NAME, last_name=LAST_NAME, cpf="", gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg="", gender=GENDER, birthday_date=BIRTHDAY_DATE,
+                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, gender="", birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, gender="", birthday_date=BIRTHDAY_DATE,
+                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, gender=GENDER, birthday_date="",
             ).clean_fields()
 
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, gender=GENDER, birthday_date="",
-            ).clean_fields()
-
-    def test_create_invalid_unique_cpf_and_rg(self):
+    def test_create_invalid_unique_cpf(self):
         Person.objects.create(
             first_name=FIRST_NAME,
             last_name=LAST_NAME,
             cpf=CPF,
-            rg=RG,
             gender=GENDER,
             contact=CONTACT,
             birthday_date=BIRTHDAY_DATE,
@@ -246,19 +179,6 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME,
                 cpf=CPF,
-                rg=RG_2,
-                gender=GENDER,
-                contact=CONTACT,
-                birthday_date=BIRTHDAY_DATE,
-            ).validate_unique()
-
-        # deve emitir erro porque só pode conter um único objeto com o mesmo rg
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=CPF_2,
-                rg=RG,
                 gender=GENDER,
                 contact=CONTACT,
                 birthday_date=BIRTHDAY_DATE,
@@ -268,64 +188,23 @@ class PersonTestCase(TestCase):
         # first_name deve conter somente letras e espaço
         with self.assertRaises(ValidationError):
             Person(
-                first_name=INVALID_NAME,
-                last_name=LAST_NAME,
-                cpf=CPF,
-                rg=RG,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
+                first_name=INVALID_NAME, last_name=LAST_NAME, cpf=CPF, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=INVALID_NAME_2,
-                last_name=LAST_NAME,
-                cpf=CPF,
-                rg=RG,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
+                first_name=INVALID_NAME_2, last_name=LAST_NAME, cpf=CPF, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         # last_name deve conter somente letras e espaço
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME,
-                last_name=INVALID_NAME,
-                cpf=CPF,
-                rg=RG,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
+                first_name=FIRST_NAME, last_name=INVALID_NAME, cpf=CPF, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         with self.assertRaises(ValidationError):
             Person(
-                first_name=FIRST_NAME,
-                last_name=INVALID_NAME_2,
-                cpf=CPF,
-                rg=RG,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
-        # rg deve conter somente numeros
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=CPF,
-                rg=INVALID_RG,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
-            ).clean_fields()
-
-        with self.assertRaises(ValidationError):
-            Person(
-                first_name=FIRST_NAME,
-                last_name=LAST_NAME,
-                cpf=CPF,
-                rg=INVALID_RG_2,
-                gender=GENDER,
-                birthday_date=BIRTHDAY_DATE,
+                first_name=FIRST_NAME, last_name=INVALID_NAME_2, cpf=CPF, gender=GENDER, birthday_date=BIRTHDAY_DATE,
             ).clean_fields()
 
         # contact deve conter somente numeros
@@ -334,7 +213,6 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME,
                 cpf=CPF,
-                rg=RG,
                 gender=GENDER,
                 birthday_date=BIRTHDAY_DATE,
                 contact=INVALID_CONTACT,
@@ -345,15 +223,24 @@ class PersonTestCase(TestCase):
                 first_name=FIRST_NAME,
                 last_name=LAST_NAME,
                 cpf=CPF,
-                rg=RG,
                 gender=GENDER,
                 birthday_date=BIRTHDAY_DATE,
                 contact=INVALID_CONTACT_2,
             ).clean_fields()
 
+        with self.assertRaises(ValidationError):
+            Person(
+                first_name=FIRST_NAME,
+                last_name=LAST_NAME,
+                cpf=CPF,
+                gender=GENDER,
+                birthday_date=BIRTHDAY_DATE,
+                contact=INVALID_CONTACT_LENGTH,
+            ).clean_fields()
+
     def test_properties(self):
         person = Person(
-            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, gender=GENDER, birthday_date=BIRTHDAY_DATE,
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, gender=GENDER, birthday_date=BIRTHDAY_DATE,
         )
 
         self.assertNotEqual(person.age, None)  # deve retornar um inteiro com a idade da pessoa
@@ -363,7 +250,7 @@ class PersonTestCase(TestCase):
 
     def test_soft_delete(self):
         person = Person.objects.create(
-            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, birthday_date=BIRTHDAY_DATE, gender=GENDER,
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, birthday_date=BIRTHDAY_DATE, gender=GENDER,
         )
 
         person.delete()
@@ -375,7 +262,7 @@ class PersonTestCase(TestCase):
 
     def test_undelete(self):
         person = Person.objects.create(
-            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, rg=RG, birthday_date=BIRTHDAY_DATE, gender=GENDER,
+            first_name=FIRST_NAME, last_name=LAST_NAME, cpf=CPF, birthday_date=BIRTHDAY_DATE, gender=GENDER,
         )
 
         person.delete()
