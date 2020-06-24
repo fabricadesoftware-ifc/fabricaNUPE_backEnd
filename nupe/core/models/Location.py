@@ -7,6 +7,7 @@ STATE_MAX_LENGTH = 50
 
 class City(SafeDeleteModel):
     _safedelete_policy = NO_DELETE
+
     name = models.CharField(max_length=CITY_MAX_LENGTH, unique=True)
 
     def __str__(self):
@@ -15,6 +16,7 @@ class City(SafeDeleteModel):
 
 class State(SafeDeleteModel):
     _safedelete_policy = NO_DELETE
+
     name = models.CharField(max_length=STATE_MAX_LENGTH, unique=True)
     cities = models.ManyToManyField("City", related_name="states", related_query_name="state", through="Location")
 
@@ -24,6 +26,7 @@ class State(SafeDeleteModel):
 
 class Location(SafeDeleteModel):
     _safedelete_policy = NO_DELETE
+
     city = models.ForeignKey(
         "City", related_name="locations", related_query_name="location", on_delete=models.PROTECT,
     )

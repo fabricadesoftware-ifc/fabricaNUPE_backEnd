@@ -14,11 +14,18 @@ PERSON_RG_MIN_LENGTH = PERSON_RG_MAX_LENGTH = 7
 PERSON_GENDER_MAX_LENGTH = 1
 PERSON_CONTACT_MIN_LENGTH = PERSON_CONTACT_MAX_LENGTH = 12
 
-GENDER_CHOICES = [("F", "Feminino"), ("M", "Masculino")]
-
 
 class Person(SafeDeleteModel):
+    FEMININO = "F"
+    MASCULINO = "M"
+
+    GENDER_CHOICES = [
+        (FEMININO, "Feminino"),
+        (MASCULINO, "Masculino"),
+    ]
+
     _safedelete_policy = SOFT_DELETE_CASCADE
+
     first_name = models.CharField(max_length=PERSON_FIRST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS_AND_SPACE])
     last_name = models.CharField(max_length=PERSON_LAST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS_AND_SPACE])
     cpf = models.CharField(
@@ -36,9 +43,13 @@ class Person(SafeDeleteModel):
         validators=[ONLY_NUMBERS, MinLengthValidator(PERSON_CONTACT_MIN_LENGTH)],
         null=True,
         blank=True,
+        help_text="DDD+Número",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.full_name
 
     @property
     def full_name(self) -> str:
@@ -51,12 +62,6 @@ class Person(SafeDeleteModel):
         para obter a idade atual da pessoa
         """
         today = timezone.now()
+        birthday_date = self.birthday_date
 
-        return (
-            today.year
-            - self.birthday_date.year
-            - ((today.month, today.day) < (self.birthday_date.month, self.birthday_date.day))
-        )
-
-    def __str__(self):
-        return self.full_name
+        return today.year - birthday_date.year - ((today.month, today.day) < (birthday_date.month, birthday_date.day))

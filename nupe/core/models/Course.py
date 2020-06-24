@@ -7,6 +7,7 @@ GRADE_MAX_LENGTH = 50
 
 class Course(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE_CASCADE
+
     name = models.CharField(max_length=COURSE_MAX_LENGTH, unique=True)
 
     def __str__(self):
@@ -15,6 +16,7 @@ class Course(SafeDeleteModel):
 
 class Grade(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE_CASCADE
+
     name = models.CharField(max_length=GRADE_MAX_LENGTH, unique=True)
     courses = models.ManyToManyField(
         "Course", related_name="grades", related_query_name="grade", through="AcademicEducation"
@@ -26,6 +28,7 @@ class Grade(SafeDeleteModel):
 
 class AcademicEducation(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE_CASCADE
+
     course = models.ForeignKey(
         "Course",
         related_name="academics_educations",

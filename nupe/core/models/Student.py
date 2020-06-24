@@ -12,19 +12,27 @@ class Student(SafeDeleteModel):
     _academic_education_campus_deleted_id = models.IntegerField(default=None, null=True, blank=True)
 
     registration = models.CharField(max_length=STUDENT_REGISTRATION_MAX_LENGTH, validators=[ONLY_NUMBERS], unique=True)
-    person = models.ForeignKey("Person", related_name="student_registrations", on_delete=models.CASCADE)
+    person = models.ForeignKey(
+        "Person",
+        related_name="student_registrations",
+        related_query_name="student_registration",
+        on_delete=models.CASCADE,
+    )
     academic_education_campus = models.ForeignKey(
-        "AcademicEducationCampus", related_name="students", null=True, on_delete=models.SET_NULL
+        "AcademicEducationCampus", related_name="students", on_delete=models.SET_NULL, null=True
     )
     responsibles_persons = models.ManyToManyField(
-        "Person", related_name="dependents_students", related_query_name="student", through="Responsible"
+        "Person", related_name="dependents_students", related_query_name="dependent_student", through="Responsible"
     )
-    graduated = models.BooleanField(default=False, null=True, blank=True)
+    graduated = models.BooleanField(default=False)
     ingress_date = models.DateField()
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ["person", "academic_education_campus"]
+
+    def __str__(self):
+        return f"{self.person} - {self.registration}"
 
     @property
     def age(self):
@@ -34,17 +42,15 @@ class Student(SafeDeleteModel):
     def academic_education(self):
         return str(self.academic_education_campus.academic_education)
 
-    def __str__(self):
-        return f"{self.person} - {self.registration}"
-
 
 class Responsible(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE_CASCADE
+
     student = models.ForeignKey(
         "Student", related_name="responsibles", related_query_name="responsible", on_delete=models.CASCADE
     )
     person = models.ForeignKey(
-        "Person", related_name="dependents", related_query_name="dependent", on_delete=models.CASCADE
+        "Person", related_name="responsibles", related_query_name="responsible", on_delete=models.CASCADE
     )
 
     class Meta:
