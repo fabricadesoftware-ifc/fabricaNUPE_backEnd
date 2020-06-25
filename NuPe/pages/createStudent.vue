@@ -35,7 +35,23 @@ export default {
           console.log(err.data);
           alert("Erro ao criar usuario");
         });
+    },
+    getListOfStudents(tokenUser) {
+      this.$axios
+        .get("/api/v1/student/", {
+          headers: { Authorization: "Bearer ".concat(tokenUser) }
+        })
+        .then(resp => {
+          console.log(resp.data);
+        })
+        .catch(err => {
+          console.log(err);
+          alert("Erro na função getListOfStudent");
+        });
     }
+  },
+  mounted() {
+    this.getListOfStudents("qBP07QuFBxMahYCRadE5PDWlPy0RYf");
   }
 };
 </script>

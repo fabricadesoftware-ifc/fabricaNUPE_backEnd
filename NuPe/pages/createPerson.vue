@@ -37,6 +37,19 @@ export default {
           console.log(err.data);
           alert("Erro ao criar usuario person");
         });
+    },
+    getListOfPeople(tokenUser) {
+      this.$axios
+        .get("/api/v1/person/", {
+          headers: { Authorization: "Bearer ".concat(tokenUser) }
+        })
+        .then(resp => {
+          console.log(resp.data);
+        })
+        .catch(err => {
+          alert("Erro no metodo getListOfPeople");
+          console.log(err);
+        });
     }
   }
 };
