@@ -1,0 +1,20 @@
+{
+  "name": "NuPe",
+  "version": "1.0.0",
+  "description": "Frontend para a API NuPe, desenvolvida pela fabrica de software",
+  "author": "jorgebeeck",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.11.0",
+    "@nuxtjs/proxy": "^2.0.0",
+    "nuxt": "^2.0.0",
+    "nuxt-buefy": "^0.3.2"
+  },
+  "devDependencies": {}
+}
