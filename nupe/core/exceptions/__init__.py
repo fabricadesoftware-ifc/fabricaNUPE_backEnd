@@ -1,1 +1,1 @@
-from nupe.core.exceptions.ActionNotImplemented import ActionNotImplemented
+from nupe.core.exceptions.action_not_implemented import ActionNotImplemented

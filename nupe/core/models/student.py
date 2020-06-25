@@ -1,7 +1,7 @@
 from django.db import models
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
-from nupe.core.utils.Regex import ONLY_NUMBERS
+from nupe.core.utils.regex import ONLY_NUMBERS
 
 STUDENT_REGISTRATION_MAX_LENGTH = 35
 RESPONSIBLE_MIN_AGE = 18

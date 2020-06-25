@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import nupe.file.models.ImageUpload
+import nupe.file.models.image_upload
 
 
 class Migration(migrations.Migration):
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
-                ("image", models.ImageField(upload_to=nupe.file.models.ImageUpload.make_path_profile_image)),
+                ("image", models.ImageField(upload_to=nupe.file.models.image_upload.make_path_profile_image)),
             ],
             options={"abstract": False,},
         ),

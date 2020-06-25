@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Permission, User
 from rest_framework.test import APIClient
 
-from resources.const.datas.User import USERNAME
+from resources.const.datas.user import USERNAME
 
 
 def create_user_with_permissions(*, username: str = USERNAME, permissions: list) -> User:

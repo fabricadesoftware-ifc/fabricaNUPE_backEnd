@@ -6,8 +6,8 @@ from PIL import Image
 from rest_framework.test import APITestCase
 
 from nupe.file.models import ProfileImage
-from resources.const.datas.ProfileImage import PROFILE_IMAGE_INVALID_FILENAME, PROFILE_IMAGE_VALID_FILENAME
-from tests.endpoints.setup.User import create_user_and_do_authentication
+from resources.const.datas.image_upload import PROFILE_IMAGE_INVALID_FILENAME, PROFILE_IMAGE_VALID_FILENAME
+from tests.endpoints.setup.user import create_user_and_do_authentication
 
 
 class ProfileImageAPITestCase(APITestCase):

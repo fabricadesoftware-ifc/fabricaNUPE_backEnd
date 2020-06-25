@@ -2,14 +2,14 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from nupe.core.models import Person
-from nupe.core.models.Person import (
+from nupe.core.models.person import (
     PERSON_CONTACT_MAX_LENGTH,
     PERSON_CPF_MAX_LENGTH,
     PERSON_FIRST_NAME_MAX_LENGTH,
     PERSON_GENDER_MAX_LENGTH,
     PERSON_LAST_NAME_MAX_LENGTH,
 )
-from resources.const.datas.Person import (
+from resources.const.datas.person import (
     AGE,
     BIRTHDAY_DATE,
     CONTACT,

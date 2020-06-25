@@ -5,7 +5,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework.permissions import AllowAny
 
 from nupe.core.router import router as core_router
-from nupe.core.views.CustomHandler404 import custom_handler_404
+from nupe.core.views import custom_handler_404
 from nupe.file.router import router as file_router
 from project import description, developer_email, developer_name, developer_social_url
 

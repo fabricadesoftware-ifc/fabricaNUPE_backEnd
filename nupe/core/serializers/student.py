@@ -1,9 +1,9 @@
 from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField, ValidationError
 
 from nupe.core.models import Person, Student
-from nupe.core.models.Student import RESPONSIBLE_MIN_AGE
+from nupe.core.models.student import RESPONSIBLE_MIN_AGE
 from nupe.core.serializers import PersonDetailSerializer, PersonListSerializer
-from resources.const.messages.Responsible import (
+from resources.const.messages.responsible import (
     MYSELF_RESPONSIBLE_MESSAGE,
     UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE,
     UNDER_AGE_RESPONSIBLE_MESSAGE,

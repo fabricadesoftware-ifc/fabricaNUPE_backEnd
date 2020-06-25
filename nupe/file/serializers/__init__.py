@@ -1,1 +1,1 @@
-from nupe.file.serializers.ImageUpload import ProfileImageCreateSerializer
+from nupe.file.serializers.image_upload import ProfileImageCreateSerializer

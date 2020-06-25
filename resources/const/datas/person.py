@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from nupe.core.models.Person import PERSON_CONTACT_MIN_LENGTH, PERSON_CPF_MIN_LENGTH
+from nupe.core.models.person import PERSON_CONTACT_MIN_LENGTH, PERSON_CPF_MIN_LENGTH
 
 # dados válidos
 FIRST_NAME = "a"

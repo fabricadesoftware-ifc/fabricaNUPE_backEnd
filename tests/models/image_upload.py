@@ -5,7 +5,7 @@ from django.test import TestCase
 from PIL import Image
 
 from nupe.file.models import ProfileImage
-from resources.const.datas.ProfileImage import PROFILE_IMAGE_VALID_FILENAME
+from resources.const.datas.image_upload import PROFILE_IMAGE_VALID_FILENAME
 
 
 class ProfileImageTestCase(TestCase):

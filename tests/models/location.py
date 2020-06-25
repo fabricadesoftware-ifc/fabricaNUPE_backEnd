@@ -2,8 +2,8 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from nupe.core.models import City, Location, State
-from nupe.core.models.Location import CITY_MAX_LENGTH, STATE_MAX_LENGTH
-from resources.const.datas.Location import CITY_NAME, STATE_NAME
+from nupe.core.models.location import CITY_MAX_LENGTH, STATE_MAX_LENGTH
+from resources.const.datas.location import CITY_NAME, STATE_NAME
 
 
 class CityTestCase(TestCase):

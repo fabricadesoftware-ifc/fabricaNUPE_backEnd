@@ -1,1 +1,1 @@
-from nupe.file.views.ImageUpload import ProfileImageViewSet
+from nupe.file.views.image_upload import ProfileImageViewSet

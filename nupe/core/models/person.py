@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
-from nupe.core.utils.Regex import ONLY_LETTERS_AND_SPACE, ONLY_NUMBERS
+from nupe.core.utils.regex import ONLY_LETTERS_AND_SPACE, ONLY_NUMBERS
 
 PERSON_FIRST_NAME_MAX_LENGTH = 50
 PERSON_LAST_NAME_MAX_LENGTH = 100

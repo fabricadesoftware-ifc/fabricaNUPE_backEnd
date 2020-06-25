@@ -2,8 +2,8 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from nupe.core.models import AcademicEducationCampus, Person, Responsible, Student
-from nupe.core.models.Student import STUDENT_REGISTRATION_MAX_LENGTH
-from resources.const.datas.Person import (
+from nupe.core.models.student import STUDENT_REGISTRATION_MAX_LENGTH
+from resources.const.datas.person import (
     BIRTHDAY_DATE,
     CPF,
     CPF_2,
@@ -13,8 +13,8 @@ from resources.const.datas.Person import (
     LAST_NAME,
     UNDER_AGE_BIRTHDAY_DATE,
 )
-from resources.const.datas.Student import INGRESS_DATE, REGISTRATION
-from tests.models.setup.Institution import create_academic_education_campus
+from resources.const.datas.student import INGRESS_DATE, REGISTRATION
+from tests.models.setup.institution import create_academic_education_campus
 
 
 class StudentTestCase(TestCase):

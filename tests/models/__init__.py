@@ -1,11 +1,11 @@
-from tests.models.Course import AcademicEducationTestCase, CourseTestCase, GradeTestCase
-from tests.models.Institution import (
+from tests.models.course import AcademicEducationTestCase, CourseTestCase, GradeTestCase
+from tests.models.image_upload import ProfileImageTestCase
+from tests.models.institution import (
     AcademicEducationCampusTestCase,
     CampusTestCase,
     InstitutionCampusTestCase,
     InstitutionTestCase,
 )
-from tests.models.Location import CityTestCase, LocationTestCase, StateTestCase
-from tests.models.Person import PersonTestCase
-from tests.models.ProfileImage import ProfileImageTestCase
-from tests.models.Student import ResponsibleTestCase, StudentTestCase
+from tests.models.location import CityTestCase, LocationTestCase, StateTestCase
+from tests.models.person import PersonTestCase
+from tests.models.student import ResponsibleTestCase, StudentTestCase

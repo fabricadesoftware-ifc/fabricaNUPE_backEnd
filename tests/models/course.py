@@ -2,8 +2,8 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from nupe.core.models import AcademicEducation, Course, Grade
-from nupe.core.models.Course import COURSE_MAX_LENGTH, GRADE_MAX_LENGTH
-from resources.const.datas.Course import COURSE_NAME, GRADE_NAME
+from nupe.core.models.course import COURSE_MAX_LENGTH, GRADE_MAX_LENGTH
+from resources.const.datas.course import COURSE_NAME, GRADE_NAME
 
 
 class CourseTestCase(TestCase):

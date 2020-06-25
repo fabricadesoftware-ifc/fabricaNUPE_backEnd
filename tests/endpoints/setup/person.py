@@ -1,7 +1,7 @@
 from datetime import date
 
 from nupe.core.models import Person
-from resources.const.datas.Person import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME
+from resources.const.datas.person import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME
 
 
 def create_person(*, cpf: str = CPF, gender: chr = GENDER, birthday_date: date = BIRTHDAY_DATE) -> Person:
