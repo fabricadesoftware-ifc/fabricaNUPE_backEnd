@@ -50,7 +50,38 @@ export default {
           alert("Erro no metodo getListOfPeople");
           console.log(err);
         });
+    },
+
+    getPerson(tokenUser, cpf) {
+      this.$axios
+        .get("/api/v1/person/".concat(cpf, "/"), {
+          headers: { Authorization: "Bearer ".concat(tokenUser) }
+        })
+        .then(resp => {
+          console.log(resp.data);
+        })
+        .catch(err => {
+          alert("Erro no metodo getPerson");
+          console.log(err);
+        });
+    },
+    deletePerson(tokenUser, cpf) {
+      this.$axios
+        .delete("/api/v1/person/".concat(cpf, "/"), {
+          headers: { Authorization: "Bearer ".concat(tokenUser) }
+        })
+        .then(resp => {
+          alert("Usuario DELETADO com sucesso");
+          console.log(resp.data);
+        })
+        .catch(err => {
+          alert("Erro no método deletePerson");
+          console.log(err);
+        });
     }
+  },
+  mounted() {
+    this.getListOfPeople("0gKYHspvPjCvx8n2c90A0HIsqUIKXt");
   }
 };
 </script>

@@ -48,10 +48,37 @@ export default {
           console.log(err);
           alert("Erro na função getListOfStudent");
         });
+    },
+    getStudent(tokenUser, registration) {
+      this.$axios
+        .get("/api/v1/student/".concat(registration, "/"), {
+          headers: { Authorization: "Bearer ".concat(tokenUser) }
+        })
+        .then(resp => {
+          console.log(resp.data);
+        })
+        .catch(err => {
+          console.log(err);
+          alert("Erro na função getListOfStudent");
+        });
+    },
+    deleteStudent(tokenUser, registration) {
+      this.$axios
+        .delete("/api/v1/person/".concat(registration, "/"), {
+          headers: { Authorization: "Bearer ".concat(tokenUser) }
+        })
+        .then(resp => {
+          alert("Student DELETADO com sucesso");
+          console.log(resp.data);
+        })
+        .catch(err => {
+          alert("Erro no método deleteStudent");
+          console.log(err);
+        });
     }
   },
   mounted() {
-    this.getListOfStudents("qBP07QuFBxMahYCRadE5PDWlPy0RYf");
+    this.getListOfStudents("TNtEgeHkjn7MHP4U92Jk9nzjUNptRt");
   }
 };
 </script>
