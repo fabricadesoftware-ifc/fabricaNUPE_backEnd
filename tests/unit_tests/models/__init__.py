@@ -8,3 +8,4 @@ from tests.unit_tests.models.institution import (
 )
 from tests.unit_tests.models.location import CityTestCase, LocationTestCase, StateTestCase
 from tests.unit_tests.models.person import PersonTestCase
+from tests.unit_tests.models.student import ResponsibleTestCase, StudentTestCase
