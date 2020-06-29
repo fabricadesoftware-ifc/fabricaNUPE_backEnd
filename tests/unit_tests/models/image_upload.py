@@ -1,18 +1,13 @@
-from os import path
-from shutil import rmtree
-
 from django.test import TestCase
 from model_bakery import baker
 
 from nupe.file.models.image_upload import ProfileImageTest
+from tests.remove_image_files_after_test import remove_all_files_in_dir
 
 
 class ProfileImageTestCase(TestCase):
     def tearDown(self):
-        path_test_image = "media/tests"
-
-        if path.exists(path_test_image):
-            rmtree(path_test_image)
+        remove_all_files_in_dir()
 
     def test_has_all_attributes(self):
         self.assertIs(hasattr(ProfileImageTest, "created_at"), True)
