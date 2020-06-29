@@ -1,8 +1,8 @@
 from django.core.validators import MinLengthValidator
 from django.db import models
-from django.utils import timezone
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
+from nupe.core.utils.properties import calculate_age
 from nupe.core.utils.regex import ONLY_LETTERS_AND_SPACE, ONLY_NUMBERS
 
 PERSON_FIRST_NAME_MAX_LENGTH = 50
@@ -51,11 +51,4 @@ class Person(SafeDeleteModel):
 
     @property
     def age(self) -> int:
-        """
-        se o mês ou o dia atual for menor do que o mês ou o dia da data de nascimento, é subtraído 1 da idade
-        para obter a idade atual da pessoa
-        """
-        today = timezone.now()
-        birthday_date = self.birthday_date
-
-        return today.year - birthday_date.year - ((today.month, today.day) < (birthday_date.month, birthday_date.day))
+        return calculate_age(self.birthday_date)
