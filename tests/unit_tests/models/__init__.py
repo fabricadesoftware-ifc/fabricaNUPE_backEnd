@@ -6,3 +6,4 @@ from tests.unit_tests.models.institution import (
     InstitutionCampusTestCase,
     InstitutionTestCase,
 )
+from tests.unit_tests.models.location import CityTestCase, LocationTestCase, StateTestCase
