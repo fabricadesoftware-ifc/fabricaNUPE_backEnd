@@ -32,16 +32,3 @@ class ProfileImage(UploadImage):
     @property
     def url(self):
         return self.image.url
-
-
-# model para facilitar a remoção dos arquivos após finalizar os testes
-# DEVE SER UTILIZADA SOMENTE PARA TESTES
-class ProfileImageTest(UploadImage):
-    image = models.ImageField(upload_to="tests")
-
-    def __str__(self):
-        return self.url
-
-    @property
-    def url(self):
-        return self.image.url
