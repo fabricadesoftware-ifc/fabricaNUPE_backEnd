@@ -23,6 +23,7 @@ flake8 = "^3.7.9"
 isort = "^4.3.21"
 drf-yasg = "^1.17.1"
 coverage = "^5.1"
+model_bakery = "^1.1.0"
 
 [tool.black]
 line-length = 119

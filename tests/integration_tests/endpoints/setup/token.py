@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 
 from resources.const.datas.oauth2 import CLIENT_ID, CLIENT_SECRET
-from tests.endpoints.setup.application import get_or_create_application
+from tests.integration_tests.endpoints.setup.application import get_or_create_application
 
 
 def get_access_token(*, username: str, password: str) -> (HttpResponse, APIClient):

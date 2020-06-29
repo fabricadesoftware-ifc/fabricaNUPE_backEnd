@@ -11,8 +11,8 @@ from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
 from resources.const.datas.person import BIRTHDAY_DATE, CPF, CPF_2, CPF_3, FIRST_NAME, GENDER, LAST_NAME
-from tests.endpoints.setup.person import create_person
-from tests.endpoints.setup.user import create_user_and_do_authentication
+from tests.integration_tests.endpoints.setup.person import create_person
+from tests.integration_tests.endpoints.setup.user import create_user_and_do_authentication
 
 
 class PersonAPITestCase(APITestCase):

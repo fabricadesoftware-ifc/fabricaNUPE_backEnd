@@ -5,8 +5,8 @@ from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from rest_framework.test import APITestCase
 
 from resources.const.datas.user import PASSWORD, USERNAME
-from tests.endpoints.setup.token import get_access_token, revoke_access_token
-from tests.endpoints.setup.user import create_user_with_permissions
+from tests.integration_tests.endpoints.setup.token import get_access_token, revoke_access_token
+from tests.integration_tests.endpoints.setup.user import create_user_with_permissions
 
 
 class Oauth2APITestCase(APITestCase):
