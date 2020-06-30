@@ -1,11 +1,13 @@
 from django.contrib.auth.models import Permission, User
 from rest_framework.test import APIClient
 
-from resources.const.datas.user import USERNAME
+from resources.const.datas.user import PASSWORD, USERNAME
 
 
-def create_user_with_permissions(*, username: str = USERNAME, permissions: list) -> User:
-    user = User.objects.create_user(username=username, password=username)
+def create_user_with_permissions(
+    *, username: str = USERNAME, password: str = PASSWORD, permissions: list = []
+) -> User:
+    user = User.objects.create_user(username=username, password=password)
 
     for permission in permissions:
         app_label, codename = permission.split(".")
@@ -14,10 +16,16 @@ def create_user_with_permissions(*, username: str = USERNAME, permissions: list)
     return user
 
 
-def create_user_and_do_authentication(permissions: list) -> APIClient:
+def create_user_with_permissions_and_do_authentication(
+    *, username: str = USERNAME, password: str = PASSWORD, permissions: list = []
+) -> APIClient:
     client = APIClient()
 
-    user = create_user_with_permissions(username="teste", permissions=permissions)
+    user = create_user_with_permissions(username=username, password=password, permissions=permissions)
     client.force_authenticate(user=user)
 
     return client
+
+
+def delete_all_users():
+    User.objects.all().delete()

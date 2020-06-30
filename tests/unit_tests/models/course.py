@@ -2,7 +2,6 @@ from django.test import TestCase
 from model_bakery import baker
 
 from nupe.core.models import AcademicEducation, Course, Grade
-from resources.const.datas.course import COURSE_NAME, GRADE_NAME
 
 
 class CourseTestCase(TestCase):
@@ -11,7 +10,7 @@ class CourseTestCase(TestCase):
         self.assertIs(hasattr(Course, "name"), True)
 
     def test_return_str(self):
-        course = baker.prepare(Course, name=COURSE_NAME)
+        course = baker.prepare(Course)
 
         self.assertEqual(str(course), course.name)
 
@@ -23,7 +22,7 @@ class GradeTestCase(TestCase):
         self.assertIs(hasattr(Grade, "courses"), True)
 
     def test_return_str(self):
-        grade = baker.prepare(Grade, name=GRADE_NAME)
+        grade = baker.prepare(Grade)
 
         self.assertEqual(str(grade), grade.name)
 

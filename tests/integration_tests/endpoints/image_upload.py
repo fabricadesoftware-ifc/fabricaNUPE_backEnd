@@ -7,19 +7,11 @@ from rest_framework.test import APITestCase
 
 from nupe.file.models import ProfileImage
 from resources.const.datas.image_upload import PROFILE_IMAGE_INVALID_FILENAME, PROFILE_IMAGE_VALID_FILENAME
-from tests.integration_tests.endpoints.setup.user import create_user_and_do_authentication
+from tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
 from tests.remove_image_files_after_test import remove_all_files_in_dir
 
 
 class ProfileImageAPITestCase(APITestCase):
-    @classmethod
-    def tearDownClass(cls):
-        # remove os arquivos criados que são necessários para os testes
-        os.remove(PROFILE_IMAGE_VALID_FILENAME)
-        os.remove(PROFILE_IMAGE_INVALID_FILENAME)
-
-        remove_all_files_in_dir()
-
     @classmethod
     def setUpClass(cls):
         # cria uma imagem qualquer
@@ -30,8 +22,16 @@ class ProfileImageAPITestCase(APITestCase):
         with open(PROFILE_IMAGE_INVALID_FILENAME, "w") as invalid_image:
             invalid_image.write("foo bar")
 
+    @classmethod
+    def tearDownClass(cls):
+        # remove os arquivos criados que são necessários para os testes
+        os.remove(PROFILE_IMAGE_VALID_FILENAME)
+        os.remove(PROFILE_IMAGE_INVALID_FILENAME)
+
+        remove_all_files_in_dir()
+
     def test_create_profile_image_with_permission(self):
-        client = create_user_and_do_authentication(permissions=["file.add_profileimage"])
+        client = create_user_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
         url = reverse("image-list")
 
         with open(PROFILE_IMAGE_VALID_FILENAME, "rb") as image:
@@ -53,7 +53,7 @@ class ProfileImageAPITestCase(APITestCase):
     def test_destroy_profile_image_with_permission(self):
         profile_image = baker.make(ProfileImage, _create_files=True)
 
-        client = create_user_and_do_authentication(permissions=["file.delete_profileimage"])
+        client = create_user_with_permissions_and_do_authentication(permissions=["file.delete_profileimage"])
         url = reverse("image-detail", args=[profile_image.id])
 
         response = client.delete(path=url)
@@ -63,7 +63,7 @@ class ProfileImageAPITestCase(APITestCase):
         self.assertIs(os.path.exists(profile_image.image.path), False)
 
     def test_destroy_profile_image_not_found_with_permission(self):
-        client = create_user_and_do_authentication(permissions=["file.delete_profileimage"])
+        client = create_user_with_permissions_and_do_authentication(permissions=["file.delete_profileimage"])
         url = reverse("image-detail", args=[99])
 
         response = client.delete(path=url)
@@ -71,7 +71,7 @@ class ProfileImageAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_create_profile_image_without_permission(self):
-        client = create_user_and_do_authentication(permissions=[])
+        client = create_user_with_permissions_and_do_authentication()
         url = reverse("image-list")
 
         response = client.post(path=url)
@@ -79,7 +79,7 @@ class ProfileImageAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 403)  # não deve ter permissão para acessar
 
     def test_destroy_profile_image_without_permission(self):
-        client = create_user_and_do_authentication(permissions=[])
+        client = create_user_with_permissions_and_do_authentication()
         url = reverse("image-detail", args=[99])
 
         response = client.delete(path=url)
@@ -87,7 +87,7 @@ class ProfileImageAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 403)  # não deve ter permissão para acessar
 
     def test_create_invalid_profile_image_with_permission(self):
-        client = create_user_and_do_authentication(permissions=["file.add_profileimage"])
+        client = create_user_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
         url = reverse("image-list")
 
         with open(PROFILE_IMAGE_INVALID_FILENAME, "rb") as invalid_image:
