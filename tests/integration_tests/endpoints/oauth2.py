@@ -46,7 +46,7 @@ class Oauth2APITestCase(APITestCase):
         response_data = loads(response.content.decode())
 
         self.assertEqual(response.status_code, HTTP_200_OK)
-        self.assertNotEqual(response_data.get("access_token"), None)  # deve retornar um novo token de acesso
+        self.assertIsNotNone(response_data.get("access_token"))  # deve retornar um novo token de acesso
 
     def test_revoke_token(self):
         response, client = get_access_token(username=USERNAME, password=PASSWORD)

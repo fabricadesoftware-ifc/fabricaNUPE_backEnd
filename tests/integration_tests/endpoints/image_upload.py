@@ -30,7 +30,7 @@ class ProfileImageAPITestCase(APITestCase):
 
         remove_all_files_in_dir()
 
-    def test_create_profile_image_with_permission(self):
+    def test_create_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
         url = reverse("image-list")
 
@@ -50,7 +50,7 @@ class ProfileImageAPITestCase(APITestCase):
 
             self.assertIs(os.path.exists(profile_image_path), True)
 
-    def test_destroy_profile_image_with_permission(self):
+    def test_destroy_with_permission(self):
         profile_image = baker.make(ProfileImage, _create_files=True)
 
         client = create_user_with_permissions_and_do_authentication(permissions=["file.delete_profileimage"])
@@ -62,7 +62,7 @@ class ProfileImageAPITestCase(APITestCase):
         self.assertEqual(ProfileImage.objects.count(), 0)
         self.assertIs(os.path.exists(profile_image.image.path), False)
 
-    def test_destroy_profile_image_not_found_with_permission(self):
+    def test_destroy_not_found_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["file.delete_profileimage"])
         url = reverse("image-detail", args=[99])
 
@@ -70,7 +70,7 @@ class ProfileImageAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, 404)
 
-    def test_create_profile_image_without_permission(self):
+    def test_create_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
         url = reverse("image-list")
 
@@ -78,7 +78,7 @@ class ProfileImageAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, 403)  # não deve ter permissão para acessar
 
-    def test_destroy_profile_image_without_permission(self):
+    def test_destroy_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
         url = reverse("image-detail", args=[99])
 
@@ -86,7 +86,7 @@ class ProfileImageAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, 403)  # não deve ter permissão para acessar
 
-    def test_create_invalid_profile_image_with_permission(self):
+    def test_create_invalid_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
         url = reverse("image-list")
 

@@ -4,7 +4,7 @@ from nupe.core.models import Person, Student
 from nupe.core.models.student import RESPONSIBLE_MIN_AGE
 from nupe.core.serializers import PersonDetailSerializer, PersonListSerializer
 from resources.const.messages.responsible import (
-    MYSELF_RESPONSIBLE_MESSAGE,
+    SELF_RESPONSIBLE_MESSAGE,
     UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE,
     UNDER_AGE_RESPONSIBLE_MESSAGE,
 )
@@ -48,30 +48,43 @@ class StudentCreateSerializer(ModelSerializer):
         read_only_fields = ["id"]
 
     def validate(self, data):
-        person_data = data.get("person")
-        responsibles_data = data.get("responsibles_persons")
+        # caso o atributo não seja informado, é utilizado a instancia de 'Student' para obte-lo
+        # dessa forma a validação funcionará para as actions de 'create' e 'partial_update'
+        person_data = data.get("person", self.instance.person if self.instance else None)
+        responsibles_data = data.get("responsibles_persons", [])
 
-        # caso "person" não seja informado no data, é utilizado a instancia de student object para obter "person"
-        # dessa forma a validação funcionará para as actions de "create" e "partial_update"
-        person = person_data if person_data else self.instance.person
-
-        if person and person.age < RESPONSIBLE_MIN_AGE:
-            self.__verify_responsibles_of_under_age_student(responsibles=responsibles_data, person=person)
+        if person_data:
+            self.__verify_responsibles_of_under_age_student(responsibles=responsibles_data, person=person_data)
 
         return data
 
-    def __verify_responsibles_of_under_age_student(self, *, responsibles: list, person: Person) -> ValidationError:
-        """Validações para estudantes menor de idade"""
+    def __verify_responsibles_of_under_age_student(self, *, responsibles: list, person: Person):
+        """
+        Verifica se os responsáveis do estudante são válidos
 
-        if not responsibles:
-            # Deve conter pelo menos 1 responsável
+        Args:
+            responsibles (list): lista dos responsáveis do estudante
+            person (Person): informações pessoais do estudante
+
+        Raises:
+            ValidationError 1: caso o estudante seja menor de idade, ele deve conter pelo menos um responsável
+            ValidationError 2: caso o estudante seja menor de idade, ele não deve ser o responsável de sí
+            ValidationError 3: caso o estudante seja menor de idade, não deve conter nenhum responsável menor de idade
+        """
+        student_is_under_age = person.age < RESPONSIBLE_MIN_AGE
+
+        # ValidationError 1
+        if student_is_under_age and not responsibles:
             raise ValidationError({"responsibles_persons": UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE})
 
         for responsible in responsibles:
-            if responsible.id == person.id:
-                # O estudante não pode ser o próprio responsável
-                raise ValidationError({"responsibles_persons": MYSELF_RESPONSIBLE_MESSAGE})
+            responsible_is_under_age = responsible.age < RESPONSIBLE_MIN_AGE
+            student_is_self_responsible = responsible.id == person.id
 
-            elif responsible.age < RESPONSIBLE_MIN_AGE:
-                # O responsável não pode ser menor de idade
+            # ValidationError 2
+            if student_is_under_age and student_is_self_responsible:
+                raise ValidationError({"responsibles_persons": SELF_RESPONSIBLE_MESSAGE})
+
+            # ValidationError 3
+            elif responsible_is_under_age:
                 raise ValidationError({"responsibles_persons": UNDER_AGE_RESPONSIBLE_MESSAGE})

@@ -11,12 +11,12 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
-from resources.const.datas.person import BIRTHDAY_DATE, CPF, FIRST_NAME, GENDER, LAST_NAME
+from resources.const.datas.person import CPF, FIRST_NAME, GENDER, LAST_NAME, OLDER_BIRTHDAY_DATE
 from tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
 
 
 class PersonAPITestCase(APITestCase):
-    def test_list_person_with_permission(self):
+    def test_list_with_permission(self):
         baker.make(Person)  # cria uma pessoa no banco para retornar no list
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.view_person"])
@@ -29,7 +29,7 @@ class PersonAPITestCase(APITestCase):
         # deve retornar todos os dados do banco de dados não mascarados
         self.assertEqual(response.data.get("count"), Person.objects.count())
 
-    def test_retrieve_person_with_permission(self):
+    def test_retrieve_with_permission(self):
         person = baker.make(Person)  # cria uma pessoa no banco para detalhar suas informações
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.view_person"])
@@ -42,14 +42,14 @@ class PersonAPITestCase(APITestCase):
         # deve retornar as informações do usuário do cpf fornecido
         self.assertEqual(response.data.get("cpf"), person.cpf)
 
-    def test_create_person_with_permission(self):
+    def test_create_with_permission(self):
         # pessoa com informações válidas para conseguir criar
         person = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
             "gender": GENDER,
-            "birthday_date": BIRTHDAY_DATE,
+            "birthday_date": OLDER_BIRTHDAY_DATE,
         }
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
@@ -61,15 +61,17 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.data.get("cpf"), person.get("cpf"))
         self.assertEqual(Person.objects.count(), 1)  # deve ser criado no banco de dados
 
-    def test_partial_update_person_with_permission(self):
-        person = baker.make(Person, cpf=CPF)  # cria uma pessoa no banco para poder atualizar suas informações
+    def test_only_one_field_partial_update_with_permission(self):
+        person = baker.make(Person)  # cria uma pessoa no banco para poder atualizar suas informações
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
         url = reverse("person-detail", args=[person.cpf])
 
-        # somente um campo e com informações válidas para conseguir atualizar
+        # somente um campo e com informação válida para conseguir atualizar
         new_first_name = "first name updated"
-        person_update = {"first_name": new_first_name}
+        person_update = {
+            "first_name": new_first_name,
+        }
 
         response = client.patch(path=url, data=person_update)
 
@@ -78,33 +80,32 @@ class PersonAPITestCase(APITestCase):
         # deve ser atualizado no banco
         self.assertEqual(Person.objects.get(pk=person.id).first_name, new_first_name)
 
-        # todos os campos e com informações válidas para conseguir atualizar
+    def test_more_than_one_field_partial_update_with_permission(self):
+        person = baker.make(Person)
+
+        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
+        url = reverse("person-detail", args=[person.cpf])
+
+        # mais de um campo e com informações válidas para conseguir atualizar
         new_last_name = "last name updated"
+        new_contact = "047999887766"
 
         person_update = {
-            "first_name": new_first_name,
             "last_name": new_last_name,
-            "cpf": person.cpf,
-            "birthday_date": person.birthday_date,
-            "gender": person.gender,
-            "contact": person.contact,
+            "contact": new_contact,
         }
 
         response = client.patch(path=url, data=person_update)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
-        # verifica se todos os campos atualizou no banco de dados
+        # verifica se todos os campos foram atualizados no banco de dados
         person_database = Person.objects.get(pk=person.id)
 
-        self.assertEqual(person_database.first_name, new_first_name)
         self.assertEqual(person_database.last_name, new_last_name)
-        self.assertEqual(person_database.cpf, person.cpf)
-        self.assertEqual(person_database.birthday_date, person.birthday_date)
-        self.assertEqual(person_database.gender, person.gender)
-        self.assertEqual(person_database.contact, person.contact)
+        self.assertEqual(person_database.contact, new_contact)
 
-    def test_destroy_person_with_permission(self):
+    def test_destroy_with_permission(self):
         person = baker.make(Person)  # cria uma pessoa no banco para poder excluir
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.delete_person"])
@@ -119,7 +120,7 @@ class PersonAPITestCase(APITestCase):
         # mas deve ser mantido no banco de dados
         self.assertEqual(Person.all_objects.count(), 1)
 
-    def test_create_invalid_person_with_permission(self):
+    def test_create_invalid_first_name_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
         url = reverse("person-list")
 
@@ -130,7 +131,7 @@ class PersonAPITestCase(APITestCase):
             "last_name": LAST_NAME,
             "cpf": CPF,
             "gender": GENDER,
-            "birthday_date": BIRTHDAY_DATE,
+            "birthday_date": OLDER_BIRTHDAY_DATE,
         }
 
         response = client.post(path=url, data=person_data)
@@ -140,13 +141,17 @@ class PersonAPITestCase(APITestCase):
         # deve emitir mensagem de erro do campo inválido
         self.assertIsNotNone(response.data.get("first_name"))
 
+    def test_create_invalid_cpf_with_permission(self):
+        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
+        url = reverse("person-list")
+
         invalid_cpf = "12345678910"  # o dígito verificador deve ser válido
         person_data = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": invalid_cpf,
             "gender": GENDER,
-            "birthday_date": BIRTHDAY_DATE,
+            "birthday_date": OLDER_BIRTHDAY_DATE,
         }
 
         response = client.post(path=url, data=person_data)
@@ -154,19 +159,27 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.data.get("cpf"))
 
+    def test_create_invalid_gender_with_permission(self):
+        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
+        url = reverse("person-list")
+
         invalid_gender = "invalid_gender"  # valor válido: F ou M
         person_data = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
             "gender": invalid_gender,
-            "birthday_date": BIRTHDAY_DATE,
+            "birthday_date": OLDER_BIRTHDAY_DATE,
         }
 
         response = client.post(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.data.get("gender"))
+
+    def test_create_invalid_birthday_date_with_permission(self):
+        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
+        url = reverse("person-list")
 
         invalid_birthday_date = "14/02/1999"  # formato válido: yyyy-MM-dd
         person_data = {
@@ -182,13 +195,17 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.data.get("birthday_date"))
 
+    def test_create_invalid_contact_with_permission(self):
+        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
+        url = reverse("person-list")
+
         invalid_contact = "999999999"  # deve conter 12 números. Ex: 047999999999
         person_data = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
             "gender": GENDER,
-            "birthday_date": BIRTHDAY_DATE,
+            "birthday_date": OLDER_BIRTHDAY_DATE,
             "contact": invalid_contact,
         }
 
@@ -197,9 +214,9 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.data.get("contact"))
 
-    def test_partial_update_invalid_with_permission(self):
+    def test_partial_update_invalid_first_name_with_permission(self):
         # cria uma pessoa no banco para poder atualiza-lo
-        person = baker.make(Person, cpf=CPF)
+        person = baker.make(Person)
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
         url = reverse("person-detail", args=[person.cpf])
@@ -216,6 +233,12 @@ class PersonAPITestCase(APITestCase):
         # deve emitir mensagem de erro do campo inválido
         self.assertIsNotNone(response.data.get("first_name"))
 
+    def test_partial_update_invalid_cpf_with_permission(self):
+        person = baker.make(Person)
+
+        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
+        url = reverse("person-detail", args=[person.cpf])
+
         invalid_cpf = "12345678910"
         person_data = {
             "cpf": invalid_cpf,
@@ -225,6 +248,12 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.data.get("cpf"))
+
+    def test_partial_update_invalid_gender_with_permission(self):
+        person = baker.make(Person)
+
+        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
+        url = reverse("person-detail", args=[person.cpf])
 
         invalid_gender = "invalid_gender"
         person_data = {
@@ -236,6 +265,12 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.data.get("gender"))
 
+    def test_partial_update_invalid_birthday_date_with_permission(self):
+        person = baker.make(Person)
+
+        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
+        url = reverse("person-detail", args=[person.cpf])
+
         invalid_birthday_date = "14/02/1999"
         person_data = {
             "birthday_date": invalid_birthday_date,
@@ -245,6 +280,12 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.data.get("birthday_date"))
+
+    def test_partial_update_invalid_contact_with_permission(self):
+        person = baker.make(Person)
+
+        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
+        url = reverse("person-detail", args=[person.cpf])
 
         invalid_contact = "999999999"
         person_data = {
@@ -256,7 +297,7 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.data.get("contact"))
 
-    def test_list_person_without_permission(self):
+    def test_list_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
 
         url = reverse("person-list")
@@ -264,7 +305,7 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)  # não deve ter permissão para acessar
 
-    def test_retrieve_person_without_permission(self):
+    def test_retrieve_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
 
         url = reverse("person-detail", args=[99])
@@ -272,7 +313,7 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
-    def test_create_person_without_permission(self):
+    def test_create_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
 
         url = reverse("person-list")
@@ -280,7 +321,7 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
-    def test_partial_update_person_without_permission(self):
+    def test_partial_update_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
 
         url = reverse("person-detail", args=[99])
@@ -288,7 +329,7 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
-    def test_destroy_person_without_permission(self):
+    def test_destroy_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
 
         url = reverse("person-detail", args=[99])
@@ -296,15 +337,15 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
-    def test_retrieve_registration_not_found(self):
+    def test_retrieve_not_found_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["core.view_person"])
 
-        url = reverse("person-detail", args=[99])  # qualquer registration, o banco de dados para test é vazio
+        url = reverse("person-detail", args=[99])  # Não existe no banco de teste porque inicia-se vazio
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe
 
-    def test_partial_update_registration_not_found(self):
+    def test_partial_update_not_found_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
 
         url = reverse("person-detail", args=[99])
@@ -312,7 +353,7 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
 
-    def test_destroy_registration_not_found(self):
+    def test_destroy_not_found_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["core.delete_person"])
 
         url = reverse("person-detail", args=[99])
