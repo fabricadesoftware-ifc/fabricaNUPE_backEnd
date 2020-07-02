@@ -18,7 +18,7 @@ api_info = openapi.Info(title="Nupe API", default_version="v1", description=desc
 
 schema_view = get_schema_view(info=api_info, public=True, permission_classes=[AllowAny])
 
-core_router.registry.extend(file_router.registry)  # união da rota de outros apps em uma única rota
+core_router.registry.extend(file_router.registry)  # união da rota de outros apps
 
 urlpatterns = [
     path("admin/", admin.site.urls),

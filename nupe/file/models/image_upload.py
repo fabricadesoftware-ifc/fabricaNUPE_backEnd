@@ -3,17 +3,11 @@ from hashlib import sha256
 from django.db import models
 
 
-class UploadImage(models.Model):
-    # author = models.ForeignKey()
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-
-
 def make_path_profile_image(instance, filename):
+    """
+    Cria uma máscara para o nome do arquivo e retorna o path com o nome mascarado
+    """
+
     filename, extension = filename.rsplit(".", 1)
 
     filename_hashed = sha256(filename.encode()).hexdigest()
@@ -23,8 +17,24 @@ def make_path_profile_image(instance, filename):
     return f"images/profiles/{new_filename}"
 
 
-class ProfileImage(UploadImage):
+class ProfileImage(models.Model):
+    """
+    Model para guardar o path da imagem de perfil da pessoa
+
+    Exemplo: 'media/exemplo/foo.jpeg'
+
+    Attr:
+        image: manager da imagem
+        created_at: data/hora de criação
+        updated_at: data/hora de atualização
+
+    Properties:
+        url: url de acesso à imagem
+    """
+
     image = models.ImageField(upload_to=make_path_profile_image)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.url

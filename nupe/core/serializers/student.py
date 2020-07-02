@@ -11,6 +11,10 @@ from resources.const.messages.responsible import (
 
 
 class StudentListSerializer(ModelSerializer):
+    """
+    Atributos a serem exibidos na listagem de estudante
+    """
+
     full_name = CharField(source="person.full_name")
 
     class Meta:
@@ -19,6 +23,10 @@ class StudentListSerializer(ModelSerializer):
 
 
 class StudentDetailSerializer(ModelSerializer):
+    """
+    Atributos a serem exibidos no detalhamento de um estudante
+    """
+
     personal_info = PersonDetailSerializer(source="person")
     course = CharField(source="academic_education_campus.academic_education")
     campus = CharField(source="academic_education_campus.campus")
@@ -40,6 +48,10 @@ class StudentDetailSerializer(ModelSerializer):
 
 
 class StudentCreateSerializer(ModelSerializer):
+    """
+    Atributos a serem serializados para criação de um estudante
+    """
+
     responsibles_persons = PrimaryKeyRelatedField(many=True, queryset=Person.objects.all())
 
     class Meta:

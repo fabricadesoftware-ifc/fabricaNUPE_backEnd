@@ -32,6 +32,11 @@ class PersonViewSet(ModelViewSet):
     }
 
     def get_serializer_class(self):
+        """
+        Se a ação utilizada conter um serializer associado, ele será retornado.
+        Caso contrário é emitido uma exceção informativa
+        """
+
         serializer = self.per_action_serializer.get(self.action)
 
         if serializer is None:

@@ -4,6 +4,10 @@ from nupe.file.models import ProfileImage
 
 
 class ProfileImageCreateSerializer(ModelSerializer):
+    """
+    Atributos a serem serializados para upload de uma imagem
+    """
+
     url = CharField(source="image.url", read_only=True)
 
     class Meta:
