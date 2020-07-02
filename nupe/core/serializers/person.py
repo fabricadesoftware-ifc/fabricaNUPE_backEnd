@@ -12,7 +12,7 @@ class PersonListSerializer(ModelSerializer):
 
     class Meta:
         model = Person
-        fields = ["id", "full_name", "contact"]
+        fields = ["id", "full_name", "cpf", "contact"]
 
 
 class PersonDetailSerializer(ModelSerializer):

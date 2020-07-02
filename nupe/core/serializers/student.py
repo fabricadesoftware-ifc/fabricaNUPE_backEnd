@@ -52,11 +52,11 @@ class StudentCreateSerializer(ModelSerializer):
     Atributos a serem serializados para criação de um estudante
     """
 
-    responsibles_persons = PrimaryKeyRelatedField(many=True, queryset=Person.objects.all())
+    responsibles = PrimaryKeyRelatedField(source="responsibles_persons", many=True, queryset=Person.objects.all())
 
     class Meta:
         model = Student
-        fields = ["id", "registration", "person", "academic_education_campus", "responsibles_persons", "ingress_date"]
+        fields = ["id", "registration", "person", "academic_education_campus", "responsibles", "ingress_date"]
         read_only_fields = ["id"]
 
     def validate(self, data):
@@ -87,7 +87,7 @@ class StudentCreateSerializer(ModelSerializer):
 
         # ValidationError 1
         if student_is_under_age and not responsibles:
-            raise ValidationError({"responsibles_persons": UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE})
+            raise ValidationError({"responsibles": UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE})
 
         for responsible in responsibles:
             responsible_is_under_age = responsible.age < RESPONSIBLE_MIN_AGE
@@ -95,8 +95,8 @@ class StudentCreateSerializer(ModelSerializer):
 
             # ValidationError 2
             if student_is_under_age and student_is_self_responsible:
-                raise ValidationError({"responsibles_persons": SELF_RESPONSIBLE_MESSAGE})
+                raise ValidationError({"responsibles": SELF_RESPONSIBLE_MESSAGE})
 
             # ValidationError 3
             elif responsible_is_under_age:
-                raise ValidationError({"responsibles_persons": UNDER_AGE_RESPONSIBLE_MESSAGE})
+                raise ValidationError({"responsibles": UNDER_AGE_RESPONSIBLE_MESSAGE})

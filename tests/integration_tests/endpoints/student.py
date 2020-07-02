@@ -58,7 +58,7 @@ class StudentAPITestCase(APITestCase):
             "registration": REGISTRATION,
             "person": under_age_person.id,
             "academic_education_campus": academic_education_campus.id,
-            "responsibles_persons": [older_person.id],
+            "responsibles": [older_person.id],
             "ingress_date": INGRESS_DATE,
         }
 
@@ -136,7 +136,7 @@ class StudentAPITestCase(APITestCase):
             "registration": invalid_registration,
             "person": older_person.id,
             "academic_education_campus": academic_education_campus.id,
-            "responsibles_persons": [],
+            "responsibles": [],
             "ingress_date": INGRESS_DATE,
         }
 
@@ -158,7 +158,7 @@ class StudentAPITestCase(APITestCase):
             "registration": REGISTRATION,
             "person": invalid_pk_person,
             "academic_education_campus": academic_education_campus.id,
-            "responsibles_persons": [],
+            "responsibles": [],
             "ingress_date": INGRESS_DATE,
         }
 
@@ -179,14 +179,14 @@ class StudentAPITestCase(APITestCase):
             "registration": REGISTRATION,
             "person": older_person.id,
             "academic_education_campus": academic_education_campus.id,
-            "responsibles_persons": [invalid_pk_responsible],
+            "responsibles": [invalid_pk_responsible],
             "ingress_date": INGRESS_DATE,
         }
 
         response = client.post(path=url, data=student)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertIsNotNone(response.data.get("responsibles_persons"))
+        self.assertIsNotNone(response.data.get("responsibles"))
 
     # caso o estudante seja menor de idade e não tenha sido informado um responsável
     def test_create_invalid_empty_responsible_with_permission(self):
@@ -200,14 +200,14 @@ class StudentAPITestCase(APITestCase):
             "registration": REGISTRATION,
             "person": under_age_person.id,
             "academic_education_campus": academic_education_campus.id,
-            "responsibles_persons": [],
+            "responsibles": [],
             "ingress_date": INGRESS_DATE,
         }
 
         response = client.post(path=url, data=student)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertIsNotNone(response.data.get("responsibles_persons"))
+        self.assertIsNotNone(response.data.get("responsibles"))
 
     # caso tenha sido informado um responsável que seja menor de idade
     def test_create_invalid_under_age_responsible_with_permission(self):
@@ -222,14 +222,14 @@ class StudentAPITestCase(APITestCase):
             "registration": REGISTRATION,
             "person": older_person.id,
             "academic_education_campus": academic_education_campus.id,
-            "responsibles_persons": [under_age_person.id],
+            "responsibles": [under_age_person.id],
             "ingress_date": INGRESS_DATE,
         }
 
         response = client.post(path=url, data=student)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertIsNotNone(response.data.get("responsibles_persons"))
+        self.assertIsNotNone(response.data.get("responsibles"))
 
     # caso o estudante seja menor de idade e tenha sido informado que ele é o próprio responsável
     def test_create_invalid_self_responsible_with_permission(self):
@@ -243,14 +243,14 @@ class StudentAPITestCase(APITestCase):
             "registration": REGISTRATION,
             "person": under_age_person.id,
             "academic_education_campus": academic_education_campus.id,
-            "responsibles_persons": [under_age_person.id],
+            "responsibles": [under_age_person.id],
             "ingress_date": INGRESS_DATE,
         }
 
         response = client.post(path=url, data=student)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertIsNotNone(response.data.get("responsibles_persons"))
+        self.assertIsNotNone(response.data.get("responsibles"))
 
     def test_create_invalid_academic_education_campus_not_exist_with_permission(self):
         older_person = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE)
@@ -263,7 +263,7 @@ class StudentAPITestCase(APITestCase):
             "registration": REGISTRATION,
             "person": older_person.id,
             "academic_education_campus": invalid_pk_academic_education_campus,
-            "responsibles_persons": [],
+            "responsibles": [],
             "ingress_date": INGRESS_DATE,
         }
 
@@ -284,7 +284,7 @@ class StudentAPITestCase(APITestCase):
             "registration": REGISTRATION,
             "person": older_person.id,
             "academic_education_campus": academic_education_campus.id,
-            "responsibles_persons": [],
+            "responsibles": [],
             "ingress_date": invalid_ingress_date,
         }
 
@@ -336,13 +336,13 @@ class StudentAPITestCase(APITestCase):
 
         invalid_pk_responsible = 99
         student_data = {
-            "responsibles_persons": [invalid_pk_responsible],
+            "responsibles": [invalid_pk_responsible],
         }
 
         response = client.patch(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertIsNotNone(response.data.get("responsibles_persons"))
+        self.assertIsNotNone(response.data.get("responsibles"))
 
     # caso o estudante seja menor de idade e não tenha sido informado um responsável
     def test_partial_update_invalid_empty_responsible_with_permission(self):
@@ -352,13 +352,13 @@ class StudentAPITestCase(APITestCase):
         url = reverse("student-detail", args=[student.registration])
 
         student_data = {
-            "responsibles_persons": [],
+            "responsibles": [],
         }
 
         response = client.patch(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertIsNotNone(response.data.get("responsibles_persons"))
+        self.assertIsNotNone(response.data.get("responsibles"))
 
     # caso tenha sido informado um responsável que seja menor de idade
     def test_partial_update_invalid_under_age_responsible_with_permission(self):
@@ -369,13 +369,13 @@ class StudentAPITestCase(APITestCase):
         url = reverse("student-detail", args=[student.registration])
 
         student_data = {
-            "responsibles_persons": [under_age_person.id],
+            "responsibles": [under_age_person.id],
         }
 
         response = client.patch(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertIsNotNone(response.data.get("responsibles_persons"))
+        self.assertIsNotNone(response.data.get("responsibles"))
 
     # caso o estudante seja menor de idade e tenha sido informado que ele é o próprio responsável
     def test_partial_update_invalid_self_responsible_with_permission(self):
@@ -385,13 +385,13 @@ class StudentAPITestCase(APITestCase):
         url = reverse("student-detail", args=[student.registration])
 
         student_data = {
-            "responsibles_persons": [student.person.id],
+            "responsibles": [student.person.id],
         }
 
         response = client.patch(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertIsNotNone(response.data.get("responsibles_persons"))
+        self.assertIsNotNone(response.data.get("responsibles"))
 
     def test_partial_update_invalid_academic_education_campus_not_exist_with_permission(self):
         student = baker.make(Student)
