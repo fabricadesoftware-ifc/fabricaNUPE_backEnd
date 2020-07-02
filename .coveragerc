@@ -1,0 +1,11 @@
+[run]
+source = nupe/
+branch = True
+omit =
+    nupe/asgi.py
+    nupe/settings*
+    nupe/wsgi.py
+    */admin.py
+    */apps.py
+    */migrations/*
+    */__init__.py

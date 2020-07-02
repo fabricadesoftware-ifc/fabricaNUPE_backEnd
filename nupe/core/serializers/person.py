@@ -41,7 +41,6 @@ class PersonCreateSerializer(ModelSerializer):
     class Meta:
         model = Person
         fields = ["id", "first_name", "last_name", "cpf", "birthday_date", "gender", "contact"]
-        read_only_fields = ["id"]
 
     def validate_cpf(self, cpf):
         """

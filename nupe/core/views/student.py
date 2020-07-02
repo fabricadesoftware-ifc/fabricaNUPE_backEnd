@@ -8,10 +8,11 @@ from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializ
 class StudentViewSet(ModelViewSet):
     queryset = Student.objects.all()
     lookup_field = "registration"
+
     filterset_class = StudentFilter
     search_fields = ["person__first_name", "person__last_name"]
     ordering_fields = ["registration", "person__first_name", "person__last_name"]
-    ordering = ["person__first_name", "person__last_name"]
+    ordering = ["person__first_name", "person__last_name"]  # ordem padrão
 
     http_method_names = ["get", "post", "patch", "delete"]
 

@@ -57,7 +57,6 @@ class StudentCreateSerializer(ModelSerializer):
     class Meta:
         model = Student
         fields = ["id", "registration", "person", "academic_education_campus", "responsibles", "ingress_date"]
-        read_only_fields = ["id"]
 
     def validate(self, data):
         # caso o atributo não seja informado, é utilizado a instancia de 'Student' para obte-lo
