@@ -1,3 +1,4 @@
+import os
 from hashlib import sha256
 
 from django.db import models
@@ -38,6 +39,11 @@ class ProfileImage(models.Model):
 
     def __str__(self):
         return self.url
+
+    def delete(self, using=None, keep_parents=False):
+        os.remove(self.image.path)
+
+        return super().delete(using=using, keep_parents=keep_parents)
 
     @property
     def url(self):

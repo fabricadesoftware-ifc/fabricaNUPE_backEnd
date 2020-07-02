@@ -63,10 +63,10 @@ class StudentCreateSerializer(ModelSerializer):
         # caso o atributo não seja informado, é utilizado a instancia de 'Student' para obte-lo
         # dessa forma a validação funcionará para as actions de 'create' e 'partial_update'
         person_data = data.get("person", self.instance.person if self.instance else None)
+
         responsibles_data = data.get("responsibles_persons", [])
 
-        if person_data:
-            self.__verify_responsibles_of_under_age_student(responsibles=responsibles_data, person=person_data)
+        self.__verify_responsibles_of_under_age_student(responsibles=responsibles_data, person=person_data)
 
         return data
 

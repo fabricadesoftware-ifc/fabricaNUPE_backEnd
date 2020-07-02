@@ -1,7 +1,7 @@
 from django.test import TestCase
 from model_bakery import baker
 
-from nupe.core.models import AcademicEducationCampus, Campus, Institution, InstitutionCampus
+from nupe.core.models import AcademicEducationCampus, Campus, Institution, InstitutionCampus, Student
 
 
 class InstitutionTestCase(TestCase):
@@ -53,3 +53,36 @@ class AcademicEducationCampusTestCase(TestCase):
 
         str_expected = f"{academic_education_campus.academic_education} - {academic_education_campus.campus}"
         self.assertEqual(str(academic_education_campus), str_expected)
+
+    def test_signals_pre_delete_should_set_related_as_none(self):
+        academic_education_campus = baker.make(AcademicEducationCampus)
+        student = baker.make(Student, academic_education_campus=academic_education_campus)
+
+        academic_education_campus.delete()
+
+        student = Student.objects.get(pk=student.id)
+        self.assertIsNone(student.academic_education_campus)
+
+    def test_signals_post_delete_should_restore_related(self):
+        academic_education_campus = baker.make(AcademicEducationCampus)
+        student = baker.make(Student, academic_education_campus=academic_education_campus)
+
+        academic_education_campus.delete()
+        academic_education_campus.undelete()
+
+        student = Student.objects.get(pk=student.id)
+        self.assertIsNotNone(student.academic_education_campus)
+        self.assertEqual(student.academic_education_campus, academic_education_campus)
+
+    def test_signals_post_delete_not_should_restore(self):
+        academic_education_campus1 = baker.make(AcademicEducationCampus)
+        academic_education_campus2 = baker.make(AcademicEducationCampus)
+        student = baker.make(Student, academic_education_campus=academic_education_campus1)
+
+        academic_education_campus1.delete()
+        academic_education_campus2.delete()
+
+        academic_education_campus2.undelete()
+
+        student = Student.objects.get(pk=student.id)
+        self.assertIsNone(student.academic_education_campus)

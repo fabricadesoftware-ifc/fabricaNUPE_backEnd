@@ -1,6 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
 
-from nupe.core.exceptions import ActionNotImplemented
 from nupe.core.filters import PersonFilter
 from nupe.core.models import Person
 from nupe.core.serializers import PersonCreateSerializer, PersonDetailSerializer, PersonListSerializer
@@ -32,14 +31,4 @@ class PersonViewSet(ModelViewSet):
     }
 
     def get_serializer_class(self):
-        """
-        Se a ação utilizada conter um serializer associado, ele será retornado.
-        Caso contrário é emitido uma exceção informativa
-        """
-
-        serializer = self.per_action_serializer.get(self.action)
-
-        if serializer is None:
-            raise ActionNotImplemented
-
-        return serializer
+        return self.per_action_serializer.get(self.action)
