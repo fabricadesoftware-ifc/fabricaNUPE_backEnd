@@ -1,5 +1,6 @@
 from json import loads
 
+from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.test import APITestCase
 
 from resources.const.messages.custom_handler_404 import ENDPOINT_NOT_FOUND
@@ -14,4 +15,5 @@ class CustomHandler404APITestCase(APITestCase):
         response = client.get(path=url)
         response_data = response.content.decode()
 
+        self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
         self.assertEqual(loads(response_data).get("detail"), ENDPOINT_NOT_FOUND)

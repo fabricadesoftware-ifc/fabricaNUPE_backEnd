@@ -3,7 +3,7 @@ from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRel
 from nupe.core.models import Person, Student
 from nupe.core.models.student import RESPONSIBLE_MIN_AGE
 from nupe.core.serializers import PersonDetailSerializer, PersonListSerializer
-from resources.const.messages.responsible import (
+from resources.const.messages.person import (
     SELF_RESPONSIBLE_MESSAGE,
     UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE,
     UNDER_AGE_RESPONSIBLE_MESSAGE,
