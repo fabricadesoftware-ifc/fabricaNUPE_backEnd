@@ -7,6 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
+        ("file", "0001_add__image_upload"),
         ("core", "0003_add__academic_education_campus__campus__institution__institution_campus"),
     ]
 
@@ -59,6 +60,12 @@ class Migration(migrations.Migration):
                             ),
                             django.core.validators.MinLengthValidator(12),
                         ],
+                    ),
+                ),
+                (
+                    "profile_image",
+                    models.OneToOneField(
+                        blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to="file.ProfileImage"
                     ),
                 ),
                 ("created_at", models.DateTimeField(auto_now_add=True)),

@@ -1,5 +1,5 @@
-import os
-from hashlib import sha256
+from os import remove
+from uuid import uuid4
 
 from django.db import models
 
@@ -11,9 +11,7 @@ def make_path_profile_image(instance, filename):
 
     filename, extension = filename.rsplit(".", 1)
 
-    filename_hashed = sha256(filename.encode()).hexdigest()
-
-    new_filename = f"{filename_hashed}.{extension}"
+    new_filename = f"{uuid4()}.{extension}"
 
     return f"images/profiles/{new_filename}"
 
@@ -41,7 +39,7 @@ class ProfileImage(models.Model):
         return self.url
 
     def delete(self, using=None, keep_parents=False):
-        os.remove(self.image.path)
+        remove(self.image.path)
 
         return super().delete(using=using, keep_parents=keep_parents)
 

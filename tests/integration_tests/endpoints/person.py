@@ -1,3 +1,5 @@
+from os import path
+
 from django.urls import reverse
 from model_bakery import baker
 from rest_framework.status import (
@@ -43,6 +45,8 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.data.get("cpf"), person.cpf)
 
     def test_create_with_permission(self):
+        profile_image = baker.make("ProfileImage", _create_files=True)
+
         # pessoa com informações válidas para conseguir criar
         person = {
             "first_name": FIRST_NAME,
@@ -50,6 +54,7 @@ class PersonAPITestCase(APITestCase):
             "cpf": CPF,
             "gender": GENDER,
             "birthday_date": OLDER_BIRTHDAY_DATE,
+            "profile_image": profile_image.id,
         }
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
@@ -60,14 +65,14 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_201_CREATED)
         self.assertEqual(response.data.get("cpf"), person.get("cpf"))
         self.assertEqual(Person.objects.count(), 1)  # deve ser criado no banco de dados
+        self.assertIs(path.exists(profile_image.image.path), True)  # deve estar no diretório
 
-    def test_only_one_field_partial_update_with_permission(self):
+    def test_partial_update_with_permission(self):
         person = baker.make(Person)  # cria uma pessoa no banco para poder atualizar suas informações
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
         url = reverse("person-detail", args=[person.cpf])
 
-        # somente um campo e com informação válida para conseguir atualizar
         new_first_name = "first name updated"
         person_update = {
             "first_name": new_first_name,
@@ -80,30 +85,31 @@ class PersonAPITestCase(APITestCase):
         # deve ser atualizado no banco
         self.assertEqual(Person.objects.get(pk=person.id).first_name, new_first_name)
 
-    def test_more_than_one_field_partial_update_with_permission(self):
-        person = baker.make(Person)
+    def test_partial_update_profile_image_with_permission(self):
+        profile_image = baker.make("ProfileImage", _create_files=True)
+        person = baker.make(Person, profile_image=profile_image)
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
         url = reverse("person-detail", args=[person.cpf])
 
-        # mais de um campo e com informações válidas para conseguir atualizar
-        new_last_name = "last name updated"
-        new_contact = "047999887766"
-
+        new_profile_image = baker.make("ProfileImage", _create_files=True)
         person_update = {
-            "last_name": new_last_name,
-            "contact": new_contact,
+            "profile_image": new_profile_image.id,
         }
+
+        # a imagem atual deve estar no diretório
+        self.assertIs(path.exists(person.profile_image.image.path), True)
 
         response = client.patch(path=url, data=person_update)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(Person.objects.get(pk=person.id).profile_image, new_profile_image)
 
-        # verifica se todos os campos foram atualizados no banco de dados
-        person_database = Person.objects.get(pk=person.id)
+        # a imagem antiga deve ser excluída do diretório
+        self.assertIs(path.exists(person.profile_image.image.path), False)
 
-        self.assertEqual(person_database.last_name, new_last_name)
-        self.assertEqual(person_database.contact, new_contact)
+        # E a nova imagem deve estar no diretório, substituindo a antiga
+        self.assertIs(path.exists(new_profile_image.image.path), True)
 
     def test_destroy_with_permission(self):
         person = baker.make(Person)  # cria uma pessoa no banco para poder excluir

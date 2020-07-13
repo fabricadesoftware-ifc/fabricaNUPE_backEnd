@@ -68,7 +68,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.data.get("person"), under_age_person.id)
         self.assertEqual(Student.objects.count(), 1)  # o estudante deve ser criado no banco de dados
 
-    def test_only_one_field_partial_update_with_permission(self):
+    def test_partial_update_with_permission(self):
         # cria um estudante no banco para poder atualiza-lo
         student = baker.make(Student, person__birthday_date=OLDER_BIRTHDAY_DATE)
 
@@ -85,31 +85,6 @@ class StudentAPITestCase(APITestCase):
 
         # deve ser atualizado no banco
         self.assertEqual(Student.objects.get(pk=student.id).registration, new_registration)
-
-    def test_more_than_one_field_partial_update_with_permission(self):
-        student = baker.make(Student, person__birthday_date=OLDER_BIRTHDAY_DATE)
-
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_student"])
-        url = reverse("student-detail", args=[student.registration])
-
-        # mais de um campo e com informações válidas para conseguir atualizar
-        new_older_person = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE)
-        new_ingress_date = "2015-01-01"
-
-        student_data = {
-            "person": new_older_person.id,
-            "ingress_date": new_ingress_date,
-        }
-
-        response = client.patch(path=url, data=student_data)
-
-        self.assertEqual(response.status_code, HTTP_200_OK)
-
-        # verifica se todos os campos foram atualizados no banco de dados
-        student_database = Student.objects.get(pk=student.id)
-
-        self.assertEqual(student_database.person, new_older_person)
-        self.assertEqual(str(student_database.ingress_date), new_ingress_date)
 
     def test_destroy_with_permission(self):
         # cria um estudante no banco para poder mascara-lo

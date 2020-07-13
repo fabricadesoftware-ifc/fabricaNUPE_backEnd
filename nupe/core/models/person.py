@@ -63,6 +63,7 @@ class Person(SafeDeleteModel):
         blank=True,
         help_text="DDD+Número",
     )
+    profile_image = models.OneToOneField("file.ProfileImage", on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 

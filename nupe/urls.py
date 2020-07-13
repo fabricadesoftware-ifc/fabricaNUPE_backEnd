@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from drf_yasg import openapi
@@ -25,4 +27,4 @@ urlpatterns = [
     path("api/v1/", include(core_router.urls)),
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     path("endpoints/", schema_view.with_ui(renderer="swagger"), name="endpoints"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
