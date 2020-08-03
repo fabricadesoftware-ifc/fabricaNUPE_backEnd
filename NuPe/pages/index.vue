@@ -1,24 +1,23 @@
 <template>
   <div>
-    <section class="hero is-large is-primary is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">Frontend para API NuPe - PAGINA INDEX</h1>
-          <ul>
-            <h2 class="subtitle">links do frontend:</h2>
-            <li>
-              <p>/createPerson/</p>
-            </li>
-            <li>
-              <p>/createStudent/</p>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
+    <header>
+      <navbar />
+    </header>
+    <main>
+      <h1 class="title">Projeto NuPe</h1>
+    </main>
+    <footerBase />
   </div>
 </template>
 <script>
-export default {};
+import navbar from "@/components/template/navbar.vue";
+import footerBase from "@/components/template/footerBase.vue";
+export default {
+  components: {
+    navbar,
+    footerBase,
+  },
+};
 </script>
-<style></style>
+<style>
+</style>

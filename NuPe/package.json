@@ -15,7 +15,9 @@
     "@nuxtjs/axios": "^5.11.0",
     "@nuxtjs/proxy": "^2.0.0",
     "nuxt": "^2.0.0",
-    "nuxt-buefy": "^0.3.2"
+    "nuxt-buefy": "^0.3.31",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.2"
   },
   "devDependencies": {}
 }

@@ -38,33 +38,10 @@ export default {
   modules: [
     // Doc: https://buefy.github.io/#/documentation
     "nuxt-buefy",
-    "@nuxtjs/auth",
     "@nuxtjs/axios"
   ],
   axios: {
     baseURL: "http://127.0.0.1:8000/"
-  },
-  router: {
-    middleware: ["auth"]
-  },
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: {
-            url: "/api/auth/login",
-            method: "post",
-            propertyName: "token"
-          },
-          logout: { url: "/api/auth/logout", method: "post" },
-          user: { url: "/api/auth/user", method: "get", propertyName: "user" }
-        }
-        // tokenRequired: true,
-        // tokenType: 'bearer',
-        // globalToken: true,
-        // autoFetchUser: true
-      }
-    }
   },
 
   /*

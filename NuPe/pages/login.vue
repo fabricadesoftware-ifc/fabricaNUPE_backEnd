@@ -1,42 +1,32 @@
 <template>
-  <div>
-    <form @submit="userLogin">
-      <div>
-        <label>Username</label>
-        <input type="text" v-model="login.username" />
+  <div class="margins">
+    <div class="columns is-mobile">
+      <div class="column">
+        <div class="card box">
+          <div class="card-content">
+            <b-field>
+              <b-input
+                placeholder="Email"
+                type="email"
+                icon="email"
+                icon-right="close-circle"
+                icon-right-clickable
+              ></b-input>
+            </b-field>
+            <b-field label="Password">
+              <b-input type="password" password-reveal></b-input>
+            </b-field>
+            <b-button type="is-success" expanded>Entrar</b-button>
+            <br />
+            <b-button expanded>Esqueci minha senha</b-button>
+          </div>
+        </div>
       </div>
-      <div>
-        <label>Password</label>
-        <input type="text" v-model="login.password" />
-      </div>
-      <div>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
+    </div>
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-      login: {
-        username: "",
-        password: ""
-      }
-    };
-  },
-  methods: {
-    async userLogin() {
-      try {
-        let response = await this.$auth.loginWith("local", {
-          data: this.login
-        });
-        console.log(response);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }
-};
-</script>
+<style>
+.margins {
+  padding: 10vh 10vw 10vh 10vw;
+}
+</style>
