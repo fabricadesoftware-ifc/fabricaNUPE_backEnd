@@ -6,7 +6,7 @@
     </b-field>
 
     <b-field>
-      <b-input placeholder="Number" type="number" min="10" max="20"></b-input>
+      <b-input name="age" v-model="form.age" placeholder="age" type="number" min="0" max="150"></b-input>
     </b-field>
 
     <b-field>
@@ -33,3 +33,22 @@
     </b-field>
   </section>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      form: {
+        age: "",
+      },
+    };
+  },
+  watch: {
+    form: {
+      handler: function (newForm, oldForm) {
+        this.$emit("updatePersonForm", newForm);
+      },
+      deep: true,
+    },
+  },
+};
+</script>
