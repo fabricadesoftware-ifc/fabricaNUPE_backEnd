@@ -1,128 +1,172 @@
 # NuPe
+
+  
+
 Projeto desenvolvido por membros da **Fábrica de Software IFC - Araquari** para melhorar o fluxo de atendimento da equipe do **Núcleo Pedagógico**.
+
+  
+
 # Membros
- - Eduardo da Silva (**Coordenador**)
- - Yuri (**Estagiário**)
- - Luis Carvalho (**Bolsista**)
- - Jorge (**Bolsista**)
- - Kauã (**Bolsista**)
-# Boas práticas de commit
- - **Iniciar no modo imperativo**. Exemplo: "**Adicionar**", "**Remover**", "**Alterar**", "**Implementar**".
- Uma dica boa para facilitar a criação dos commits, é validá-los usando a seguinte frase: “**Se aplicado, esse commit vai**”
- - **Limite de 50 caracteres**
- - **Direto** e **explicativo**
- - **Capitalizar o conteúdo**. Exemplo: "**Adicionar funcionalidade x para blabla**" ao invés de "**adicionar funcionalidade x para blabla**"
- - **Ao final do conteúdo** do commit, adicionar "**. #n**", onde **n é o id da issue**
+
+  
+
+- Eduardo da Silva (**Coordenador**)
+
+  
+
+- Yuri (**Estagiário**)
+
+  
+
+- Luis Carvalho (**Bolsista**)
+
+  
+
+- Jorge (**Bolsista**)
+
+  
+
 # Issues
- - O **título** da issue **deve ser breve** e **específico**, seguindo o padrão do commit, **deve iniciar no modo imperativo**
- - A **descrição** deve ser utilizada para **detalhar** o que precisa ser feito, **e se necessário**, como ser feito
- - O **assignee** **não é obrigatório na criação**, é utilizado para **especificar** um **"responsável"** para resolver a issue. 
- 
-	**Obs**.: Caso a issue que você for resolver **não** tiver um responsável, **torne-se ele**
- - # Labels
- - Utilize **backend** ou **frontend** para informar **onde** deverá ser implementada
- - Utilize **error** para informar que um erro **deve ser corrigido**
- - Utilize **implementation** para informar que você está **desenvolvendo a solução**
- - Utilize **test** para informar que você está **desenvolvendo os tests** da implementação
- - Utilize **refactor** para informar que você está **refatorando o código** dos tests ou da implementação
- - **todo** e **doing** são associados a issue **automaticamente pelo kanban do gitlab**
- 
-	 **Obs**.: Ao ser fechada, a issue **deve** conter as labels **backend** ou **frontend**, **implementation**, **test**, **refactor** (se necessário), e um **responsável**(assignee). 
-Isso é **necessário** para ter um controle das etapas que foram realizadas, onde foi feito e por quem foi feito.
+
+  
+
+- O **título** da issue **deve ser breve** e **específico**, seguindo o padrão do commit, **deve iniciar no modo imperativo**
+
+- A **descrição** deve ser utilizada para **detalhar** o que precisa ser feito, **e se necessário**, como ser feito
+
+- O **assignee**  **não é obrigatório na criação**, é utilizado para **especificar** um **"responsável"** para resolver a issue.
+
+  
+
+**Obs**.: Caso a issue que você for resolver **não** tiver um responsável, **torne-se ele**
+
+  
+
+# Labels
+
+  
+
+- Utilize **backend** ou **frontend** para informar **onde** deverá ser implementada
+
+- Utilize **bugfix** para informar que um erro deve ser corrigido
+
+- Utilize **hotfix** para informar que um **erro emergencial** deve ser corrigido
+
+- Utilize **enhancement** para informar que você está **desenvolvendo a solução**
+
+- Utilize **test** para informar que você está **desenvolvendo os tests** da implementação
+
+- Utilize **refactor** para informar que você está **refatorando o código** dos tests ou da implementação
+
+-  **todo** e **doing** são associados a issue **automaticamente pelo kanban do gitlab**
+
+  
+
+**Obs**.: Ao ser fechada, a issue **deve** conter as labels **backend** ou **frontend**, **enhancement**, **test**, **refactor** (se necessário), e um **responsável**(assignee). Isso é **necessário** para ter um controle das etapas que foram realizadas, onde foi feito e por quem foi feito.
+
+  
+
 # Branches
-Cada issue em andamento **deve ter uma branch associada à ela**.
-Por isso, o nome da branch deve seguir a nomenclatura padrão do gitlab "**issue_id-titulo-da-issue**".
 
-**Exemplo**: Para uma issue com id "**2**" e título "**criar model de curso**". A branch para se trabalhar nessa issue **deve** ser criada com o nome "**2-criar-model-de-curso**".
+  
+
+Cada issue em andamento **deve ter uma branch associada à ela**. Por isso, o nome da branch deve seguir a nomenclatura padrão do gitflow "**feature-titulo-da-issue**".
+
+  
+
+**Exemplo**: Para uma issue com título "**criar model de curso**". A branch para se trabalhar nessa issue **deve** ser criada com o nome "**feature-criar-model-de-curso**".
+
+  
+
 # Merge Request
+
+  
+
 - O **título** do merge request para **issues** seguirá o padrão do gitlab. "**Resolve <titulo_issue>**"
--  A **descrição** deve informar os **principais** fatos do que foi feito. Ao final, adicionar **Closes #issue_id**
 
-	Exemplo de merge request:
-	
-	**Título**: Resolve "Criar model de localizacao"
-	**Descrição**:
-	
-		Adicionado tabelas de Cidade, Estado e Localizacao
-		
-	    Adicionado tests para Cidade, Estado e Localizacao
-	    
-	    Atualizado README
+  
 
+- A **descrição** deve informar os **principais** fatos do que foi feito. Ao final, adicionar **Closes #issue_id**
 
-		Closes #1**
-	**Obs**.: O checkbox para remover a branch após o merge deve ser mantido como **checked**
+  
 
-# Boas práticas Python
-A parte do backend do  projeto **deve** seguir as orientações estabelecidas pela regulamentação do pep8.
+Exemplo de merge request:
 
-O desenvolvimento do backend **está** e **deverá continuar** seguindo conforme o artigo https://realpython.com/python-pep8/
+  
 
-# Inicialização  do backend
-É necessário instalar a versão 3.6+ do Python e o Poetry para gerenciar as dependências do projeto.
+```
 
-### Instalando o Python
-Verifique se já tem o Python instalado, se você usa GNU/Linux, provavelmente já possui alguma versão do Python instalada por padrão. Para conferir, abra o terminal e digite o seguinte comando:
+  
 
-`$ which python`
+Título: Resolve "Criar model de localizacao"
 
-ou
+  
 
-`$ which python3`
+Descrição:
 
-que deve retornar algo como  `/usr/bin/python`. Isso significa que o Python está instalado nesse endereço.
+  
 
-Caso contrário, será necessário realizar a instalação. Para isso, com o terminal aberto digite o seguinte comando:
+Adicionado tabelas de Cidade, Estado e Localizacao
 
-`$ sudo apt-get install python3.6`
+  
 
-(`Optional`) Para instalar o gerenciador de pacotes pip, digite o comando:
+Adicionado tests para Cidade, Estado e Localizacao
 
-`$ sudo apt-get install python3-pip`
+  
 
-### Instalando o Poetry
-É possível instalar o Poetry utilizando o gerenciador de pacotes `pip`. Para isso, no terminal digite o comando:
+Atualizado README
 
-`$ pip3 install --user poetry`
+  
+  
 
-`$ echo 'export PATH="$HOME/.poetry/bin:$PATH"' >> ~/.bashrc`
+Closes #1
 
-Para verificar se o Poetry foi instalado com sucesso, é necessário fechar e abrir novamente o terminal e executar o comando:
+  
 
-`$ poetry --version`
+```
 
-### Executando o projeto
-Os arquivos necessários para executar a API se encontra na branch **dev-backend**.
+  
 
-Para clonar o repositório da branch, é necessário ter o git instalado. Verifique se já está instalado com o comando:
+**Obs**.: O checkbox para remover a **feature branch** após o merge deve ser mantido como **checked**
 
-`$ git --version`
+  
 
-Caso não tenha instalado, é necessário executar os seguintes comandos:
+# Inicialização do backend
 
-`$ sudo apt-get update`
+  
 
-`$ sudo apt-get install git`
+É necessário instalar Docker ([https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)) e Docker Compose ([https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/))
 
-Para clonar o repositório da branch dev-backend, execute:
+  
 
-`$ git clone --single-branch --branch dev-backend https://git.fabricadesoftware.ifc.edu.br/nupe/nupe.git`
+Após instalado, dentro do diretório do projeto, execute o comando para iniciar a aplicação:
 
+`$ docker-compose up -d`
 
-É necessário entrar no diretório do projeto para executar os passos a seguir, para isso, execute:
+  
 
-`$ cd nupe/`
+O backend estará executando no endereço `http://localhost:80` ou apenas `http://localhost`
 
-Dentro do diretório do projeto execute os seguintes comandos:
+  
 
-`$ poetry install` - cria uma virtualenv e instala as dependências
+Para executar os testes:
 
-`$ poetry shell` - entra na virtualenv 
+`$ docker-compose exec backend bash -c "./manage.py test"`
 
-`$ ./manage.py migrate` - cria as tabelas no banco de dados
+  
 
-`$ ./manage.py runserver` - inicia um servidor web para executar o projeto. Estará rodando no endereço: 127.0.0.1:8000 (`default`)
+Para executar as migrações:
 
+`$ docker-compose exec backend bash -c "./manage.py makemigrations && ./manage.py migrate"`
 
-### Obs
-Não é permitido dar commit e nem push dentro do repositório clonado da branch dev-backend, a não ser que você esteja trabalhando em alguma issue dessa branch
+  
+
+Para criar o superusuário padrão:
+
+`$ docker-compose exec backend bash -c "./manage.py createsuperuser --noinput"`
+
+  
+
+Para parar a executação utilize:
+
+`$ docker-compose down`
