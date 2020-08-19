@@ -1,4 +1,4 @@
-# NuPe
+# nupe_frontend
 
 > Frontend para a API NuPe, desenvolvida pela fabrica de software
 
