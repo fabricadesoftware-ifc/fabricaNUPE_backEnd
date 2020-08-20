@@ -1,0 +1,12 @@
+dev_backend test:
+    image: python:3.6-slim-buster
+    variables:
+        DEBUG: "True"
+        MEDIA_ROOT: "media/test"
+        MEDIA_URL: "/media/test/"
+    before_script:
+        - pip3 install poetry==1.0.5 && poetry config virtualenvs.create false
+        - poetry install
+    script: python manage.py test
+    # only:
+    #     - develop
