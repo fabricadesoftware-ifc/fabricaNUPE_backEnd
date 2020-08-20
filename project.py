@@ -1,5 +1,5 @@
 # project info
-description = "Projeto desenvolvido pela Fábrica de Software para facilitar os atendimentos do NUPE"
+description = "Projeto desenvolvido pela Fábrica de Software para facilitar os atendimentos do NUPE."
 
 # developer info
 developer_name = "Luis Guerreiro"
