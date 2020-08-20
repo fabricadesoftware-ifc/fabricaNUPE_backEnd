@@ -2,7 +2,7 @@
 name = "nupe"
 version = "0.1.0"
 description = "projeto da fabrica de software para o NUPE do IFC - Araquari"
-authors = ["\"eduardo\", \"yuri\", \"luis\", \"jorge\", \"kaua\""]
+authors = ["\"eduardo\", \"yuri\", \"luis\", \"jorge\""]
 
 [tool.poetry.dependencies]
 python = "^3.6.1"

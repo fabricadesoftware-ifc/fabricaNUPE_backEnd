@@ -5,12 +5,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = "6+4+9k!)@5$pkosu^5x7_aq(4bnkqrmxlkkextfs*13je9=#2!"
 
-DEBUG = True
-
-# DEBUG = False
-
-# ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-
+DEBUG = os.getenv(key="DEBUG")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -66,9 +61,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "nupe.wsgi.application"
-
-
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": os.path.join(BASE_DIR, "db.sqlite3")}}
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -127,7 +119,24 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-LOGIN_URL = "/admin/login/"  # temporário
+MEDIA_ROOT = os.path.join(BASE_DIR, os.getenv(key="MEDIA_ROOT"))
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_URL = "/media/"
+MEDIA_URL = os.getenv(key="MEDIA_URL")
+
+# modo desenvolvimento
+if DEBUG:
+    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": os.path.join(BASE_DIR, "db.sqlite3")}}
+# modo produção
+else:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv(key="DB_NAME"),
+            "USER": os.getenv(key="DB_USER"),
+            "PASSWORD": os.getenv(key="DB_PASSWORD"),
+            "HOST": "prod_db",  # esse valor deve ser o mesmo nome do serviço do docker-compose para o auto mapeamento
+            "PORT": "5432",
+        }
+    }
