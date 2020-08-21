@@ -19,6 +19,7 @@ class StateTestCase(TestCase):
     def test_has_all_attributes(self):
         self.assertIs(hasattr(State, "_safedelete_policy"), True)
         self.assertIs(hasattr(State, "name"), True)
+        self.assertIs(hasattr(State, "initials"), True)
         self.assertIs(hasattr(State, "cities"), True)
 
     def test_return_str(self):
@@ -36,5 +37,5 @@ class LocationTestCase(TestCase):
     def test_return_str(self):
         location = baker.prepare(Location)
 
-        str_expected = f"{location.city} - {location.state}"
+        str_expected = f"{location.city} - {location.state.initials}"
         self.assertEqual(str(location), str_expected)

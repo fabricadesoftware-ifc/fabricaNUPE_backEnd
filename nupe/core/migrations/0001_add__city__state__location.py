@@ -43,6 +43,7 @@ class Migration(migrations.Migration):
                 ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("deleted", models.DateTimeField(editable=False, null=True)),
                 ("name", models.CharField(max_length=50, unique=True)),
+                ("initials", models.CharField(max_length=2, unique=True)),
                 (
                     "cities",
                     models.ManyToManyField(

@@ -3,6 +3,7 @@ from safedelete.models import NO_DELETE, SafeDeleteModel
 
 CITY_MAX_LENGTH = 50
 STATE_MAX_LENGTH = 50
+INITIALS_STATE_MAX_LENGTH = 2
 
 
 class City(SafeDeleteModel):
@@ -43,6 +44,7 @@ class State(SafeDeleteModel):
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
 
     name = models.CharField(max_length=STATE_MAX_LENGTH, unique=True)
+    initials = models.CharField(max_length=INITIALS_STATE_MAX_LENGTH, unique=True)
     cities = models.ManyToManyField("City", related_name="states", related_query_name="state", through="Location")
 
     def __str__(self):
@@ -76,4 +78,4 @@ class Location(SafeDeleteModel):
         unique_together = ["city", "state"]
 
     def __str__(self):
-        return f"{self.city} - {self.state}"
+        return f"{self.city} - {self.state.initials}"
