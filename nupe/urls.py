@@ -9,13 +9,15 @@ from rest_framework.permissions import AllowAny
 from nupe.core.router import router as core_router
 from nupe.core.views import custom_handler_404
 from nupe.file.router import router as file_router
-from project import description, developer_email, developer_name, developer_social_url
 
 # quando DEBUG = False, retorna um json ao invés de renderizar um template
 handler404 = custom_handler_404
 
 # informações a serem exibidas no template do swagger
-contact = openapi.Contact(name=developer_name, url=developer_social_url, email=developer_email)
+description = "Projeto realizado pela Fábrica de Software para melhorar o atendimento realizado pelo NUPE"
+contact = openapi.Contact(
+    name="Luis Guerreiro", url="https://linkedin.com/in/devguerreiro", email="luiscvlh11@gmail.com"
+)
 api_info = openapi.Info(title="Nupe API", default_version="v1", description=description, contact=contact)
 
 schema_view = get_schema_view(info=api_info, public=True, permission_classes=[AllowAny])
@@ -26,5 +28,4 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include(core_router.urls)),
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
-    path("endpoints/", schema_view.with_ui(renderer="swagger"), name="endpoints"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

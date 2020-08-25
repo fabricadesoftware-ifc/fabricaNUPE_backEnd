@@ -1,0 +1,554 @@
+swagger: '2.0'
+info:
+  title: Nupe API
+  description: "Projeto realizado pela F\xE1brica de Software para melhorar o atendimento\
+    \ realizado pelo NUPE"
+  contact:
+    name: Luis Guerreiro
+    url: https://linkedin.com/in/devguerreiro
+    email: luiscvlh11@gmail.com
+  version: v1
+basePath: /api/v1
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  NUPE Authentication:
+    flow: password
+    tokenUrl: /oauth/token/
+    type: oauth2
+security:
+  - NUPE Authentication: []
+paths:
+  /image/:
+    post:
+      operationId: image_create
+      description: upload a image into database
+      parameters:
+        - name: image
+          in: formData
+          required: true
+          type: file
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/ProfileImageCreate'
+      consumes:
+        - multipart/form-data
+      tags:
+        - image
+    parameters: []
+  /image/{id}/:
+    delete:
+      operationId: image_delete
+      description: remove a image from database
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes:
+        - multipart/form-data
+      tags:
+        - image
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this profile image.
+        required: true
+        type: integer
+  /person/:
+    get:
+      operationId: person_list
+      description: return all persons in database
+      parameters:
+        - name: gender
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: birthday_date
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/PersonList'
+      tags:
+        - person
+    post:
+      operationId: person_create
+      description: create a person in database
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/PersonCreate'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/PersonCreate'
+      tags:
+        - person
+    parameters: []
+  /person/{cpf}/:
+    get:
+      operationId: person_read
+      description: return a specific person from database
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/PersonDetail'
+      tags:
+        - person
+    patch:
+      operationId: person_partial_update
+      description: update one or more person attributes
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/PersonCreate'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/PersonCreate'
+      tags:
+        - person
+    delete:
+      operationId: person_delete
+      description: remove a person from database
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - person
+    parameters:
+      - name: cpf
+        in: path
+        required: true
+        type: string
+  /student/:
+    get:
+      operationId: student_list
+      description: return all students in database
+      parameters:
+        - name: graduated
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: ingress_date
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: course_id
+          in: query
+          description: ''
+          required: false
+          type: number
+        - name: campus_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/StudentList'
+      tags:
+        - student
+    post:
+      operationId: student_create
+      description: create a student in database
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/StudentCreate'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/StudentCreate'
+      tags:
+        - student
+    parameters: []
+  /student/{registration}/:
+    get:
+      operationId: student_read
+      description: return a specific student from database
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/StudentDetail'
+      tags:
+        - student
+    patch:
+      operationId: student_partial_update
+      description: update one or more student attributes
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/StudentCreate'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/StudentCreate'
+      tags:
+        - student
+    delete:
+      operationId: student_delete
+      description: remove a student from database
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - student
+    parameters:
+      - name: registration
+        in: path
+        required: true
+        type: string
+        pattern: ^[0-9]*$
+definitions:
+  ProfileImageCreate:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      image:
+        title: Image
+        type: string
+        readOnly: true
+        format: uri
+      url:
+        title: Url
+        type: string
+        readOnly: true
+        minLength: 1
+  PersonList:
+    required:
+      - cpf
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      full_name:
+        title: Full name
+        type: string
+        readOnly: true
+      cpf:
+        title: Cpf
+        type: string
+        maxLength: 11
+        minLength: 11
+      contact:
+        title: Contact
+        description: "DDD+N\xFAmero"
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 12
+        minLength: 12
+        x-nullable: true
+  PersonCreate:
+    required:
+      - first_name
+      - last_name
+      - cpf
+      - birthday_date
+      - gender
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      first_name:
+        title: First name
+        type: string
+        pattern: ^[a-z A-Z]*$
+        maxLength: 50
+        minLength: 1
+      last_name:
+        title: Last name
+        type: string
+        pattern: ^[a-z A-Z]*$
+        maxLength: 100
+        minLength: 1
+      cpf:
+        title: Cpf
+        type: string
+        maxLength: 11
+        minLength: 11
+      birthday_date:
+        title: Birthday date
+        type: string
+        format: date
+      gender:
+        title: Gender
+        type: string
+        enum:
+          - F
+          - M
+      contact:
+        title: Contact
+        description: "DDD+N\xFAmero"
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 12
+        minLength: 12
+        x-nullable: true
+      profile_image:
+        title: Profile image
+        type: integer
+        x-nullable: true
+  PersonDetail:
+    required:
+      - first_name
+      - last_name
+      - cpf
+      - birthday_date
+      - gender
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      first_name:
+        title: First name
+        type: string
+        pattern: ^[a-z A-Z]*$
+        maxLength: 50
+        minLength: 1
+      last_name:
+        title: Last name
+        type: string
+        pattern: ^[a-z A-Z]*$
+        maxLength: 100
+        minLength: 1
+      cpf:
+        title: Cpf
+        type: string
+        maxLength: 11
+        minLength: 11
+      birthday_date:
+        title: Birthday date
+        type: string
+        format: date
+      gender:
+        title: Gender
+        type: string
+        enum:
+          - F
+          - M
+      contact:
+        title: Contact
+        description: "DDD+N\xFAmero"
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 12
+        minLength: 12
+        x-nullable: true
+      profile_image:
+        title: Profile image
+        type: string
+        minLength: 1
+  StudentList:
+    required:
+      - registration
+      - full_name
+      - ingress_date
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      registration:
+        title: Registration
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 35
+        minLength: 1
+      full_name:
+        title: Full name
+        type: string
+        minLength: 1
+      ingress_date:
+        title: Ingress date
+        type: string
+        format: date
+      graduated:
+        title: Graduated
+        type: boolean
+  StudentCreate:
+    required:
+      - registration
+      - person
+      - academic_education_campus
+      - responsibles
+      - ingress_date
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      registration:
+        title: Registration
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 35
+        minLength: 1
+      person:
+        title: Person
+        type: integer
+      academic_education_campus:
+        title: Academic education campus
+        type: integer
+      responsibles:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+      ingress_date:
+        title: Ingress date
+        type: string
+        format: date
+  StudentDetail:
+    required:
+      - registration
+      - personal_info
+      - course
+      - campus
+      - responsibles
+      - ingress_date
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      registration:
+        title: Registration
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 35
+        minLength: 1
+      personal_info:
+        $ref: '#/definitions/PersonDetail'
+      course:
+        title: Course
+        type: string
+        minLength: 1
+      campus:
+        title: Campus
+        type: string
+        minLength: 1
+      academic_education_campus_id:
+        title: Academic education campus id
+        type: string
+        readOnly: true
+      responsibles:
+        type: array
+        items:
+          $ref: '#/definitions/PersonList'
+      ingress_date:
+        title: Ingress date
+        type: string
+        format: date
+      graduated:
+        title: Graduated
+        type: boolean

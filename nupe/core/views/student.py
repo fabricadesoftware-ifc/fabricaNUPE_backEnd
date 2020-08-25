@@ -6,6 +6,18 @@ from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializ
 
 
 class StudentViewSet(ModelViewSet):
+    """
+    list: return all students in database
+
+    retrieve: return a specific student from database
+
+    create: create a student in database
+
+    delete: remove a student from database
+
+    partial_update: update one or more student attributes
+    """
+
     queryset = Student.objects.all()
     lookup_field = "registration"
 

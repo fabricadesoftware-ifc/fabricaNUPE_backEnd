@@ -6,6 +6,18 @@ from nupe.core.serializers import PersonCreateSerializer, PersonDetailSerializer
 
 
 class PersonViewSet(ModelViewSet):
+    """
+    list: return all persons in database
+
+    retrieve: return a specific person from database
+
+    create: create a person in database
+
+    delete: remove a person from database
+
+    partial_update: update one or more person attributes
+    """
+
     queryset = Person.objects.all()
     lookup_field = "cpf"
 

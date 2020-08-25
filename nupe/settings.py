@@ -97,6 +97,7 @@ SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {
         "NUPE Authentication": {"type": "oauth2", "tokenUrl": "/oauth/token/", "flow": "password"}
     },
+    "DEFAULT_INFO": "nupe.urls.api_info",
 }
 
 
