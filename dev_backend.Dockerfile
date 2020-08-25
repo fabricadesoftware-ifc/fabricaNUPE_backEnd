@@ -3,7 +3,8 @@ LABEL mantainer="Luis Guerreiro <luiscvlh11@gmail.com>"
 
 WORKDIR /usr/nupe
 
-RUN pip3 install poetry==1.0.5 && \
+RUN apt-get update && apt-get install git -y && \
+    pip3 install poetry==1.0.5 && \
     poetry config virtualenvs.create false
 
 COPY poetry.lock pyproject.toml /usr/nupe/
