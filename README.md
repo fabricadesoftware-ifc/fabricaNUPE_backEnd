@@ -144,43 +144,7 @@ Closes #1
 **Obs**.: O checkbox para remover a **feature branch** após o merge deve ser mantido como **checked**
 
   
-
 # Inicialização do backend
 
-  
 
-É necessário instalar Docker ([https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)) e Docker Compose ([https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/))
-
-  
-
-Após instalado, dentro do diretório do projeto, execute o comando para iniciar a aplicação:
-
-`$ docker-compose up -d`
-
-  
-
-O backend estará executando no endereço `http://localhost:80` ou apenas `http://localhost`
-
-  
-
-Para executar os testes:
-
-`$ docker-compose exec backend bash -c "./manage.py test"`
-
-  
-
-Para executar as migrações:
-
-`$ docker-compose exec backend bash -c "./manage.py makemigrations && ./manage.py migrate"`
-
-  
-
-Para criar o superusuário padrão:
-
-`$ docker-compose exec backend bash -c "./manage.py createsuperuser --noinput"`
-
-  
-
-Para parar a executação utilize:
-
-`$ docker-compose down`
+Veja o tutorial de inicialização do backend [aqui](https://drive.google.com/file/d/14IXAQ1NYwhC9xxS9KiujHHjHeH1r2byd/view?usp=sharing)
