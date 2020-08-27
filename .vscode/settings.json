@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/guerreiro/.cache/pypoetry/virtualenvs/nupe-ootsR098-py3.6/bin/python"
+    "python.pythonPath": "/home/guerreiro/.cache/pypoetry/virtualenvs/nupe-ootsR098-py3.6/bin/python",
+    "restructuredtext.confPath": "${workspaceFolder}/docs"
 }

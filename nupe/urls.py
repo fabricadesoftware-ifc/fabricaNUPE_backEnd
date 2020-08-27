@@ -18,7 +18,7 @@ description = "Projeto realizado pela Fábrica de Software para melhorar o atend
 contact = openapi.Contact(
     name="Luis Guerreiro", url="https://linkedin.com/in/devguerreiro", email="luiscvlh11@gmail.com"
 )
-api_info = openapi.Info(title="Nupe API", default_version="v1", description=description, contact=contact)
+api_info = openapi.Info(title="Nupe API", default_version="v0.1.0", description=description, contact=contact)
 
 schema_view = get_schema_view(info=api_info, public=True, permission_classes=[AllowAny])
 

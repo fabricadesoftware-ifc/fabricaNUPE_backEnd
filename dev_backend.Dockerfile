@@ -3,7 +3,8 @@ LABEL mantainer="Luis Guerreiro <luiscvlh11@gmail.com>"
 
 WORKDIR /usr/nupe
 
-RUN apt-get update && apt-get install git -y && \
+# build-essential para utilizar o "make" do sphinx
+RUN apt-get update && apt-get install git build-essential -y && \
     pip3 install poetry==1.0.5 && \
     poetry config virtualenvs.create false
 
