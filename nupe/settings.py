@@ -105,6 +105,11 @@ OAUTH2_PROVIDER = {
     "REFRESH_TOKEN_EXPIRE_SECONDS": timedelta(hours=8).seconds,
 }
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=4),
+    "REFRESH_TOKEN_LIFETIME": timedelta(hours=8),
+}
+
 
 LANGUAGE_CODE = "pt-br"
 
