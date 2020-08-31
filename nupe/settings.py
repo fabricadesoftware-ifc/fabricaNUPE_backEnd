@@ -74,7 +74,6 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     # autenticação
     "DEFAULT_AUTHENTICATION_CLASSES": ("oauth2_provider.contrib.rest_framework.OAuth2Authentication",),
-    # "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
     "DEFAULT_PERMISSION_CLASSES": ("drf_action_permissions.DjangoActionPermissions",),
     # render/parser
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
@@ -104,14 +103,8 @@ SWAGGER_SETTINGS = {
 OAUTH2_PROVIDER = {
     "ACCESS_TOKEN_EXPIRE_SECONDS": timedelta(hours=4).seconds,
     "REFRESH_TOKEN_EXPIRE_SECONDS": timedelta(hours=8).seconds,
-    'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
+    "OAUTH2_BACKEND_CLASS": "oauth2_provider.oauth2_backends.JSONOAuthLibCore",
 }
-
-
-# SIMPLE_JWT = {
-#     "ACCESS_TOKEN_LIFETIME": timedelta(hours=4),
-#     "REFRESH_TOKEN_LIFETIME": timedelta(hours=8),
-# }
 
 
 LANGUAGE_CODE = "pt-br"
@@ -138,13 +131,13 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.getenv(key="DB_NAME"),
-#         "USER": os.getenv(key="DB_USER"),
-#         "PASSWORD": os.getenv(key="DB_PASSWORD"),
-#         "HOST": "prod_db",  # esse valor deve ser o mesmo nome do serviço do docker-compose para o auto mapeamento
-#         "PORT": "5432",
-#     }
-# }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.postgresql",
+    #         "NAME": os.getenv(key="DB_NAME"),
+    #         "USER": os.getenv(key="DB_USER"),
+    #         "PASSWORD": os.getenv(key="DB_PASSWORD"),
+    #         "HOST": "prod_db",  # esse valor deve ser o mesmo nome do serviço do docker-compose para o auto mapping
+    #         "PORT": "5432",
+    #     }
+    # }
