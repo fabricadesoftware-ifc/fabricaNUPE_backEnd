@@ -1,4 +1,4 @@
-FROM python:3.6-slim-buster
+FROM python:3.8-slim-buster
 LABEL mantainer="Luis Guerreiro <luiscvlh11@gmail.com>"
 
 WORKDIR /usr/nupe

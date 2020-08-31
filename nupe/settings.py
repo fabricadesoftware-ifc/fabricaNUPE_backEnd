@@ -104,6 +104,7 @@ SWAGGER_SETTINGS = {
 OAUTH2_PROVIDER = {
     "ACCESS_TOKEN_EXPIRE_SECONDS": timedelta(hours=4).seconds,
     "REFRESH_TOKEN_EXPIRE_SECONDS": timedelta(hours=8).seconds,
+    "OAUTH2_BACKEND_CLASS": "oauth2_provider.oauth2_backends.JSONOAuthLibCore",
 }
 
 
@@ -131,13 +132,13 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.getenv(key="DB_NAME"),
-#         "USER": os.getenv(key="DB_USER"),
-#         "PASSWORD": os.getenv(key="DB_PASSWORD"),
-#         "HOST": "prod_db",  # esse valor deve ser o mesmo nome do serviço do docker-compose para o auto mapeamento
-#         "PORT": "5432",
-#     }
-# }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.postgresql",
+    #         "NAME": os.getenv(key="DB_NAME"),
+    #         "USER": os.getenv(key="DB_USER"),
+    #         "PASSWORD": os.getenv(key="DB_PASSWORD"),
+    #         "HOST": "prod_db",  # esse valor deve ser o mesmo nome do serviço do docker-compose para o auto mapping
+    #         "PORT": "5432",
+    #     }
+    # }

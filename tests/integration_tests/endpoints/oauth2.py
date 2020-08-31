@@ -42,7 +42,7 @@ class Oauth2APITestCase(APITestCase):
 
         url = reverse("oauth2_provider:token")
 
-        response = client.post(path=url, data=data, format="multipart")
+        response = client.post(path=url, data=data)
         response_data = loads(response.content.decode())
 
         self.assertEqual(response.status_code, HTTP_200_OK)

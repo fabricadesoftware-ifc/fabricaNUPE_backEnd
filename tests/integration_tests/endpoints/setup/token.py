@@ -24,7 +24,7 @@ def get_access_token(*, username: str, password: str) -> (HttpResponse, APIClien
     data = {"username": username, "password": password, "grant_type": "password"}
     url = reverse("oauth2_provider:token")
 
-    return client.post(path=url, data=data, format="multipart"), client
+    return client.post(path=url, data=data), client
 
 
 def revoke_access_token(*, access_token: str) -> HttpResponse:
@@ -42,7 +42,7 @@ def revoke_access_token(*, access_token: str) -> HttpResponse:
     data = {"token": access_token}
     url = reverse("oauth2_provider:revoke-token")
 
-    response = client.post(path=url, data=data, format="multipart")
+    response = client.post(path=url, data=data)
 
     return response
 

@@ -5,6 +5,7 @@ from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.permissions import AllowAny
+# from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from nupe.core.router import router as core_router
 from nupe.core.views import custom_handler_404
@@ -25,7 +26,9 @@ schema_view = get_schema_view(info=api_info, public=True, permission_classes=[Al
 core_router.registry.extend(file_router.registry)  # união da rota de outros apps
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("api/v1/", include(core_router.urls)),
+    # path("api/v1/token/", TokenObtainPairView.as_view(), name="token"),
+    # path("api/v1/refresh_token/", TokenRefreshView.as_view(), name="refresh_token"),
+    path("admin/", admin.site.urls),
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
