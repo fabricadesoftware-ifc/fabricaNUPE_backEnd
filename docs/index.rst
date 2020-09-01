@@ -6,4 +6,4 @@ Bem vindo a Documentação do Sistema NuPe!
    :caption: Índices:
 
    pages/good_practices
-   pages/redoc
+   pages/api

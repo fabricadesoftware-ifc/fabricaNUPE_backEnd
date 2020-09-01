@@ -7,7 +7,7 @@ info:
     name: Luis Guerreiro
     url: https://linkedin.com/in/devguerreiro
     email: luiscvlh11@gmail.com
-  version: v1
+  version: v0.1.0
 basePath: /api/v1
 consumes:
   - application/json
@@ -170,6 +170,7 @@ paths:
     parameters:
       - name: cpf
         in: path
+        description: "Somente n\xFAmeros"
         required: true
         type: string
   /student/:
@@ -297,6 +298,155 @@ paths:
         required: true
         type: string
         pattern: ^[0-9]*$
+  /user/:
+    get:
+      operationId: user_list
+      description: ''
+      parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/UserCurrent'
+      tags:
+        - user
+    post:
+      operationId: user_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserCurrent'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserCurrent'
+      tags:
+        - user
+    parameters: []
+  /user/current/:
+    get:
+      operationId: user_current
+      description: ''
+      parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserCurrent'
+      tags:
+        - user
+    parameters: []
+  /user/{id}/:
+    get:
+      operationId: user_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserCurrent'
+      tags:
+        - user
+    put:
+      operationId: user_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserCurrent'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserCurrent'
+      tags:
+        - user
+    patch:
+      operationId: user_partial_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserCurrent'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserCurrent'
+      tags:
+        - user
+    delete:
+      operationId: user_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - user
+    parameters:
+      - name: id
+        in: path
+        description: "A unique integer value identifying this usu\xE1rio."
+        required: true
+        type: integer
 definitions:
   ProfileImageCreate:
     type: object
@@ -330,6 +480,7 @@ definitions:
         readOnly: true
       cpf:
         title: Cpf
+        description: "Somente n\xFAmeros"
         type: string
         maxLength: 11
         minLength: 11
@@ -339,7 +490,7 @@ definitions:
         type: string
         pattern: ^[0-9]*$
         maxLength: 12
-        minLength: 12
+        minLength: 11
         x-nullable: true
   PersonCreate:
     required:
@@ -368,6 +519,7 @@ definitions:
         minLength: 1
       cpf:
         title: Cpf
+        description: "Somente n\xFAmeros"
         type: string
         maxLength: 11
         minLength: 11
@@ -387,7 +539,7 @@ definitions:
         type: string
         pattern: ^[0-9]*$
         maxLength: 12
-        minLength: 12
+        minLength: 11
         x-nullable: true
       profile_image:
         title: Profile image
@@ -420,6 +572,7 @@ definitions:
         minLength: 1
       cpf:
         title: Cpf
+        description: "Somente n\xFAmeros"
         type: string
         maxLength: 11
         minLength: 11
@@ -439,7 +592,7 @@ definitions:
         type: string
         pattern: ^[0-9]*$
         maxLength: 12
-        minLength: 12
+        minLength: 11
         x-nullable: true
       profile_image:
         title: Profile image
@@ -552,3 +705,18 @@ definitions:
       graduated:
         title: Graduated
         type: boolean
+  UserCurrent:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      first_name:
+        title: Primeiro nome
+        type: string
+        maxLength: 150
+      last_name:
+        title: "\xDAltimo nome"
+        type: string
+        maxLength: 150
