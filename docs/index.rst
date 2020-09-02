@@ -6,6 +6,7 @@ Bem vindo a Documentação do Sistema NuPe!
    :maxdepth: 3
    :caption: Contents:
 
+   pages/requirements
    pages/good_practices
    pages/api
    pages/code
