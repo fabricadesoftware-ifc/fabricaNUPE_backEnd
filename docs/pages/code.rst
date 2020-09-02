@@ -18,3 +18,4 @@ Serializers
    :maxdepth: 2
 
    ../modules/serializers-core
+   ../modules/serializers-file

@@ -79,7 +79,7 @@ class StudentDetailSerializer(ModelSerializer):
 
 class StudentCreateSerializer(ModelSerializer):
     """
-    Recebe e valida as informações para então cadastrar um novo estudante
+    Recebe e valida as informações para então cadastrar ou atualizar um estudante
 
     Campos:
         id: identificador

@@ -65,7 +65,7 @@ class PersonDetailSerializer(ModelSerializer):
 
 class PersonCreateSerializer(ModelSerializer):
     """
-    Recebe e valida as informações para então cadastrar uma nova pessoa
+    Recebe e valida as informações para então cadastrar ou atualizar uma pessoa
 
     Campos:
         id: identificador (somente leitura)
