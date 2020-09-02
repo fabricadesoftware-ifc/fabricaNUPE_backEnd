@@ -12,8 +12,8 @@
 
 import os
 import sys
-import django
 
+import django
 import sphinx_redactor_theme
 
 sys.path.insert(0, os.path.abspath(".."))
@@ -44,7 +44,7 @@ extensions = [
 # autodoc extension
 autodoc_default_options = {
     "members": True,
-    "inherited-members": True,
+    # "inherited-members": True,
 }
 
 # redoc
