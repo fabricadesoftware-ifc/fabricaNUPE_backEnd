@@ -12,7 +12,18 @@ from resources.const.messages.person import (
 
 class StudentListSerializer(ModelSerializer):
     """
-    Atributos a serem exibidos na listagem de estudante
+    Retorna uma lista de estudantes cadastrados no banco de dados
+
+    Campos:
+        id: identificador
+
+        registration: número da matrícula
+
+        full_name: nome completo
+
+        ingress_date: data de ingresso no curso
+
+        graduated: status do curso, se já se formou ou não
     """
 
     full_name = CharField(source="person.full_name")
@@ -24,7 +35,26 @@ class StudentListSerializer(ModelSerializer):
 
 class StudentDetailSerializer(ModelSerializer):
     """
-    Atributos a serem exibidos no detalhamento de um estudante
+    Retorna os detalhes de um estudante específico
+
+    Campos:
+        id: identificador
+
+        registration: número da matrícula
+
+        personal_info: informações pessoais, as mesmas informações de PersonDetailSerializer
+
+        course: nome do curso que está cursando
+
+        campus: nome do campus onde estuda
+
+        academic_education_campus_id: identificador do objeto da model AcademicEducationCampus
+
+        responsibles: responsáveis do estudante
+
+        ingress_date: data de ingresso no curso
+
+        graduated: status do curso, se já se formou ou não
     """
 
     personal_info = PersonDetailSerializer(source="person")
@@ -49,7 +79,20 @@ class StudentDetailSerializer(ModelSerializer):
 
 class StudentCreateSerializer(ModelSerializer):
     """
-    Atributos a serem serializados para criação de um estudante
+    Recebe e valida as informações para então cadastrar um novo estudante
+
+    Campos:
+        id: identificador
+
+        registration: número da matrícula
+
+        person: identificador do objeto da model Person
+
+        academic_education_campus: identificador do objeto da model AcademicEducationCampus
+
+        responsibles: lista de id das pessoas responsáveis
+
+        ingress_date: data de ingresso no curso
     """
 
     responsibles = PrimaryKeyRelatedField(source="responsibles_persons", many=True, queryset=Person.objects.all())
@@ -59,6 +102,23 @@ class StudentCreateSerializer(ModelSerializer):
         fields = ["id", "registration", "person", "academic_education_campus", "responsibles", "ingress_date"]
 
     def validate(self, data):
+        """
+        Verifica se os responsáveis do estudante são válidos
+
+        Validações:
+            Estudante menor de idade:
+                Deve conter pelo menos um responsável
+
+                Não deve ser o responsável de sí
+
+                Não deve conter nenhum responsável menor de idade
+
+        Argumentos:
+            data (dict): dados enviados no body da requisição
+
+        Retorna:
+            [dict]: retorna os dados recebidos
+        """
         # caso o atributo não seja informado, é utilizado a instancia de 'Student' para obte-lo
         # dessa forma a validação funcionará para as actions de 'create' e 'partial_update'
         person_data = data.get("person", self.instance.person if self.instance else None)
@@ -73,9 +133,9 @@ class StudentCreateSerializer(ModelSerializer):
         """
         Verifica se os responsáveis do estudante são válidos
 
-        Args:
+        Argumentos:
             responsibles (list): lista dos responsáveis do estudante
-            person (Person): informações pessoais do estudante
+            person (Person): objeto da model Person
 
         Raises:
             ValidationError 1: caso o estudante seja menor de idade, ele deve conter pelo menos um responsável
