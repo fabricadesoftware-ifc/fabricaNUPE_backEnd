@@ -2,7 +2,6 @@ from rest_framework.serializers import CharField, ModelSerializer, ValidationErr
 from validate_docbr import CPF
 
 from nupe.core.models import Person
-from nupe.file.models import ProfileImage
 from nupe.file.services.image_upload import ProfileImageService
 from resources.const.messages.person import PERSON_INVALID_CPF_MESSAGE
 
@@ -115,24 +114,17 @@ class PersonCreateSerializer(ModelSerializer):
         Argumentos:
             instance (Person): objeto da model Person a ser atualizado
 
-            validated_data (dict): dados para atualização
+            validated_data (dict): dados já validados para atualização
         """
-        new_profile_image_id = validated_data.get("profile_image")
+        new_profile_image = validated_data.get("profile_image")
 
-        if new_profile_image_id is not None:
-            try:
-                new_profile_image_exists = ProfileImage.objects.get(pk=new_profile_image_id)
+        if new_profile_image is not None:
+            updating_profile_image = new_profile_image.id != instance.profile_image.id
 
-                updating_profile_image = new_profile_image_id != instance.profile_image.id
+            if updating_profile_image:
+                profile_image_service = ProfileImageService()
 
-                if updating_profile_image and new_profile_image_exists:
-                    profile_image_service = ProfileImageService()
-
-                    # exclui a imagem de perfil antiga
-                    profile_image_service.remove_file(profile_image=instance.profile_image)
-
-            except ProfileImage.DoesNotExist:
-                # se o id informado não existir no banco de dados a foto de perfil não é atualizada
-                del validated_data["profile_image"]
+                # exclui a imagem de perfil antiga
+                profile_image_service.remove_file(profile_image=instance.profile_image)
 
         return super().update(instance, validated_data)
