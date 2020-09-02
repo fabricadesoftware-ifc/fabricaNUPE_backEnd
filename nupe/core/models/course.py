@@ -9,10 +9,10 @@ class Course(SafeDeleteModel):
     """
     Define o nome de um curso da instituição
 
-    Example
+    Exemplo:
         'Sistemas de Informação'
 
-    Attributes
+    Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
         name: nome do curso
@@ -34,10 +34,10 @@ class Grade(SafeDeleteModel):
     """
     Define o nível/grau de um curso
 
-    Example
+    Exemplo:
         'Bacharelado'
 
-    Attributes
+    Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
         name: nomenclatura do grau
@@ -62,10 +62,10 @@ class AcademicEducation(SafeDeleteModel):
     """
     Define uma formação acadêmica. É uma associativa entre a model de Course e Grade
 
-    Example
+    Exemplo:
         'Bacharelado em Sistemas de Informação'
 
-    Attributes
+    Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
         course: objeto do tipo model 'Course' (o2m)

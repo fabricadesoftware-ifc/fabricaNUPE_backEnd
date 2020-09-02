@@ -9,10 +9,10 @@ class Institution(SafeDeleteModel):
     """
     Define o nome de uma instituição
 
-    Example
+    Exemplo:
         'Instituto Federal Catarinense'
 
-    Attributes
+    Atributos:
         _safedelete_policy: NO_DELETE
 
         name: nome da instituição
@@ -34,10 +34,10 @@ class Campus(SafeDeleteModel):
     """
     Define o nome de um campus para ser atribuído a uma instituição
 
-    Example
+    Exemplo:
         'Araquari'
 
-    Attributes
+    Atributos:
         _safedelete_policy: NO_DELETE
 
         name: nome do campus
@@ -70,10 +70,10 @@ class InstitutionCampus(SafeDeleteModel):
     """
     Define uma instituição pertencente à um campus. É uma associativa entre a model de Institution e Campus
 
-    Example
+    Exemplo:
         'Instituto Federal Catarinense - Campus Araquari'
 
-    Attributes
+    Atributos:
         _safedelete_policy: NO_DELETE
 
         institution: objeto do tipo model Institution (o2m)
@@ -108,10 +108,10 @@ class AcademicEducationCampus(SafeDeleteModel):
     Define um curso que pertence à uma instituição de um campus. É uma associativa entre a model de AcademicEducation
     e Campus
 
-    Example
+    Exemplo:
         'Sistemas de Informação - Campus Araquari'
 
-    Attributes
+    Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
         academic_education: objeto do tipo model 'AcademicEducation' (o2m)

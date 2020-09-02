@@ -20,10 +20,10 @@ class Person(SafeDeleteModel):
     Define as informações pessoais de uma pessoa, seja ela um estudante, usuário do sistema ou
     responsável de um aluno
 
-    Example
+    Exemplo:
         'Luis Guerreiro, 12345678910, 14/02/1999, M, 47 988887777'
 
-    Attributes
+    Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
         first_name: primeiro nome da pessoa

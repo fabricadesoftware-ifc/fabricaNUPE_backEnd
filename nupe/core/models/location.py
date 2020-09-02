@@ -10,10 +10,10 @@ class City(SafeDeleteModel):
     """
     Define o nome de uma cidade
 
-    Example
+    Exemplo:
         'Araquari'
 
-    Attributes
+    Atributos:
         _safedelete_policy: NO_DELETE
 
         name: nome da cidade
@@ -33,10 +33,10 @@ class State(SafeDeleteModel):
     """
     Define o nome de um estado
 
-    Example
+    Exemplo:
         'Santa Catarina'
 
-    Attributes
+    Atributos:
         _safedelete_policy: NO_DELETE
 
         name: nome do estado
@@ -58,14 +58,14 @@ class Location(SafeDeleteModel):
     """
     Define uma cidade pertencente à um estado. É uma associativa entre a model de City e State
 
-    Example
+    Exemplo:
         'Araquari - Santa Catarina'
 
-    Attributes
+    Atributos:
         _safedelete_policy: NO_DELETE
 
         city: objeto do tipo model 'City' (o2m)
-        
+
         state: objeto do tipo model 'State' (o2m)
 
         campus: relação inversa para a model Campus

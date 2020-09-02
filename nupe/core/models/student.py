@@ -11,15 +11,16 @@ class Student(SafeDeleteModel):
     """
     Define as informações a respeito de um estudante
 
-    Example
+    Exemplo:
         'Luis Guerreiro - 202008010001'
 
-    Attributes
+    Atributos:
         registration: número de matrícula do estudante
 
         person: objeto do tipo model 'Person' com as informações pessoais do estudante (o2m)
 
-        academic_education_campus: objeto do tipo model 'AcademicEducationCampus' com a formação acadêmica/campus do estudante (o2m)
+        academic_education_campus: objeto do tipo model 'AcademicEducationCampus' com a formação acadêmica/campus
+        do estudante (o2m)
 
         responsibles_persons: pessoas responsáveis pelo estudante (m2m)
 
@@ -80,10 +81,10 @@ class Responsible(SafeDeleteModel):
     """
     Define os responsáveis de um estudante caso seja menor de idade. É uma associativa entre Student e Person
 
-    Example
+    Exemplo:
         'João responsável pelo Luis Guerreiro'
 
-    Attributes
+    Atributos:
         student: objeto do tipo model 'Student'
 
         person: objeto do tipo model 'Person'
