@@ -55,6 +55,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="students",
+                        related_query_name="student",
                         to="core.AcademicEducationCampus",
                     ),
                 ),
@@ -70,8 +71,8 @@ class Migration(migrations.Migration):
                 (
                     "responsibles_persons",
                     models.ManyToManyField(
-                        related_name="dependents_students",
-                        related_query_name="dependent_student",
+                        related_name="dependents",
+                        related_query_name="dependent",
                         through="core.Responsible",
                         to="core.Person",
                     ),

@@ -7,15 +7,19 @@ GRADE_MAX_LENGTH = 50
 
 class Course(SafeDeleteModel):
     """
-    Model para definir o nome de um curso
+    Define o nome de um curso da instituição
 
-    Exemplo: 'Sistemas de Informação'
+    Example
+        'Sistemas de Informação'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: SOFT_DELETE_CASCADE
 
-    Attr:
-        name: nomenclatura
+        name: nome do curso
+
+        grades: relação inversa para a model Grade
+
+        academic_education: relação inversa para a model AcademicEducation
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
@@ -28,16 +32,19 @@ class Course(SafeDeleteModel):
 
 class Grade(SafeDeleteModel):
     """
-    Model para definir o nome de um grau de curso
+    Define o nível/grau de um curso
 
-    Exemplo: 'Bacharelado'
+    Example
+        'Bacharelado'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: SOFT_DELETE_CASCADE
 
-    Attr:
-        name: nomenclatura
-        courses: cursos que sejam desse grau (m2m)
+        name: nomenclatura do grau
+
+        courses: cursos que pertencem a esse grau (m2m)
+
+        academic_education: relação inversa para a model AcademicEducation
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
@@ -53,32 +60,27 @@ class Grade(SafeDeleteModel):
 
 class AcademicEducation(SafeDeleteModel):
     """
-    Model para definir uma formação acadêmica de um aluno. É uma associativa entre a model de Course e Grade
+    Define uma formação acadêmica. É uma associativa entre a model de Course e Grade
 
-    Exemplo: 'Bacharelado em Sistemas de Informação'
+    Example
+        'Bacharelado em Sistemas de Informação'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: SOFT_DELETE_CASCADE
 
-    Attr:
         course: objeto do tipo model 'Course' (o2m)
+
         grade: objeto do tipo model 'Grade' (o2m)
+
+        campus: relação inversa para a model Campus
+
+        courses_campus: relação inversa para a model AcademicEducationCampus
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
-    course = models.ForeignKey(
-        "Course",
-        related_name="academics_educations",
-        related_query_name="academic_education",
-        on_delete=models.CASCADE,
-    )
-    grade = models.ForeignKey(
-        "Grade",
-        related_name="academics_educations",
-        related_query_name="academic_education",
-        on_delete=models.CASCADE,
-    )
+    course = models.ForeignKey("Course", related_name="academic_education", on_delete=models.CASCADE,)
+    grade = models.ForeignKey("Grade", related_name="academic_education", on_delete=models.CASCADE,)
 
     class Meta:
         unique_together = ["grade", "course"]

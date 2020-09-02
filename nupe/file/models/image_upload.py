@@ -4,9 +4,13 @@ from uuid import uuid4
 from django.db import models
 
 
-def make_path_profile_image(instance, filename):
+def make_path_profile_image(instance: models.ImageField, filename: str) -> str:
     """
-    Cria uma máscara para o nome do arquivo e retorna o path com o nome mascarado
+    Define uma máscara para o nome do arquivo da imagem
+
+    :return: o path com o nome mascarado
+
+    :rtype: string
     """
 
     filename, extension = filename.rsplit(".", 1)
@@ -18,16 +22,19 @@ def make_path_profile_image(instance, filename):
 
 class ProfileImage(models.Model):
     """
-    Model para guardar o path da imagem de perfil da pessoa
+    Guarda o path da imagem de perfil de uma pessoa
 
-    Exemplo: 'media/exemplo/foo.jpeg'
+    Example
+        'media/exemplo/foo.jpeg'
 
-    Attr:
+    Attributes
         image: manager da imagem
+
         created_at: data/hora de criação
+
         updated_at: data/hora de atualização
 
-    Properties:
+    Properties
         url: url de acesso à imagem
     """
 

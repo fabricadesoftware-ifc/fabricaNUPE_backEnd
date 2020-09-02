@@ -7,15 +7,19 @@ CAMPUS_MAX_LENGTH = 50
 
 class Institution(SafeDeleteModel):
     """
-    Model para definir o nome de uma instituição
+    Define o nome de uma instituição
 
-    Exemplo: 'Instituto Federal Catarinense'
+    Example
+        'Instituto Federal Catarinense'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: NO_DELETE
 
-    Attr:
-        name: nomenclatura
+        name: nome da instituição
+
+        campus: relação inversa para a model Campus
+
+        institutions_campus: relação inversa para a model InstitutionCampus
     """
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
@@ -28,18 +32,25 @@ class Institution(SafeDeleteModel):
 
 class Campus(SafeDeleteModel):
     """
-    Model para definir o nome de um campus
+    Define o nome de um campus para ser atribuído a uma instituição
 
-    Exemplo: 'Araquari'
+    Example
+        'Araquari'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: NO_DELETE
 
-    Attr:
-        name: nomenclatura
-        location: localização (o2m)
-        institutions: instituições desse campus (m2m)
-        academic_education: cursos fornecidos por esse campus (m2m)
+        name: nome do campus
+
+        location: localização do campus (o2m)
+
+        institutions: instituições localizadas nesse campus (m2m)
+
+        academic_education: cursos oferecidos por esse campus (m2m)
+
+        institutions_campus: relação inversa para a model InstitutionCampus
+
+        courses_campus: relação inversa para a model AcademicEducationCampus
     """
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
@@ -57,22 +68,33 @@ class Campus(SafeDeleteModel):
 
 class InstitutionCampus(SafeDeleteModel):
     """
-    Model para definir uma instituição pertencente à um campus. É uma associativa entre a model de Institution e Campus
+    Define uma instituição pertencente à um campus. É uma associativa entre a model de Institution e Campus
 
-    Exemplo: 'Instituto Federal Catarinense - Campus Araquari'
+    Example
+        'Instituto Federal Catarinense - Campus Araquari'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: NO_DELETE
 
-    Attr:
         institution: objeto do tipo model Institution (o2m)
+
         campus: objeto do tipo model Campus (o2m)
     """
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
 
-    institution = models.ForeignKey("Institution", related_name="institution_campus", on_delete=models.PROTECT)
-    campus = models.ForeignKey("Campus", related_name="institution_campus", on_delete=models.PROTECT)
+    institution = models.ForeignKey(
+        "Institution",
+        related_name="institutions_campus",
+        related_query_name="institution_campus",
+        on_delete=models.PROTECT,
+    )
+    campus = models.ForeignKey(
+        "Campus",
+        related_name="institutions_campus",
+        related_query_name="institution_campus",
+        on_delete=models.PROTECT,
+    )
 
     class Meta:
         unique_together = ["institution", "campus"]
@@ -83,23 +105,33 @@ class InstitutionCampus(SafeDeleteModel):
 
 class AcademicEducationCampus(SafeDeleteModel):
     """
-    Model para definir um curso que pertence à uma instituição de um campus.
-    É uma associativa entre a model de AcademicEducation e Campus
+    Define um curso que pertence à uma instituição de um campus. É uma associativa entre a model de AcademicEducation
+    e Campus
 
-    Exemplo: 'Sistemas de Informação - Campus Araquari'
+    Example
+        'Sistemas de Informação - Campus Araquari'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: SOFT_DELETE_CASCADE
 
-    Attr:
         academic_education: objeto do tipo model 'AcademicEducation' (o2m)
+
         campus: objeto do tipo model 'Campus' (o2m)
+
+        students: relação inversa para a model Student
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
-    academic_education = models.ForeignKey("AcademicEducation", related_name="course_campus", on_delete=models.CASCADE)
-    campus = models.ForeignKey("Campus", related_name="course_campus", on_delete=models.PROTECT)
+    academic_education = models.ForeignKey(
+        "AcademicEducation",
+        related_name="courses_campus",
+        related_query_name="course_campus",
+        on_delete=models.CASCADE,
+    )
+    campus = models.ForeignKey(
+        "Campus", related_name="courses_campus", related_query_name="course_campus", on_delete=models.PROTECT,
+    )
 
     class Meta:
         unique_together = ["campus", "academic_education"]

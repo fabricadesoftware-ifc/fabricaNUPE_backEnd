@@ -42,7 +42,10 @@ class Migration(migrations.Migration):
                 (
                     "cpf",
                     models.CharField(
-                        max_length=11, unique=True, validators=[django.core.validators.MinLengthValidator(11)]
+                        max_length=11,
+                        unique=True,
+                        help_text="Somente números",
+                        validators=[django.core.validators.MinLengthValidator(11)],
                     ),
                 ),
                 ("birthday_date", models.DateField()),
@@ -58,7 +61,7 @@ class Migration(migrations.Migration):
                             django.core.validators.RegexValidator(
                                 "^[0-9]*$", message="Este campo deve conter somente números"
                             ),
-                            django.core.validators.MinLengthValidator(12),
+                            django.core.validators.MinLengthValidator(11),
                         ],
                     ),
                 ),

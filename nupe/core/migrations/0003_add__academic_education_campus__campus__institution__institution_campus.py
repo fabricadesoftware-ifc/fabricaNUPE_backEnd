@@ -20,7 +20,8 @@ class Migration(migrations.Migration):
                     "academic_education",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="course_campus",
+                        related_name="courses_campus",
+                        related_query_name="course_campus",
                         to="core.AcademicEducation",
                     ),
                 ),
@@ -59,7 +60,8 @@ class Migration(migrations.Migration):
                     "campus",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.PROTECT,
-                        related_name="institution_campus",
+                        related_name="institutions_campus",
+                        related_query_name="institution_campus",
                         to="core.Campus",
                     ),
                 ),
@@ -67,7 +69,8 @@ class Migration(migrations.Migration):
                     "institution",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.PROTECT,
-                        related_name="institution_campus",
+                        related_name="institutions_campus",
+                        related_query_name="institution_campus",
                         to="core.Institution",
                     ),
                 ),
@@ -92,7 +95,10 @@ class Migration(migrations.Migration):
             model_name="academiceducationcampus",
             name="campus",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.PROTECT, related_name="course_campus", to="core.Campus"
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="courses_campus",
+                related_query_name="course_campus",
+                to="core.Campus",
             ),
         ),
         migrations.AlterUniqueTogether(

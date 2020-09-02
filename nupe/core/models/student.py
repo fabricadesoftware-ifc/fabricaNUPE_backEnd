@@ -9,25 +9,32 @@ RESPONSIBLE_MIN_AGE = 18
 
 class Student(SafeDeleteModel):
     """
-    Model para definir as informações sobre um estudante
+    Define as informações a respeito de um estudante
 
-    Exemplo: 'Fulano de Tal - 202002071234'
+    Example
+        'Luis Guerreiro - 202008010001'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        registration: número de matrícula do estudante
 
-    Attr:
-        registration: número de matrícula
-        person: objeto do tipo model 'Person' com as informações pessoais (o2m)
-        academic_education_campus: objeto do tipo model 'AcademicEducationCampus' com o curso do campus (o2m)
-        responsibles_persons: pessoas responsáveis pelo aluno (m2m)
-        graduated: status se já se formou ou não
-        ingress_date: data de ingresso
-        updated_at: data de atualização
+        person: objeto do tipo model 'Person' com as informações pessoais do estudante (o2m)
 
-    Properties:
-        age: idade
-        academic_education: nome do curso
+        academic_education_campus: objeto do tipo model 'AcademicEducationCampus' com a formação acadêmica/campus do estudante (o2m)
+
+        responsibles_persons: pessoas responsáveis pelo estudante (m2m)
+
+        graduated: status se o estudante já é formado ou não
+
+        ingress_date: data de ingresso do estudante no campus
+
+        updated_at: data da última atualização dos dados do estudante
+
+        responsibles: relação inversa para a model Responsible
+
+    Properties
+        age: idade do estudante
+
+        academic_education: nome do curso que o estudante participa
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
@@ -41,10 +48,14 @@ class Student(SafeDeleteModel):
         on_delete=models.CASCADE,
     )
     academic_education_campus = models.ForeignKey(
-        "AcademicEducationCampus", related_name="students", on_delete=models.SET_NULL, null=True
+        "AcademicEducationCampus",
+        related_name="students",
+        related_query_name="student",
+        on_delete=models.SET_NULL,
+        null=True,
     )
     responsibles_persons = models.ManyToManyField(
-        "Person", related_name="dependents_students", related_query_name="dependent_student", through="Responsible"
+        "Person", related_name="dependents", related_query_name="dependent", through="Responsible"
     )
     graduated = models.BooleanField(default=False)
     ingress_date = models.DateField()
@@ -67,15 +78,14 @@ class Student(SafeDeleteModel):
 
 class Responsible(SafeDeleteModel):
     """
-    Model para definir os responsáveis de um aluno menor de idade. É uma associativa entre Student e Person
+    Define os responsáveis de um estudante caso seja menor de idade. É uma associativa entre Student e Person
 
-    Exemplo: 'Pai do Fulano de Tal responsável pelo Fulano de Tal'
+    Example
+        'João responsável pelo Luis Guerreiro'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
-
-    Attr:
+    Attributes
         student: objeto do tipo model 'Student'
+
         person: objeto do tipo model 'Person'
     """
 

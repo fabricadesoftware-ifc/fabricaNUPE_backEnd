@@ -1,0 +1,83 @@
+===================
+Models da app core
+===================
+
+Módulo de Curso
+---------------
+
+Curso
++++++
+
+.. autoclass:: nupe.core.models.course.Course
+
+Grau do Curso
++++++++++++++
+
+.. autoclass:: nupe.core.models.course.Grade
+
+Formação Acadêmica
+++++++++++++++++++
+
+.. autoclass:: nupe.core.models.course.AcademicEducation
+
+Módulo de Instituição
+---------------------
+
+Instituição
++++++++++++
+
+.. autoclass:: nupe.core.models.institution.Institution
+
+Campus
+++++++
+
+.. autoclass:: nupe.core.models.institution.Campus
+
+Instituição do Campus
++++++++++++++++++++++
+
+.. autoclass:: nupe.core.models.institution.InstitutionCampus
+
+Formação Acadêmica do Campus
+++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.models.institution.AcademicEducationCampus
+
+Módulo de Localização
+---------------------
+
+Cidade
+++++++
+
+.. autoclass:: nupe.core.models.location.City
+
+Estado
+++++++
+
+.. autoclass:: nupe.core.models.location.State
+
+Localização
++++++++++++
+
+.. autoclass:: nupe.core.models.location.Location
+
+Módulo de Pessoa
+----------------
+
+Pessoa
+++++++
+
+.. autoclass:: nupe.core.models.person.Person
+
+Módulo de Estudante
+-------------------
+
+Estudante
++++++++++
+
+.. autoclass:: nupe.core.models.student.Student
+
+Responsável
++++++++++++
+
+.. autoclass:: nupe.core.models.student.Responsible

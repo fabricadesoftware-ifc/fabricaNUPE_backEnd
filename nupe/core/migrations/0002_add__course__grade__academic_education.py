@@ -49,20 +49,14 @@ class Migration(migrations.Migration):
             model_name="academiceducation",
             name="course",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="academics_educations",
-                related_query_name="academic_education",
-                to="core.Course",
+                on_delete=django.db.models.deletion.CASCADE, related_name="academic_education", to="core.Course",
             ),
         ),
         migrations.AddField(
             model_name="academiceducation",
             name="grade",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="academics_educations",
-                related_query_name="academic_education",
-                to="core.Grade",
+                on_delete=django.db.models.deletion.CASCADE, related_name="academic_education", to="core.Grade",
             ),
         ),
         migrations.AlterUniqueTogether(name="academiceducation", unique_together={("grade", "course")},),

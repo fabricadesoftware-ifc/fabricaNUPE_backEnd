@@ -17,27 +17,41 @@ PERSON_CONTACT_MAX_LENGTH = 12
 
 class Person(SafeDeleteModel):
     """
-    Model para definir as informações pessoais de uma pessoa. Seja ela um estudante, usuário do sistema ou
+    Define as informações pessoais de uma pessoa, seja ela um estudante, usuário do sistema ou
     responsável de um aluno
 
-    Exemplo: 'Fulano de Tal'
+    Example
+        'Luis Guerreiro, 12345678910, 14/02/1999, M, 47 988887777'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: SOFT_DELETE_CASCADE
 
-    Attr:
-        first_name: nome
-        last_name: sobrenome
-        cpf: número do documento 'Cadastro de Pessoas Físicas' (somento números)
+        first_name: primeiro nome da pessoa
+
+        last_name: sobrenome da pessoa
+
+        cpf: número do documento 'Cadastro de Pessoas Físicas' (somente números)
+
         birthday_date: data de nascimento (yyyy-mm-dd)
+
         gender: sexo (F, M)
+
         contact: número de contato (DDD+Número)
-        created_at: data de criação
-        updated_at: data de atualização
+
+        created_at: data do cadastro
+
+        updated_at: data da última atualização das informações
+
+        student_registrations: relação inversa para a model Student
+
+        dependents: relação inversa para a model Student
+
+        responsibles: relação inversa para a model Responsible
 
     Properties:
-        full_name: junção do nome e sobrenome
-        age: idade
+        full_name: nome completo da pessoa
+
+        age: idade da pessoa
     """
 
     FEMININO = "F"

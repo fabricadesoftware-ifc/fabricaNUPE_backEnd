@@ -8,15 +8,17 @@ INITIALS_STATE_MAX_LENGTH = 2
 
 class City(SafeDeleteModel):
     """
-    Model para definir o nome de uma cidade
+    Define o nome de uma cidade
 
-    Exemplo: 'Araquari'
+    Example
+        'Araquari'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: NO_DELETE
 
-    Attr:
-        name: nomenclatura
+        name: nome da cidade
+
+        states: relação inversa para a model State
     """
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
@@ -29,16 +31,17 @@ class City(SafeDeleteModel):
 
 class State(SafeDeleteModel):
     """
-    Model para definir o nome de um estado
+    Define o nome de um estado
 
-    Exemplo: 'Santa Catarina'
+    Example
+        'Santa Catarina'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: NO_DELETE
 
-    Attr:
-        name: nomenclatura
-        cities: cidades desse estado (m2m)
+        name: nome do estado
+
+        cities: cidades pertencente à esse estado (m2m)
     """
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
@@ -53,16 +56,19 @@ class State(SafeDeleteModel):
 
 class Location(SafeDeleteModel):
     """
-    Model para definir uma cidade pertencente à um estado. É uma associativa entre a model de City e State
+    Define uma cidade pertencente à um estado. É uma associativa entre a model de City e State
 
-    Exemplo: 'Araquari - Santa Catarina'
+    Example
+        'Araquari - Santa Catarina'
 
-    Args:
-        SafeDeleteModel: model responsável por mascarar o objeto ao invés de excluir do banco de dados
+    Attributes
+        _safedelete_policy: NO_DELETE
 
-    Attr:
         city: objeto do tipo model 'City' (o2m)
+        
         state: objeto do tipo model 'State' (o2m)
+
+        campus: relação inversa para a model Campus
     """
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
