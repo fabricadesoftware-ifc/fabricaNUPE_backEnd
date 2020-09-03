@@ -2,14 +2,6 @@
 Documentação do Código
 ======================
 
-Filters
--------
-
-.. toctree::
-   :maxdepth: 2
-
-   ../modules/filters-core
-
 Commands
 --------
 
@@ -17,6 +9,14 @@ Commands
    :maxdepth: 2
 
    ../modules/commands-core
+
+Filters
+-------
+
+.. toctree::
+   :maxdepth: 2
+
+   ../modules/filters-core
 
 Models
 ------
