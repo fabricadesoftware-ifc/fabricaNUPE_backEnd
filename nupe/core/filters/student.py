@@ -5,13 +5,24 @@ from nupe.core.models import Student
 
 class StudentFilter(FilterSet):
     """
-    Filtros para requisições no endpoint de 'Student'
+    Filtros para se utilizar nas requisições do endpoint de Student
 
-    Param:
-        ingress_date_before: menor ou igual a data fornecida (yyyy-mm-dd)
-        ingress_date_after: maior ou igual a data fornecida (yyyy-mm-dd)
+    Exemplo:
+        /api/v1/person?foo=xyz
+
+        ou
+
+        /api/v1/person?foo=xyz&bar=abc
+
+    Parâmetros:
+        ingress_date_before: menor a data fornecida (yyyy-mm-dd)
+
+        ingress_date_after: maior a data fornecida (yyyy-mm-dd)
+
         course_id: igual ao inteiro fornecido
+
         campus_name: igual a string fornecida (case insensitive)
+
         graduated: igual ao booleano fornecido (True, False)
     """
 

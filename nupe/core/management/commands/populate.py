@@ -8,6 +8,13 @@ from nupe.core.models import Campus, City, Course, Grade, Institution, Location,
 
 
 class Command(BaseCommand):
+    """
+    Popula o banco de dados com informações mínimas. Isso pode demorar alguns minutos.
+
+    Raises:
+        CommandError: Caso algo não de certo durante a execução
+    """
+
     help = "Popula o banco de dados com informações mínimas. Isso pode demorar alguns minutos."
 
     INSTITUTION_BASENAME = "Instituto Federal Catarinense"
@@ -23,6 +30,9 @@ class Command(BaseCommand):
             raise CommandError("Alguma coisa deu errado.")
 
     def populate_locations(self):
+        """
+        Utiliza a API do IBGE para buscar os estados e cidades do Brasil e popular o banco de dados
+        """
         if self.__already_was_populated():
             return
 
@@ -40,6 +50,10 @@ class Command(BaseCommand):
                     state_object_model.cities.add(city_object_model)
 
     def populate_academic_education(self):
+        """
+        Popula o banco de dados com base em uma lista pré-definida de cursos oferecidos pelo
+        Instituto Federal Catarinense - Campus Araquari
+        """
         for academic_education in academic_educations:
             course_object_model, course_created = Course.objects.get_or_create(name=academic_education.get("course"))
             grade_object_model, grade_created = Grade.objects.get_or_create(name=academic_education.get("grade"))
@@ -48,6 +62,9 @@ class Command(BaseCommand):
                 grade_object_model.courses.add(course_object_model)
 
     def populate_institutions(self):
+        """
+        Cadastra o Instituto Federal Catarinense e o Campus Araquari no banco de dados
+        """
         institution_object_model, institution_created = Institution.objects.get_or_create(
             name=self.INSTITUTION_BASENAME
         )
