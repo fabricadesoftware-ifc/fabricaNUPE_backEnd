@@ -6,9 +6,9 @@ from PIL import Image
 from rest_framework.test import APITestCase
 
 from nupe.file.models import ProfileImage
-from resources.const.datas.image_upload import PROFILE_IMAGE_INVALID_FILENAME, PROFILE_IMAGE_VALID_FILENAME
-from tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
-from tests.remove_image_files_after_test import remove_all_files_in_dir
+from nupe.resources.const.datas.image_upload import PROFILE_IMAGE_INVALID_FILENAME, PROFILE_IMAGE_VALID_FILENAME
+from nupe.tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.remove_image_files_after_test import remove_all_files_in_dir
 
 
 class ProfileImageAPITestCase(APITestCase):

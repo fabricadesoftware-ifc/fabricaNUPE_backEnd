@@ -11,9 +11,9 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Student
-from resources.const.datas.person import OLDER_BIRTHDAY_DATE
-from resources.const.datas.student import INGRESS_DATE, REGISTRATION
-from tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.resources.const.datas.person import OLDER_BIRTHDAY_DATE
+from nupe.resources.const.datas.student import INGRESS_DATE, REGISTRATION
+from nupe.tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
 
 
 class StudentAPITestCase(APITestCase):

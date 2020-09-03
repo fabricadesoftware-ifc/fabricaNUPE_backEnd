@@ -3,8 +3,8 @@ from json import loads
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.test import APITestCase
 
-from resources.const.messages.custom_handler_404 import ENDPOINT_NOT_FOUND
-from tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.resources.const.messages.custom_handler_404 import ENDPOINT_NOT_FOUND
+from nupe.tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
 
 
 class CustomHandler404APITestCase(APITestCase):

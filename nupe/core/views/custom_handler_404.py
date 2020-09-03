@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from resources.const.messages.custom_handler_404 import ENDPOINT_NOT_FOUND
+from nupe.resources.const.messages.custom_handler_404 import ENDPOINT_NOT_FOUND
 
 
 def custom_handler_404(request, exception):

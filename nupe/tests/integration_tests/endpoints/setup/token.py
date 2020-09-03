@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from tests.integration_tests.endpoints.setup.application import create_application
+from nupe.tests.integration_tests.endpoints.setup.application import create_application
 
 
 def get_access_token(*, username: str, password: str) -> (HttpResponse, APIClient):

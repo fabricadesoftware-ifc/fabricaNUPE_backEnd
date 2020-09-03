@@ -2,7 +2,7 @@ from django.test import TestCase
 from model_bakery import baker
 
 from nupe.file.models.image_upload import ProfileImage
-from tests.remove_image_files_after_test import remove_all_files_in_dir
+from nupe.tests.remove_image_files_after_test import remove_all_files_in_dir
 
 
 class ProfileImageTestCase(TestCase):

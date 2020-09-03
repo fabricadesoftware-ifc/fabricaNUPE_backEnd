@@ -21,13 +21,11 @@ dev_backend test:
         - pip3 install poetry==1.0.5 && poetry config virtualenvs.create false
         - poetry install
     script: python manage.py test
-    # only:
-    #     - develop
-    # rules:
-    #     - changes:
-    #           - manage.py
-    #           - nupe/
-    #           - resources/
+    rules:
+        - if: '$CI_COMMIT_BRANCH == "develop"'
+          changes:
+              - manage.py
+              - nupe/
 
 docs build:
     extends: dev_backend test
@@ -38,10 +36,11 @@ docs build:
         paths:
             - $DOCS_PATH
         expire_in: 1h
-    when: always
-    # rules:
-    #     - changes:
-    #           - docs/
+    rules:
+        - if: '$CI_COMMIT_BRANCH == "develop"'
+          when: always
+          changes:
+              - docs/
     cache:
         key: docs build
         policy: push
@@ -55,8 +54,12 @@ docs deploy:
         GIT_STRATEGY: none
     before_script:
         - npm install -g surge
-        - ls -l
     script: surge -p $DOCS_PATH -d $DOCUMENTATION_URL
+    rules:
+        - if: '$CI_COMMIT_BRANCH == "develop"'
     cache:
         key: docs build
         policy: pull
+    environment:
+        name: docs-nupe
+        url: $DOCUMENTATION_URL

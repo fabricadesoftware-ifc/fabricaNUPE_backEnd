@@ -13,8 +13,8 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
-from resources.const.datas.person import CPF, FIRST_NAME, GENDER, LAST_NAME, OLDER_BIRTHDAY_DATE
-from tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.resources.const.datas.person import CPF, FIRST_NAME, GENDER, LAST_NAME, OLDER_BIRTHDAY_DATE
+from nupe.tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
 
 
 class PersonAPITestCase(APITestCase):
