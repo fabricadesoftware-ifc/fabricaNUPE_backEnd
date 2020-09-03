@@ -7,8 +7,8 @@ from nupe.core.models import AcademicEducationCampus, Student
 @receiver(signal=pre_softdelete, sender=AcademicEducationCampus, dispatch_uid="academic_education_campus_pre_delete")
 def academic_education_campus_pre_delete(sender, **kwargs):
     """
-    todos os estudantes que tinham relação com o objeto de 'AcademicEducationCampus' que foi removido
-    tem seu atributo "academic_education_campus" setado como 'None'
+    Quando um objeto da model AcademicEducationCampus é removido, todos os estudantes que tem relação com essa model
+    tem seu atributo 'academic_education_campus' setado como 'None'
     """
 
     academic_education_campus_deleted = kwargs.get("instance")
@@ -25,8 +25,8 @@ def academic_education_campus_pre_delete(sender, **kwargs):
 @receiver(signal=post_undelete, sender=AcademicEducationCampus, dispatch_uid="academic_education_campus_post_undelete")
 def academic_education_campus_post_undelete(sender, **kwargs):
     """
-    todos os estudantes que tinham relação com o objeto de 'AcademicEducationCampus' que está sendo
-    restaurado, tem seu atributo "academic_education_campus" setado com o 'valor anterior'
+    Quando um objeto da model AcademicEducationCampus é restaurado, todos os estudantes que tem relação com essa model
+    tem seu atributo 'academic_education_campus' setado como o valor anterior a remoção
     """
 
     academic_education_campus_undeleted = kwargs.get("instance")

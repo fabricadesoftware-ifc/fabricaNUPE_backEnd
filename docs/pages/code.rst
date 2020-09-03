@@ -39,5 +39,10 @@ Serializers
 Signals
 -------
 
+.. toctree::
+   :maxdepth: 2
+
+   ../modules/signals-core
+
 Utilities
 ---------
