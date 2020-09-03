@@ -10,3 +10,8 @@ dev_backend test:
     script: python manage.py test
     only:
         - develop
+    rules:
+        - changes:
+              - manage.py
+              - nupe/
+              - resources/
