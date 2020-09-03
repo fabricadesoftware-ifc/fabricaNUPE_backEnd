@@ -10,3 +10,4 @@ Bem vindo a Documentação do Sistema NuPe!
    pages/good_practices
    pages/api
    pages/code
+   pages/about
