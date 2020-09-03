@@ -36,6 +36,14 @@ Serializers
    ../modules/serializers-core
    ../modules/serializers-file
 
+Services
+--------
+
+.. toctree::
+   :maxdepth: 2
+
+   ../modules/services-file
+
 Signals
 -------
 
@@ -46,3 +54,8 @@ Signals
 
 Utilities
 ---------
+
+.. toctree::
+   :maxdepth: 2
+
+   ../modules/utilities-core

@@ -8,9 +8,8 @@ def make_path_profile_image(instance: models.ImageField, filename: str) -> str:
     """
     Define uma máscara para o nome do arquivo da imagem
 
-    :return: o path com o nome mascarado
-
-    :rtype: string
+    Retorna:
+        str: o path com o nome mascarado
     """
 
     filename, extension = filename.rsplit(".", 1)
@@ -24,17 +23,17 @@ class ProfileImage(models.Model):
     """
     Guarda o path da imagem de perfil de uma pessoa
 
-    Example
+    Exemplo:
         'media/exemplo/foo.jpeg'
 
-    Attributes
+    Atributos:
         image: manager da imagem
 
         created_at: data/hora de criação
 
         updated_at: data/hora de atualização
 
-    Properties
+    Propriedades:
         url: url de acesso à imagem
     """
 

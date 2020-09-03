@@ -6,9 +6,9 @@ from nupe.file.models import ProfileImage
 class ProfileImageService:
     def remove_file(self, profile_image: ProfileImage):
         """
-        Remove a imagem de perfil do diretório
+        Remove o arquivo da imagem de perfil do diretório
 
-        Args:
+        Argumentos:
             profile_image (ProfileImage): instância de ProfileImage que contém o path
         """
         if profile_image:
