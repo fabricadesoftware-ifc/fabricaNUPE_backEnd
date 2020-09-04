@@ -22,11 +22,10 @@ dev_backend test:
         - poetry install
     script: python manage.py test
     rules:
-        - if: '$CI_COMMIT_BRANCH == "develop"'
+        - if: $CI_COMMIT_BRANCH == develop
           changes:
               - manage.py
-              - nupe/
-
+              - nupe/**/*
 docs build:
     extends: dev_backend test
     stage: build
@@ -37,10 +36,9 @@ docs build:
             - $DOCS_PATH
         expire_in: 1h
     rules:
-        - if: '$CI_COMMIT_BRANCH == "develop"'
-          when: always
+        - if: $CI_COMMIT_BRANCH == develop
           changes:
-              - docs/
+              - docs/**/*
     cache:
         key: docs build
         policy: push
@@ -56,10 +54,12 @@ docs deploy:
         - npm install -g surge
     script: surge -p $DOCS_PATH -d $DOCUMENTATION_URL
     rules:
-        - if: '$CI_COMMIT_BRANCH == "develop"'
+        - if: $CI_COMMIT_BRANCH == develop
     cache:
         key: docs build
         policy: pull
     environment:
         name: docs-nupe
         url: $DOCUMENTATION_URL
+    needs:
+        - docs build
