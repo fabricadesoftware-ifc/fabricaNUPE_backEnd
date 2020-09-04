@@ -49,9 +49,9 @@ Labels
 Branches
 --------
 
-Cada issue em andamento **deve ter uma branch associada à ela**. Por isso, o nome da branch deve seguir a nomenclatura padrão do gitflow "**feature-titulo-da-issue**".
+Cada issue em andamento **deve ter uma branch associada à ela**. Por isso, o nome da branch deve seguir a nomenclatura padrão do gitflow "**feature/titulo-da-issue**".
 
-**Exemplo**: Para uma issue com título "**criar model de curso**". A branch para se trabalhar nessa issue **deve** ser criada com o nome "**feature-criar-model-de-curso**".
+**Exemplo**: Para uma issue com título "**criar model de curso**". A branch para se trabalhar nessa issue **deve** ser criada com o nome "**feature/criar-model-de-curso**".
 
 Merge Request
 -------------
