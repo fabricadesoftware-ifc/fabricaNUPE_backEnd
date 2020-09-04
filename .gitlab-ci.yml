@@ -3,7 +3,7 @@ test:
     rules:
         - changes:
               - manage.py
-              - nupe
+              - nupe/**/*
 # stages:
 #     - test
 #     - build
