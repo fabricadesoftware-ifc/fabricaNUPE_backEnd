@@ -9,19 +9,19 @@ variables:
     DOCUMENTATION_URL: nupe-documentation.surge.sh
 
 backend_image push to container_registry:
-    image: docker:19.03.12
+    image:
+        name: gcr.io/kaniko-project/executor:debug
+        entrypoint: [""]
     stage: build
-    services:
-        - docker:19.03.12-dind
     variables:
         IMAGE_TAG: $CI_REGISTRY_IMAGE/nupe:backend
     before_script:
-        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        - docker build --pull -t $IMAGE_TAG -f dev_backend.Dockerfile .
-    script: docker push $IMAGE_TAG
+        - mkdir -p /kaniko/.docker
+        - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    script: /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dev_backend.Dockerfile --destination $IMAGE_TAG
     rules:
-        # - if: $CI_COMMIT_BRANCH == "develop"
-        - changes:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
               - dev_backend.Dockerfile
 
 dev_backend test:
@@ -29,8 +29,8 @@ dev_backend test:
     stage: test
     script: python manage.py test
     rules:
-        # - if: $CI_COMMIT_BRANCH == "develop"
-        - changes:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
               - manage.py
               - nupe/**/*
           allow_failure: true
@@ -45,8 +45,8 @@ docs build:
             - $DOCS_PATH
         expire_in: 1h
     rules:
-        # - if: $CI_COMMIT_BRANCH == "develop"
-        - changes:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
               - docs/**/*
     cache:
         key: docs build
@@ -62,8 +62,8 @@ docs deploy:
     before_script:
         - npm install -g surge
     script: surge -p $DOCS_PATH -d $DOCUMENTATION_URL
-    # rules:
-    #     - if: $CI_COMMIT_BRANCH == "develop"
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
     cache:
         key: docs build
         policy: pull
