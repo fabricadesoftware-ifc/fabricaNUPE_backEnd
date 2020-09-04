@@ -1,65 +1,69 @@
-stages:
-    - test
-    - build
-    - deploy
-
-variables:
-    GIT_STRATEGY: fetch
-    DOCS_PATH: docs/_build/html
-    DOCUMENTATION_URL: nupe-documentation.surge.sh
-
-dev_backend test:
-    stage: test
-    image: python:3.6-slim-buster
-    variables:
-        GIT_STRATEGY: clone
-        DEBUG: "True"
-        MEDIA_ROOT: "media/test"
-        MEDIA_URL: "/media/test/"
-    before_script:
-        - apt-get update && apt-get install build-essential -y
-        - pip3 install poetry==1.0.5 && poetry config virtualenvs.create false
-        - poetry install
-    script: python manage.py test
+test:
+    script: ls -l
     rules:
-        - if: '$CI_COMMIT_BRANCH == "develop"'
-          changes:
+        - changes:
               - manage.py
-              - nupe/
+              - nupe/**
+# stages:
+#     - test
+#     - build
+#     - deploy
 
-docs build:
-    extends: dev_backend test
-    stage: build
-    script: make -C docs/ html
-    artifacts:
-        name: docs
-        paths:
-            - $DOCS_PATH
-        expire_in: 1h
-    rules:
-        - if: '$CI_COMMIT_BRANCH == "develop"'
-          when: always
-          changes:
-              - docs/
-    cache:
-        key: docs build
-        policy: push
-        paths:
-            - $DOCS_PATH
+# variables:
+#     GIT_STRATEGY: fetch
+#     DOCS_PATH: docs/_build/html
+#     DOCUMENTATION_URL: nupe-documentation.surge.sh
 
-docs deploy:
-    stage: deploy
-    image: node
-    variables:
-        GIT_STRATEGY: none
-    before_script:
-        - npm install -g surge
-    script: surge -p $DOCS_PATH -d $DOCUMENTATION_URL
-    rules:
-        - if: '$CI_COMMIT_BRANCH == "develop"'
-    cache:
-        key: docs build
-        policy: pull
-    environment:
-        name: docs-nupe
-        url: $DOCUMENTATION_URL
+# dev_backend test:
+#     stage: test
+#     image: python:3.6-slim-buster
+#     variables:
+#         GIT_STRATEGY: clone
+#         DEBUG: "True"
+#         MEDIA_ROOT: "media/test"
+#         MEDIA_URL: "/media/test/"
+#     before_script:
+#         - apt-get update && apt-get install build-essential -y
+#         - pip3 install poetry==1.0.5 && poetry config virtualenvs.create false
+#         - poetry install
+#     script: python manage.py test
+#     rules:
+#         # - if: '$CI_COMMIT_BRANCH == "develop"'
+#         - changes:
+#               - manage.py
+#               - nupe/**
+# docs build:
+#     extends: dev_backend test
+#     stage: build
+#     script: make -C docs/ html
+#     artifacts:
+#         name: docs
+#         paths:
+#             - $DOCS_PATH
+#         expire_in: 1h
+#     rules:
+#         # - if: '$CI_COMMIT_BRANCH == "develop"'
+#         - changes:
+#               - docs/
+#     cache:
+#         key: docs build
+#         policy: push
+#         paths:
+#             - $DOCS_PATH
+
+# docs deploy:
+#     stage: deploy
+#     image: node
+#     variables:
+#         GIT_STRATEGY: none
+#     before_script:
+#         - npm install -g surge
+#     script: surge -p $DOCS_PATH -d $DOCUMENTATION_URL
+#     # rules:
+#     #     - if: '$CI_COMMIT_BRANCH == "develop"'
+#     cache:
+#         key: docs build
+#         policy: pull
+#     environment:
+#         name: docs-nupe
+#         url: $DOCUMENTATION_URL
