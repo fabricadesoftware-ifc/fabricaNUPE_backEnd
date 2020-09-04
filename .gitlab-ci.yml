@@ -1,4 +1,5 @@
 stages:
+    - pre-build
     - build
     - test
     - deploy
@@ -6,13 +7,13 @@ stages:
 variables:
     GIT_STRATEGY: fetch
     DOCS_PATH: docs/_build/html
-    DOCUMENTATION_URL: nupe-documentation.surge.sh
+    DOCS_URL: nupe-documentation.surge.sh
 
-backend_image push to container_registry:
+dev_backend_image push to container_registry:
     image:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
-    stage: build
+    stage: pre-build
     variables:
         IMAGE_TAG: $CI_REGISTRY_IMAGE/nupe:backend
     before_script:
@@ -61,14 +62,16 @@ docs deploy:
         GIT_STRATEGY: none
     before_script:
         - npm install -g surge
-    script: surge -p $DOCS_PATH -d $DOCUMENTATION_URL
+    script: surge -p $DOCS_PATH -d $DOCS_URL
     rules:
         - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - docs/**/*
     cache:
         key: docs build
         policy: pull
     environment:
         name: docs-nupe
-        url: $DOCUMENTATION_URL
+        url: $DOCS_URL
     needs:
         - docs build

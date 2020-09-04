@@ -2,60 +2,25 @@
 Documentação do Código
 ======================
 
-Commands
+App Core
 --------
 
 .. toctree::
-   :maxdepth: 2
-
+   :maxdepth: 1
+   
    ../modules/commands-core
-
-Filters
--------
-
-.. toctree::
-   :maxdepth: 2
-
    ../modules/filters-core
-
-Models
-------
-
-.. toctree::
-   :maxdepth: 2
-
    ../modules/models-core
-   ../modules/models-file
-
-Serializers
------------
-
-.. toctree::
-   :maxdepth: 2
-
    ../modules/serializers-core
-   ../modules/serializers-file
+   ../modules/signals-core
+   ../modules/utilities-core
 
-Services
+App File
 --------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
+   ../modules/models-file
+   ../modules/serializers-file
    ../modules/services-file
-
-Signals
--------
-
-.. toctree::
-   :maxdepth: 2
-
-   ../modules/signals-core
-
-Utilities
----------
-
-.. toctree::
-   :maxdepth: 2
-
-   ../modules/utilities-core

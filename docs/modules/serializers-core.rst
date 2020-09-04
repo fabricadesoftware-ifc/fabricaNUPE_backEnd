@@ -1,12 +1,12 @@
-========
-App Core
-========
+==============
+Serializadores
+==============
 
 Módulo de Pessoa
 ----------------
 
 Serializer para Listar Pessoas
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.person.PersonListSerializer
 

@@ -1,6 +1,6 @@
-========
-App Core
-========
+===========
+Utilitários
+===========
 
 Módulo de Propriedades
 ----------------------

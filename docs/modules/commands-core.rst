@@ -1,5 +1,5 @@
 ========
-App Core
+Comandos
 ========
 
 Para verificar os comandos disponíveis no projeto digite:
@@ -10,12 +10,6 @@ Para verificar os comandos disponíveis no projeto digite:
 
 Módulo de População
 -------------------
-
-Para utilizar esse comando digite:
-
-.. code-block:: console
-
-    $ ./manage.py populate
 
 Populate
 ++++++++
