@@ -3,6 +3,10 @@ LABEL mantainer="Luis Guerreiro <luiscvlh11@gmail.com>"
 
 WORKDIR /usr/nupe
 
+ENV DEBUG=True \
+    MEDIA_ROOT=media/test \
+    MEDIA_URL=/media/test/
+
 # build-essential para utilizar o "make" do sphinx
 RUN apt-get update && apt-get install git build-essential -y && \
     pip3 install poetry==1.0.5 && \

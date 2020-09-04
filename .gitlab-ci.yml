@@ -31,7 +31,8 @@ docs build:
         expire_in: 1h
     rules:
         # - if: $CI_COMMIT_BRANCH == "develop"
-        - changes:
+        - when: always
+          changes:
               - docs/**/*
     cache:
         key: docs build
