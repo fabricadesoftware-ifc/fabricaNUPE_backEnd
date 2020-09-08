@@ -344,3 +344,6 @@ yarn-error.log
 # Sphinx
 _build
 _templates
+
+# Check Vulnerabilities
+vulnerabilities.json
