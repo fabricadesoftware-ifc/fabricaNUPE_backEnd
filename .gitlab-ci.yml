@@ -24,17 +24,8 @@ dev_backend_image push to container_registry:
         - if: $CI_COMMIT_BRANCH == "develop"
           changes:
               - dev_backend.Dockerfile
-
-dev_backend test:
-    image: $CI_REGISTRY_IMAGE/nupe:backend
-    stage: test
-    script: python manage.py test
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - manage.py
-              - nupe/**/*
-          allow_failure: true
+              - poetry.lock
+              - pyproject.toml
 
 docs build:
     image: $CI_REGISTRY_IMAGE/nupe:backend
@@ -56,6 +47,24 @@ docs build:
         policy: push
         paths:
             - $DOCS_PATH
+
+dev_backend test:
+    image: $CI_REGISTRY_IMAGE/nupe:backend
+    stage: test
+    script: python manage.py test
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - manage.py
+              - nupe/**/*
+          allow_failure: true
+
+dev_backend check dependencies:
+    extends: dev_backend test
+    script: python manage.py check_vulnerabilities
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          allow_failure: true
 
 docs deploy:
     image: node
