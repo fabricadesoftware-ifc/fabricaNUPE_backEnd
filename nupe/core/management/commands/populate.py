@@ -12,7 +12,7 @@ class Command(BaseCommand):
     Popula o banco de dados com informações mínimas. Isso pode demorar alguns minutos.
 
     Raises:
-        CommandError: Caso algo não de certo durante a execução
+        CommandError: Algo de errado não está certo
     """
 
     help = "Popula o banco de dados com informações mínimas. Isso pode demorar alguns minutos."
@@ -26,8 +26,8 @@ class Command(BaseCommand):
             self.populate_academic_education()
             self.populate_institutions()
             self.stdout.write(self.style.SUCCESS("Tudo populado com sucesso! :D"))
-        except:  # noqa
-            raise CommandError("Alguma coisa deu errado.")
+        except CommandError:  # noqa
+            raise CommandError("Algo de errado não está certo")
 
     def populate_locations(self):
         """
