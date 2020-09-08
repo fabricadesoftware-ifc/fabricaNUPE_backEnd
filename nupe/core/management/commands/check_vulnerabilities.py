@@ -5,15 +5,16 @@ from django.core.management.base import BaseCommand, CommandError
 
 
 class Command(BaseCommand):
+    """
+    Verifica se há vulnerabilidades nas dependências do projeto, e caso tenha, imprime
+
+    Raises:
+        CommandError: Algo de errado não está certo
+    """
+
     FILENAME = "vulnerabilities.json"
 
     def handle(self, *args, **options):
-        """
-        Verifica se há vulnerabilidades nas dependências do projeto, e caso tenha, imprime
-
-        Raises:
-            CommandError: Algo de errado não está certo
-        """
         try:
             os.system(f"safety check --json -o {self.FILENAME}")
 
