@@ -39,6 +39,8 @@ dev_backend test:
 docs build:
     image: $CI_REGISTRY_IMAGE/nupe:backend
     stage: build
+    before_script:
+        - ./manage.py generate_swagger -o docs/api/schema.yaml
     script: make -C docs/ html
     artifacts:
         name: docs
