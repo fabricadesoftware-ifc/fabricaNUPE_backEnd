@@ -7,7 +7,7 @@ stages:
 variables:
     GIT_STRATEGY: fetch
     DOCS_PATH: docs/_build/html
-    DOCS_URL: nupe-documentation.surge.sh
+    DOCS_URL: http://nupe-documentation.surge.sh
 
 dev_backend_image push to container_registry:
     image:
