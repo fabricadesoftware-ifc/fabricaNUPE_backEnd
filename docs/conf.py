@@ -47,7 +47,7 @@ autodoc_default_options = {
     # "inherited-members": True,
 }
 
-# redoc
+# config redoc to autogenerate html schema api
 redoc = [
     {"name": "NuPe Documentação", "page": "pages/redoc_api", "spec": "api/schema.yaml", "embed": True},
 ]
