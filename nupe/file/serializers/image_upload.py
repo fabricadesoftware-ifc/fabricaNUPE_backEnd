@@ -1,28 +1,25 @@
-from rest_framework.serializers import CharField, ModelSerializer
+from rest_framework.serializers import ModelSerializer
 
 from nupe.file.models import ProfileImage
 
 
 class ProfileImageCreateSerializer(ModelSerializer):
     """
-    Recebe e valida as informações para então cadastrar ou atualizar uma foto de perfil
+    Recebe e valida as informações para então fazer o upload da foto de perfil
 
     Campos:
         id: identificador (somente leitura)
 
         image: objeto do tipo ImageField responsável por gerenciar o arquivo de imagem
 
-        url: url para visualizar a imagem (somente leitura)
+        attachment_id: identificador para fazer associação com outro objeto (somente leitura)
+
+        uploaded_at: data/hora do upload (somente leitura)
 
     """
 
-    url = CharField(source="image.url", read_only=True)
-
     class Meta:
         model = ProfileImage
-        fields = [
-            "id",
-            "image",
-            "url",
-        ]
+        fields = ["id", "image", "attachment_id", "uploaded_at"]
+        read_only_fields = ["attachment_id", "uploaded_at"]
         extra_kwargs = {"image": {"write_only": True}}

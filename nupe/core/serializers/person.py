@@ -1,8 +1,9 @@
-from rest_framework.serializers import CharField, ModelSerializer, ValidationError
+from rest_framework.serializers import CharField, ModelSerializer, SlugRelatedField, ValidationError
 from validate_docbr import CPF
 
 from nupe.core.models import Person
-from nupe.file.services.image_upload import ProfileImageService
+from nupe.file.models import ProfileImage
+from nupe.file.services import ImageUploadService
 from nupe.resources.const.messages.person import PERSON_INVALID_CPF_MESSAGE
 
 
@@ -47,7 +48,7 @@ class PersonDetailSerializer(ModelSerializer):
         profile_image: url da foto de perfil
     """
 
-    profile_image = CharField(source="profile_image.image.url", default=None)
+    profile_image = CharField(source="profile_image.url", default=None)
 
     class Meta:
         model = Person
@@ -82,8 +83,11 @@ class PersonCreateSerializer(ModelSerializer):
 
         contact: número do telefone
 
-        profile_image: identificador da foto de perfil (necessário fazer upload da imagem antes, para obter o id)
+        profile_image: atributo 'attachment_id' da model ProfileImage (necessário fazer upload da imagem antes
+        para obter o identificador de associação)
     """
+
+    profile_image = SlugRelatedField(slug_field="attachment_id", queryset=ProfileImage.objects.all())
 
     class Meta:
         model = Person
@@ -119,12 +123,9 @@ class PersonCreateSerializer(ModelSerializer):
         new_profile_image = validated_data.get("profile_image")
 
         if new_profile_image is not None:
-            updating_profile_image = new_profile_image.id != instance.profile_image.id
+            image_service = ImageUploadService()
 
-            if updating_profile_image:
-                profile_image_service = ProfileImageService()
-
-                # exclui a imagem de perfil antiga
-                profile_image_service.remove_file(profile_image=instance.profile_image)
+            # exclui a imagem de perfil antiga
+            image_service.remove_file(instance=instance.profile_image)
 
         return super().update(instance, validated_data)

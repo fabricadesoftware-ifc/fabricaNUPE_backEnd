@@ -5,16 +5,15 @@ from rest_framework.viewsets import GenericViewSet
 from nupe.file.models import ProfileImage
 from nupe.file.serializers import ProfileImageCreateSerializer
 
-# TODO adicionar endpoint para atualizar a imagem de perfil
-
 
 class ProfileImageViewSet(GenericViewSet, CreateModelMixin, DestroyModelMixin):
     """
-    create: upload a image into database
+    create: faz o upload da foto de perfil para o banco de dados
 
-    delete: remove a image from database
+    delete: remove a foto de perfil do banco de dados
     """
 
+    lookup_field = "attachment_id"
     queryset = ProfileImage.objects.all()
     serializer_class = ProfileImageCreateSerializer
     parser_classes = [MultiPartParser]

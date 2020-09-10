@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("file", "0001_add__image_upload"),
+        ("file", "0001_add__profile_image"),
         ("core", "0003_add__academic_education_campus__campus__institution__institution_campus"),
     ]
 
@@ -68,7 +68,11 @@ class Migration(migrations.Migration):
                 (
                     "profile_image",
                     models.OneToOneField(
-                        blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to="file.ProfileImage"
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="file.ProfileImage",
+                        help_text="O upload da imagem deve ser feito antes, para obter o atributo de associação",
                     ),
                 ),
                 ("created_at", models.DateTimeField(auto_now_add=True)),

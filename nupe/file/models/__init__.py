@@ -1,1 +1,1 @@
-from nupe.file.models.image_upload import ProfileImage
+from nupe.file.models.image_upload import Image, ProfileImage

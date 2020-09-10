@@ -1,15 +1,17 @@
-from os import remove
+import os
 
-from nupe.file.models import ProfileImage
+from nupe.file.models import Image
 
 
-class ProfileImageService:
-    def remove_file(self, profile_image: ProfileImage):
+class ImageUploadService:
+    def remove_file(self, instance):
         """
-        Remove o arquivo da imagem de perfil do diretório
+        Remove a imagem do diretório
 
         Argumentos:
-            profile_image (ProfileImage): instância de ProfileImage que contém o path
+            instance (Image): instância da model Image
         """
-        if profile_image:
-            remove(profile_image.image.path)
+        if isinstance(instance, Image):
+            os.remove(instance.image.path)
+        else:
+            raise ValueError(Image)

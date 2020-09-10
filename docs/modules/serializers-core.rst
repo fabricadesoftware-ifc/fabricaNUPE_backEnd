@@ -37,3 +37,11 @@ Serializer para Cadastrar um Estudante
 ++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.student.StudentCreateSerializer
+
+Módulo de Usuário
+-----------------
+
+Serializer para Retornar Informações do Usuário Logado
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.user.CurrentUserSerializer

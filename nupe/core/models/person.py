@@ -38,6 +38,8 @@ class Person(SafeDeleteModel):
 
         contact: número de contato (DDD+Número)
 
+        profile_image: url de acesso para a foto de perfil
+
         created_at: data do cadastro
 
         updated_at: data da última atualização das informações
@@ -81,7 +83,13 @@ class Person(SafeDeleteModel):
         blank=True,
         help_text="DDD+Número",
     )
-    profile_image = models.OneToOneField("file.ProfileImage", on_delete=models.SET_NULL, null=True, blank=True)
+    profile_image = models.OneToOneField(
+        "file.ProfileImage",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text="O upload da imagem deve ser feito antes, para obter o atributo de associação",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 

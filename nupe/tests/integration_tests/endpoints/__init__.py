@@ -3,3 +3,4 @@ from nupe.tests.integration_tests.endpoints.image_upload import ProfileImageAPIT
 from nupe.tests.integration_tests.endpoints.oauth2 import Oauth2APITestCase
 from nupe.tests.integration_tests.endpoints.person import PersonAPITestCase
 from nupe.tests.integration_tests.endpoints.student import StudentAPITestCase
+from nupe.tests.integration_tests.endpoints.user import UserAPITestCase
