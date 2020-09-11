@@ -83,11 +83,11 @@ class CampusListSerializer(ModelSerializer):
         Raises:
             NotImplementedError: Usar 'CampusSerializer' ao invés de 'CampusListSerializer'
         """
-        raise NotImplementedError("Usar 'CampusSerializer' ao invés de 'CampusListSerializer'")
+        raise NotImplementedError("Usar 'CampusSerializer' ao invés de 'CampusListSerializer'")  # pragma: no cover
 
     def update(self, instance, validated_data):
         """
         Raises:
             NotImplementedError: Usar 'CampusSerializer' ao invés de 'CampusListSerializer'
         """
-        raise NotImplementedError("Usar 'CampusSerializer' ao invés de 'CampusListSerializer'")
+        raise NotImplementedError("Usar 'CampusSerializer' ao invés de 'CampusListSerializer'")  # pragma: no cover

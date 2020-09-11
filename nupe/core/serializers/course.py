@@ -24,11 +24,11 @@ class AcademicEducationSerializer(ModelSerializer):
         Raises:
             NotImplementedError: Serializer somente leitura
         """
-        raise NotImplementedError("Serializer somente leitura")
+        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
 
     def update(self, instance, validated_data):
         """
         Raises:
             NotImplementedError: Serializer somente leitura
         """
-        raise NotImplementedError("Serializer somente leitura")
+        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
