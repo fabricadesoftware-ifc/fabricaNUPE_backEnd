@@ -7,15 +7,15 @@ from nupe.core.serializers import PersonCreateSerializer, PersonDetailSerializer
 
 class PersonViewSet(ModelViewSet):
     """
-    list: return all persons in database
+    list: retorna todas as pessoas do banco de dados
 
-    retrieve: return a specific person from database
+    retrieve: retorna uma pessoa especifica do banco de dados
 
-    create: create a person in database
+    create: cadastra uma pessoa no banco de dados
 
-    delete: remove a person from database
+    destroy: exclui uma pessoa do banco de dados
 
-    partial_update: update one or more person attributes
+    partial_update: atualiza um ou mais atributos de uma pessoa
     """
 
     queryset = Person.objects.all()

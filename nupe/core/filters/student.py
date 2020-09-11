@@ -8,11 +8,11 @@ class StudentFilter(FilterSet):
     Filtros para se utilizar nas requisições do endpoint de Student
 
     Exemplo:
-        /api/v1/person?foo=xyz
+        /api/v1/student?foo=xyz
 
         ou
 
-        /api/v1/person?foo=xyz&bar=abc
+        /api/v1/student?foo=xyz&bar=abc
 
     Parâmetros:
         ingress_date_before: menor a data fornecida (yyyy-mm-dd)

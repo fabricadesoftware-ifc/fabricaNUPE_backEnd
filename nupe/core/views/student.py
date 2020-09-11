@@ -7,15 +7,15 @@ from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializ
 
 class StudentViewSet(ModelViewSet):
     """
-    list: return all students in database
+    list: retorna todos os estudantes do banco de dados
 
-    retrieve: return a specific student from database
+    retrieve: retorna um estudante especifico do banco de dados
 
-    create: create a student in database
+    create: cadastra um estudante no banco de dados
 
-    delete: remove a student from database
+    destroy: exclui um estudante do banco de dados
 
-    partial_update: update one or more student attributes
+    partial_update: atualiza um ou mais atributos de um estudante
     """
 
     queryset = Student.objects.all()

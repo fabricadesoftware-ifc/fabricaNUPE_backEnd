@@ -21,47 +21,223 @@ securityDefinitions:
 security:
   - NUPE Authentication: []
 paths:
-  /image/:
-    post:
-      operationId: image_create
-      description: upload a image into database
+  /campus/:
+    get:
+      operationId: campus_list
+      description: retorna todos os campus do banco de dados
       parameters:
-        - name: image
-          in: formData
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/CampusList'
+      tags:
+        - campus
+    post:
+      operationId: campus_create
+      description: cadastrar um campus no banco de dados
+      parameters:
+        - name: data
+          in: body
           required: true
-          type: file
+          schema:
+            $ref: '#/definitions/Campus'
       responses:
         '201':
           description: ''
           schema:
-            $ref: '#/definitions/ProfileImageCreate'
-      consumes:
-        - multipart/form-data
+            $ref: '#/definitions/Campus'
       tags:
-        - image
+        - campus
     parameters: []
-  /image/{id}/:
+  /campus/{name__iexact}/:
+    get:
+      operationId: campus_read
+      description: retorna um campus especifico do banco de dados
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Campus'
+      tags:
+        - campus
+    patch:
+      operationId: campus_partial_update
+      description: atualiza um ou mais atributos de um campus
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Campus'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Campus'
+      tags:
+        - campus
     delete:
-      operationId: image_delete
-      description: remove a image from database
+      operationId: campus_delete
+      description: exclui um campus do banco de dados
       parameters: []
       responses:
         '204':
           description: ''
-      consumes:
-        - multipart/form-data
       tags:
-        - image
+        - campus
     parameters:
-      - name: id
+      - name: name__iexact
         in: path
-        description: A unique integer value identifying this profile image.
         required: true
-        type: integer
+        type: string
+  /institution/:
+    get:
+      operationId: institution_list
+      description: "retorna todas as institui\xE7\xF5es do banco de dados"
+      parameters:
+        - name: campus_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Institution'
+      tags:
+        - institution
+    post:
+      operationId: institution_create
+      description: "cadastra uma institui\xE7\xE3o no banco de dados"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Institution'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Institution'
+      tags:
+        - institution
+    parameters: []
+  /institution/{name__iexact}/:
+    get:
+      operationId: institution_read
+      description: "retorna uma institui\xE7\xE3o especifica do banco de dados"
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Institution'
+      tags:
+        - institution
+    patch:
+      operationId: institution_partial_update
+      description: "atualiza um ou mais atributos de uma institui\xE7\xE3o"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Institution'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Institution'
+      tags:
+        - institution
+    delete:
+      operationId: institution_delete
+      description: "exclui uma institui\xE7\xE3o do banco de dados"
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - institution
+    parameters:
+      - name: name__iexact
+        in: path
+        required: true
+        type: string
   /person/:
     get:
       operationId: person_list
-      description: return all persons in database
+      description: retorna todas as pessoas do banco de dados
       parameters:
         - name: gender
           in: query
@@ -115,7 +291,7 @@ paths:
         - person
     post:
       operationId: person_create
-      description: create a person in database
+      description: cadastra uma pessoa no banco de dados
       parameters:
         - name: data
           in: body
@@ -133,7 +309,7 @@ paths:
   /person/{cpf}/:
     get:
       operationId: person_read
-      description: return a specific person from database
+      description: retorna uma pessoa especifica do banco de dados
       parameters: []
       responses:
         '200':
@@ -144,7 +320,7 @@ paths:
         - person
     patch:
       operationId: person_partial_update
-      description: update one or more person attributes
+      description: atualiza um ou mais atributos de uma pessoa
       parameters:
         - name: data
           in: body
@@ -160,7 +336,7 @@ paths:
         - person
     delete:
       operationId: person_delete
-      description: remove a person from database
+      description: exclui uma pessoa do banco de dados
       parameters: []
       responses:
         '204':
@@ -173,10 +349,48 @@ paths:
         description: "Somente n\xFAmeros"
         required: true
         type: string
+  /profile_image/:
+    post:
+      operationId: profile_image_create
+      description: faz o upload da foto de perfil para o banco de dados
+      parameters:
+        - name: image
+          in: formData
+          required: true
+          type: file
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/ProfileImageCreate'
+      consumes:
+        - multipart/form-data
+      tags:
+        - profile_image
+    parameters: []
+  /profile_image/{attachment_id}/:
+    delete:
+      operationId: profile_image_delete
+      description: remove a foto de perfil do banco de dados
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes:
+        - multipart/form-data
+      tags:
+        - profile_image
+    parameters:
+      - name: attachment_id
+        in: path
+        description: "Esse atributo \xE9 usado para fazer associa\xE7\xE3o com outro\
+          \ objeto"
+        required: true
+        type: string
   /student/:
     get:
       operationId: student_list
-      description: return all students in database
+      description: retorna todos os estudantes do banco de dados
       parameters:
         - name: graduated
           in: query
@@ -240,7 +454,7 @@ paths:
         - student
     post:
       operationId: student_create
-      description: create a student in database
+      description: cadastra um estudante no banco de dados
       parameters:
         - name: data
           in: body
@@ -258,7 +472,7 @@ paths:
   /student/{registration}/:
     get:
       operationId: student_read
-      description: return a specific student from database
+      description: retorna um estudante especifico do banco de dados
       parameters: []
       responses:
         '200':
@@ -269,7 +483,7 @@ paths:
         - student
     patch:
       operationId: student_partial_update
-      description: update one or more student attributes
+      description: atualiza um ou mais atributos de um estudante
       parameters:
         - name: data
           in: body
@@ -285,7 +499,7 @@ paths:
         - student
     delete:
       operationId: student_delete
-      description: remove a student from database
+      description: exclui um estudante do banco de dados
       parameters: []
       responses:
         '204':
@@ -301,7 +515,7 @@ paths:
   /user/:
     get:
       operationId: user_list
-      description: ''
+      description: "*Endpoint em constru\xE7\xE3o*"
       parameters:
         - name: search
           in: query
@@ -340,30 +554,30 @@ paths:
               results:
                 type: array
                 items:
-                  $ref: '#/definitions/UserCurrent'
+                  $ref: '#/definitions/CurrentUser'
       tags:
         - user
     post:
       operationId: user_create
-      description: ''
+      description: "*Endpoint em constru\xE7\xE3o*"
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UserCurrent'
+            $ref: '#/definitions/CurrentUser'
       responses:
         '201':
           description: ''
           schema:
-            $ref: '#/definitions/UserCurrent'
+            $ref: '#/definitions/CurrentUser'
       tags:
         - user
     parameters: []
   /user/current/:
     get:
       operationId: user_current
-      description: ''
+      description: "retorna informa\xE7\xF5es sobre o usu\xE1rio logado atual"
       parameters:
         - name: search
           in: query
@@ -384,57 +598,57 @@ paths:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/UserCurrent'
+            $ref: '#/definitions/CurrentUser'
       tags:
         - user
     parameters: []
   /user/{id}/:
     get:
       operationId: user_read
-      description: ''
+      description: "*Endpoint em constru\xE7\xE3o*"
       parameters: []
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/UserCurrent'
+            $ref: '#/definitions/CurrentUser'
       tags:
         - user
     put:
       operationId: user_update
-      description: ''
+      description: "*Endpoint em constru\xE7\xE3o*"
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UserCurrent'
+            $ref: '#/definitions/CurrentUser'
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/UserCurrent'
+            $ref: '#/definitions/CurrentUser'
       tags:
         - user
     patch:
       operationId: user_partial_update
-      description: ''
+      description: "*Endpoint em constru\xE7\xE3o*"
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UserCurrent'
+            $ref: '#/definitions/CurrentUser'
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/UserCurrent'
+            $ref: '#/definitions/CurrentUser'
       tags:
         - user
     delete:
       operationId: user_delete
-      description: ''
+      description: "*Endpoint em constru\xE7\xE3o*"
       parameters: []
       responses:
         '204':
@@ -448,22 +662,71 @@ paths:
         required: true
         type: integer
 definitions:
-  ProfileImageCreate:
+  CampusList:
+    required:
+      - name
+      - location
     type: object
     properties:
       id:
         title: ID
         type: integer
         readOnly: true
-      image:
-        title: Image
+      name:
+        title: Name
         type: string
+        pattern: ^[a-z A-Z]*$
+        maxLength: 50
+        minLength: 1
+      location:
+        title: Location
+        type: integer
+  Campus:
+    required:
+      - name
+      - locations
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
         readOnly: true
-        format: uri
-      url:
-        title: Url
+      name:
+        title: Name
         type: string
+        pattern: ^[a-z A-Z]*$
+        maxLength: 50
+        minLength: 1
+      locations:
+        title: Locations
+        type: string
+        minLength: 1
+      institutions:
+        type: array
+        items:
+          type: integer
         readOnly: true
+        uniqueItems: true
+      academic_education:
+        type: array
+        items:
+          type: integer
+        readOnly: true
+        uniqueItems: true
+  Institution:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        pattern: ^[a-z A-Z]*$
+        maxLength: 50
         minLength: 1
   PersonList:
     required:
@@ -499,6 +762,7 @@ definitions:
       - cpf
       - birthday_date
       - gender
+      - profile_image
     type: object
     properties:
       id:
@@ -543,8 +807,7 @@ definitions:
         x-nullable: true
       profile_image:
         title: Profile image
-        type: integer
-        x-nullable: true
+        type: string
   PersonDetail:
     required:
       - first_name
@@ -598,6 +861,30 @@ definitions:
         title: Profile image
         type: string
         minLength: 1
+  ProfileImageCreate:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      image:
+        title: Image
+        type: string
+        readOnly: true
+        format: uri
+      attachment_id:
+        title: Attachment id
+        description: "Esse atributo \xE9 usado para fazer associa\xE7\xE3o com outro\
+          \ objeto"
+        type: string
+        readOnly: true
+        minLength: 1
+      uploaded_at:
+        title: Uploaded at
+        type: string
+        format: date-time
+        readOnly: true
   StudentList:
     required:
       - registration
@@ -705,7 +992,7 @@ definitions:
       graduated:
         title: Graduated
         type: boolean
-  UserCurrent:
+  CurrentUser:
     type: object
     properties:
       id:

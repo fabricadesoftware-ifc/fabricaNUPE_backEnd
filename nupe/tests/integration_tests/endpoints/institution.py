@@ -33,7 +33,7 @@ class InstitutionAPITestCase(APITestCase):
         institution = baker.make(Institution)  # cria uma instituição no banco para detalhar suas informações
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.view_institution"])
-        url = reverse("institution-detail", args=[institution.name])
+        url = reverse("institution-detail", args=[institution.id])
 
         response = client.get(path=url)
 
@@ -52,14 +52,14 @@ class InstitutionAPITestCase(APITestCase):
         response = client.post(path=url, data=institution)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
-        self.assertEqual(response.data.get("name"), institution.get("name").title())
+        self.assertEqual(response.data.get("name"), institution.get("name"))
         self.assertEqual(Institution.objects.count(), 1)  # deve ser criado no banco de dados
 
     def test_partial_update_with_permission(self):
         institution = baker.make(Institution)  # cria uma instituição no banco para poder atualizar suas informações
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_institution"])
-        url = reverse("institution-detail", args=[institution.name])
+        url = reverse("institution-detail", args=[institution.id])
 
         new_name = "name updated"
         institution_update = {
@@ -71,13 +71,13 @@ class InstitutionAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve ser atualizado no banco
-        self.assertEqual(Institution.objects.get(pk=institution.id).name, new_name.title())
+        self.assertEqual(Institution.objects.get(pk=institution.id).name, new_name)
 
     def test_destroy_with_permission(self):
         institution = baker.make(Institution)  # cria uma instituição no banco para poder excluir
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.delete_institution"])
-        url = reverse("institution-detail", args=[institution.name])
+        url = reverse("institution-detail", args=[institution.id])
 
         response = client.delete(path=url)
 
@@ -105,7 +105,7 @@ class InstitutionAPITestCase(APITestCase):
         institution = baker.make(Institution)
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_institution"])
-        url = reverse("institution-detail", args=[institution.name])
+        url = reverse("institution-detail", args=[institution.id])
 
         invalid_name = "1nv@lid"
         institution_data = {
@@ -202,7 +202,7 @@ class CampusAPITestCase(APITestCase):
         campus = baker.make(Campus)  # cria um campus no banco para detalhar suas informações
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.view_campus"])
-        url = reverse("campus-detail", args=[campus.name])
+        url = reverse("campus-detail", args=[campus.id])
 
         response = client.get(path=url)
 
@@ -226,14 +226,14 @@ class CampusAPITestCase(APITestCase):
         response = client.post(path=url, data=campus)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
-        self.assertEqual(response.data.get("name"), campus.get("name").title())
+        self.assertEqual(response.data.get("name"), campus.get("name"))
         self.assertEqual(Campus.objects.count(), 1)  # deve ser criado no banco de dados
 
     def test_partial_update_with_permission(self):
         campus = baker.make(Campus)  # cria um campus no banco para poder atualizar suas informações
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_campus"])
-        url = reverse("campus-detail", args=[campus.name])
+        url = reverse("campus-detail", args=[campus.id])
 
         new_name = "name updated"
         campus_update = {
@@ -245,13 +245,13 @@ class CampusAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve ser atualizado no banco
-        self.assertEqual(Campus.objects.get(pk=campus.id).name, new_name.title())
+        self.assertEqual(Campus.objects.get(pk=campus.id).name, new_name)
 
     def test_destroy_with_permission(self):
         campus = baker.make(Campus)  # cria um campus no banco para poder excluir
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.delete_campus"])
-        url = reverse("campus-detail", args=[campus.name])
+        url = reverse("campus-detail", args=[campus.id])
 
         response = client.delete(path=url)
 
@@ -279,7 +279,7 @@ class CampusAPITestCase(APITestCase):
         campus = baker.make(Campus)
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_campus"])
-        url = reverse("campus-detail", args=[campus.name])
+        url = reverse("campus-detail", args=[campus.id])
 
         invalid_name = "1nv@lid"
         campus_data = {
