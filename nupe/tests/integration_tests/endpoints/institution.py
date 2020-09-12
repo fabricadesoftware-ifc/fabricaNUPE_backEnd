@@ -162,7 +162,7 @@ class InstitutionAPITestCase(APITestCase):
     def test_retrieve_not_found_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["core.view_institution"])
 
-        url = reverse("institution-detail", args=[99])  # Não existe no banco de teste porque inicia-se vazio
+        url = reverse("institution-detail", args=[99])  # não existe no banco de teste porque inicia-se vazio
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe
@@ -336,7 +336,7 @@ class CampusAPITestCase(APITestCase):
     def test_retrieve_not_found_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["core.view_campus"])
 
-        url = reverse("campus-detail", args=[99])  # Não existe no banco de teste porque inicia-se vazio
+        url = reverse("campus-detail", args=[99])  # não existe no banco de teste porque inicia-se vazio
         response = client.get(path=url)
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)  # não deve encontrar porque não existe

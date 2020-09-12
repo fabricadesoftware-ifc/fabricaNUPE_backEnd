@@ -9,7 +9,7 @@ from nupe.core.models import Campus, City, Course, Grade, Institution, Location,
 
 class Command(BaseCommand):
     """
-    Popula o banco de dados com informações mínimas. Isso pode demorar alguns minutos.
+    Popula o banco de dados com informações mínimas. Isso pode demorar alguns minutos (até 30min).
 
     Raises:
         CommandError: Algo de errado não está certo

@@ -71,3 +71,21 @@ Serializer para Listar e Detalhar uma Formação Acadêmica
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.course.AcademicEducationSerializer
+
+Módulo de Localização
+---------------------
+
+Serializer para Listar e Detalhar uma Localização
++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.location.LocationSerializer
+
+Serializer para Listar e Detalhar uma Cidade
+++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.location.CitySerializer
+
+Serializer para Listar e Detalhar um Estado
++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.location.StateSerializer

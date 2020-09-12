@@ -128,7 +128,7 @@ class StudentAPITestCase(APITestCase):
         client = create_user_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
 
-        invalid_pk_person = 99  # Não existe no banco de teste porque inicia-se vazio
+        invalid_pk_person = 99  # não existe no banco de teste porque inicia-se vazio
         student = {
             "registration": REGISTRATION,
             "person": invalid_pk_person,
