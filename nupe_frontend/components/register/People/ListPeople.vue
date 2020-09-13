@@ -1,13 +1,13 @@
 <template>
   <div>
-    <label class="title">TODOS OS USERS</label>
-    <b-table :data="allUsers" :columns="columns"></b-table>
+    <label class="title">Todas as Person</label>
+    <b-table :data="allPeople" :columns="columns"></b-table>
   </div>
 </template>
 <script>
 export default {
   props: {
-    allUsers: {
+    allPeople: {
       type: Array,
       required: true,
     },
@@ -23,6 +23,26 @@ export default {
         {
           field: "last_name",
           label: "Last Name",
+          searchable: true,
+        },
+        {
+          field: "cpf",
+          label: "CPF",
+          searchable: true,
+        },
+        {
+          field: "birthday_date",
+          label: "Data de Aniversario",
+          searchable: true,
+        },
+        {
+          field: "gender",
+          label: "Genero",
+          searchable: true,
+        },
+        {
+          field: "contact",
+          label: "Número",
           searchable: true,
         },
         {

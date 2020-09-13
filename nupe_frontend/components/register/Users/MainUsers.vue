@@ -3,7 +3,7 @@
     <!--Formulario para usuarios-->
     <CreateUsers />
     <hr />
-    <ListUsers />
+    <ListUsers :allUsers="allUsers" />
   </div>
 </template>
 <script>
@@ -14,6 +14,22 @@ export default {
   components: {
     CreateUsers,
     ListUsers,
+  },
+  data() {
+    return {
+      allUsers: [
+        {
+          id: 1,
+          first_name: "teste",
+          last_name: "filtro",
+        },
+        {
+          id: 2,
+          first_name: "teste 2",
+          last_name: "filtro 2",
+        },
+      ],
+    };
   },
 };
 </script>
