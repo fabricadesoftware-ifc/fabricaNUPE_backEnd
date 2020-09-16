@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="mySpace">
     <CreateStudents />
     <SelectStudent />
-    <ListStudents />
+    <ListStudents :allStudents="allStudents" />
   </div>
 </template>
 <script>
@@ -15,5 +15,15 @@ export default {
     ListStudents,
     SelectStudent,
   },
+  data() {
+    return {
+      allStudents: [],
+    };
+  },
 };
 </script>
+<style scoped>
+.mySpace {
+  margin: 2%;
+}
+</style>

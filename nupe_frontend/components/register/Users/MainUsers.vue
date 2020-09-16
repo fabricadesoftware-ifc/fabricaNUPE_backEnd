@@ -23,38 +23,7 @@ export default {
   },
   data() {
     return {
-      allUsers: [
-        {
-          id: 1,
-          first_name: "teste 1",
-          last_name: "filtro 1",
-        },
-        {
-          id: 2,
-          first_name: "teste 2",
-          last_name: "filtro 2",
-        },
-        {
-          id: 3,
-          first_name: "teste 3",
-          last_name: "filtro 3",
-        },
-        {
-          id: 4,
-          first_name: "teste 4",
-          last_name: "filtro 4",
-        },
-        {
-          id: 5,
-          first_name: "teste 5",
-          last_name: "filtro 5",
-        },
-        {
-          id: 6,
-          first_name: "teste 6",
-          last_name: "filtro 6",
-        },
-      ],
+      allUsers: [],
     };
   },
 };
