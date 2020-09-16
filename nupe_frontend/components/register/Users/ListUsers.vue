@@ -1,7 +1,7 @@
 <template>
   <div>
     <label class="title">TODOS OS USERS</label>
-    <b-table :data="allUsers" :columns="columns"></b-table>
+    <b-table :data="allUsers" :columns="columns" :sticky-header="true"></b-table>
   </div>
 </template>
 <script>

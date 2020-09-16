@@ -1,7 +1,7 @@
 <template>
   <div>
     <label class="title">Todas as Person</label>
-    <b-table :data="allPeople" :columns="columns"></b-table>
+    <b-table :data="allPeople" :columns="columns" :sticky-header="true"></b-table>
   </div>
 </template>
 <script>

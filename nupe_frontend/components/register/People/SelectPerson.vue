@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <label class="title">Criar Person</label>
+    <label class="title">Editar Person</label>
     <b-field label-position="inside" label="Primeiro Nome">
       <b-input></b-input>
     </b-field>
@@ -32,7 +32,11 @@
     <b-field label-position="inside" label="Número de Telefone">
       <b-input placeholder="(ddd)nnnnn-nnnn"></b-input>
     </b-field>
-    <b-button type="is-dark" expanded>CRIAR</b-button>
+
+    <div class="buttons">
+      <b-button type="is-dark">EDITAR</b-button>
+      <b-button type="is-danger">DELETAR</b-button>
+    </div>
   </div>
 </template>
 <script>
