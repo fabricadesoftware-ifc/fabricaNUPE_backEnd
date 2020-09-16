@@ -2,6 +2,7 @@ version: "3"
 
 networks:
     dev_backend:
+    dev_frontend:
 
 services:
     dev_backend:
@@ -19,3 +20,22 @@ services:
         volumes:
             - ./:/usr/nupe
         restart: always
+    dev_frontend:
+        container_name: dev_frontend
+        build:
+            context: .
+            dockerfile: dev_frontend.Dockerfile
+        image: dev_frontend:1.0
+        command: npm run dev
+        environment:
+            - API_URL=http://localhost/
+        networks:
+            - dev_frontend
+        ports:
+            - 3000:3000
+        volumes:
+            - ./nupe_frontend/:/usr/nupe
+            - /usr/nupe/node_modules/ # cria vazio
+        restart: always
+        depends_on:
+            - dev_backend

@@ -287,6 +287,8 @@ npm-debug.log
 # Scrapy stuff:
 
 # Sphinx documentation
+_build
+_templates
 
 # PyBuilder
 
@@ -341,9 +343,5 @@ yarn-error.log
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,django,node,vuejs,nuxtjs
 
-# Sphinx
-_build
-_templates
-
-# Check Vulnerabilities
-vulnerabilities.json
+# devcontainer
+.devcontainer/

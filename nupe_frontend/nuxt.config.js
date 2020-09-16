@@ -8,25 +8,25 @@ export default {
       {
         hid: "description",
         name: "description",
-        content: "NuPe - Fábrica de Software"
-      }
+        content: "NuPe - Fábrica de Software",
+      },
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
       { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
       {
         href: "https://fonts.googleapis.com/css2?family=Nunito&display=swap",
-        rel: "stylesheet"
-      }
+        rel: "stylesheet",
+      },
     ],
     htmlAttrs: {
       class: [
         "has-aside-left",
         "has-aside-mobile-transition",
         "has-navbar-fixed-top",
-        "has-aside-expanded"
-      ]
-    }
+        "has-aside-expanded",
+      ],
+    },
   },
 
   loading: { color: "#fff" },
@@ -40,71 +40,71 @@ export default {
     "@nuxtjs/toast",
     "@nuxtjs/axios",
     "@nuxtjs/auth",
-    ["nuxt-buefy", { css: false, materialDesignIcons: true }]
+    ["nuxt-buefy", { css: false, materialDesignIcons: true }],
   ],
 
   auth: {
     localStorage: false,
     cookie: {
       options: {
-        secure: process.env.NODE_ENV === "production"
-      }
+        secure: process.env.NODE_ENV === "production",
+      },
     },
 
     strategies: {
       customStrategy: {
         _scheme: "~/plugins/schemes/customAuthScheme",
-        client_id: "LXGVuefXjuwFPjyIyDXb1ljIapBlqneW18txPALY",
+        client_id: "eHvdvFWYnyiQyC09WLR7dT9vWbXSAeK1ymd3yNsd", // deve manter sempre atualizado
         client_secret:
-          "Q0KXMfbjk7iHcbImzyAMjqYicEXPixVntTRjCZSCl4rMmzrbxBVerrRSGisqXVggudkR6zhJHCCRrUTw3ud5ZY6aKuGHU7eVLb5j31HXIUPxVfkRpryTEQilW6mvOug5",
+          "Fd4MMY00L9CBIJgCskHwOGBuL87mQkeMZKCJ0UH8pdDs7eYGQdP6F4GnWPmnSEaf7CeusLfqpJIuMg9xz7Wu5MDXdyzwjMC4mIGswmJx85tiLtMWWOlTBjtjVBpIKIND", // deve manter sempre atualizado
         token: {
-          property: "access"
+          property: "access",
         },
         refreshToken: {
           property: "refresh",
           data: "refresh",
-          maxAge: 60 * 60 * 24 * 30
+          maxAge: 60 * 60 * 24 * 30,
         },
         user: {
-          property: "user"
+          property: "user",
         },
         endpoints: {
           login: {
             url: "/oauth/token/",
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
             },
             method: "post",
             propertyName: "access_token",
-            altProperty: "refresh_token"
+            altProperty: "refresh_token",
           },
           refresh: {
             url: "/api/v1/refresh_token/",
-            method: "post"
+            method: "post",
             //   propertyName: ''
           },
           logout: {},
           user: {
             url: "/api/v1/user/current/",
             method: "get",
-            propertyName: false
-          }
-        }
-      }
+            propertyName: false,
+          },
+        },
+      },
     },
     resetOnError: true,
     redirect: {
       login: "/login",
-      logout: "/login"
-    }
+      logout: "/login",
+    },
   },
 
   router: {
-    middleware: ["auth"]
+    middleware: ["auth"],
   },
 
   axios: {
-    baseURL: "http://127.0.0.1:80/"
+    baseURL: process.env.API_URL, // não alterar em modo de desenvolvimento
     // withCredentials: true,
     // crossdomain: true
   },
@@ -120,19 +120,19 @@ export default {
         message: "Operação realizada com sucesso",
         options: {
           type: "success",
-          icon: "check"
-        }
+          icon: "check",
+        },
       },
       {
         name: "defaultError",
-        message: payload =>
+        message: (payload) =>
           !payload.msg ? "Oops.. Erro inesperado" : payload.msg,
         options: {
           type: "error",
-          icon: "times"
-        }
-      }
-    ]
+          icon: "times",
+        },
+      },
+    ],
   },
 
   /*
@@ -144,6 +144,6 @@ export default {
      */
     extractCSS: true,
     transpile: ["@nuxtjs/auth"],
-    extend(config, ctx) {}
-  }
+    extend(config, ctx) {},
+  },
 };

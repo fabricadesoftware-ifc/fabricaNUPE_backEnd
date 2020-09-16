@@ -15,5 +15,10 @@ RUN apt-get update && apt-get install git build-essential -y && \
 COPY poetry.lock pyproject.toml /usr/nupe/
 RUN poetry install --no-root
 
+# instala os git hooks
+COPY .pre-commit-config.yaml /usr/nupe
+COPY .git /usr/nupe/.git
+RUN pre-commit install -t pre-commit -t pre-push
+
 COPY nupe /usr/nupe/nupe
 RUN poetry install
