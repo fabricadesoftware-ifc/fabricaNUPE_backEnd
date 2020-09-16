@@ -27,15 +27,14 @@ services:
             dockerfile: dev_frontend.Dockerfile
         image: dev_frontend:1.0
         command: npm run dev
-        environment:
-            - API_URL=http://localhost/
+        env_file: dev_frontend.env
         networks:
             - dev_frontend
         ports:
             - 3000:3000
         volumes:
             - ./nupe_frontend/:/usr/nupe
-            - /usr/nupe/node_modules/ # cria vazio
+            - /usr/nupe/node_modules/ # https://stackoverflow.com/questions/29181032/add-a-volume-to-docker-but-exclude-a-sub-folder
         restart: always
         depends_on:
             - dev_backend

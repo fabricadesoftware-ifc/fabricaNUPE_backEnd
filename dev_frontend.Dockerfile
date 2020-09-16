@@ -3,5 +3,8 @@ LABEL mantainer="Luis Guerreiro <luiscvlh11@gmail.com>"
 
 WORKDIR /usr/nupe
 
+ENV API_URL=http://localhost/ \
+    NUXT_MODE=spa
+
 COPY nupe_frontend /usr/nupe
-RUN npm install && npm run build
+RUN npm install

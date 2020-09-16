@@ -1,5 +1,5 @@
 export default {
-  mode: "universal",
+  mode: process.env.NUXT_MODE,
   head: {
     title: "NuPe - Fábrica de Software",
     meta: [
@@ -144,6 +144,6 @@ export default {
      */
     extractCSS: true,
     transpile: ["@nuxtjs/auth"],
-    extend(config, ctx) {},
+    extend(config, ctx) { },
   },
 };

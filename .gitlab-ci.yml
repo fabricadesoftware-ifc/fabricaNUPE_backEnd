@@ -8,6 +8,8 @@ variables:
     GIT_STRATEGY: fetch
     DOCS_PATH: docs/_build/html
     DOCS_URL: http://nupe-documentation.surge.sh
+    DIST_PATH: nupe_frontend/dist
+    DIST_URL: http://nupe-frontend.surge.sh
 
 dev_backend_image push to container_registry:
     image:
@@ -26,6 +28,18 @@ dev_backend_image push to container_registry:
               - dev_backend.Dockerfile
               - poetry.lock
               - pyproject.toml
+
+dev_frontend_image push to container_registry:
+    extends: dev_backend_image push to container_registry
+    variables:
+        IMAGE_TAG: $CI_REGISTRY_IMAGE/nupe:frontend
+    script: /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dev_frontend.Dockerfile --destination $IMAGE_TAG
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - dev_frontend.Dockerfile
+              - nupe_frontend/package-lock.json
+              - nupe_frontend/package.json
 
 docs build:
     image: $CI_REGISTRY_IMAGE/nupe:backend
@@ -86,3 +100,33 @@ docs deploy:
         url: $DOCS_URL
     needs:
         - docs build
+
+dev_frontend build:
+    image: $CI_REGISTRY_IMAGE/nupe:frontend
+    stage: build
+    script: npm run build
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - nupe_frontend/**/*
+    cache:
+        key: dev_frontend build
+        policy: push
+        paths:
+            - $DIST_PATH
+
+dev_frontend deploy:
+    extends: docs deploy
+    script: surge -p $DIST_PATH -d $DIST_URL
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - nupe_frontend/**/*
+    cache:
+        key: dev_frontend build
+        policy: pull
+    environment:
+        name: frontend-nupe
+        url: $DIST_URL
+    needs:
+        - dev_frontend build
