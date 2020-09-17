@@ -104,11 +104,13 @@ docs deploy:
 dev_frontend build:
     image: $CI_REGISTRY_IMAGE/nupe:frontend
     stage: build
-    script: npm run --prefix nupe_frontend/ build
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - nupe_frontend/**/*
+    before_script:
+        - mkdir nupe_frontend/node_modules/
+    script: npm run build
+    # rules:
+    #     - if: $CI_COMMIT_BRANCH == "develop"
+    #       changes:
+    #           - nupe_frontend/**/*
     cache:
         key: dev_frontend build
         policy: push
@@ -118,10 +120,10 @@ dev_frontend build:
 dev_frontend deploy:
     extends: docs deploy
     script: surge -p $DIST_PATH -d $DIST_URL
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - nupe_frontend/**/*
+    # rules:
+    #     - if: $CI_COMMIT_BRANCH == "develop"
+    #       changes:
+    #           - nupe_frontend/**/*
     cache:
         key: dev_frontend build
         policy: pull
