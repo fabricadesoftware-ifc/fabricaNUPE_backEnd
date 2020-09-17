@@ -88,10 +88,10 @@ docs deploy:
     before_script:
         - npm install -g surge
     script: surge -p $DOCS_PATH -d $DOCS_URL
-    # rules:
-    #     - if: $CI_COMMIT_BRANCH == "develop"
-    #       changes:
-    #           - docs/**/*
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - docs/**/*
     cache:
         key: docs build
         policy: pull
@@ -119,8 +119,10 @@ dev_frontend build:
             - $DIST_PATH
 
 dev_frontend deploy:
-    extends: docs deploy
     image: $CI_REGISTRY_IMAGE/nupe:frontend
+    stage: deploy
+    variables:
+        GIT_STRATEGY: none
     before_script:
         - npm install -g surge
         - ls -l
