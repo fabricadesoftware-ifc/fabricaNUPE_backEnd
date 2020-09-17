@@ -104,7 +104,7 @@ docs deploy:
 dev_frontend build:
     image: $CI_REGISTRY_IMAGE/nupe:frontend
     stage: build
-    script: npm run build
+    script: npm run --prefix nupe_frontend/ build
     rules:
         - if: $CI_COMMIT_BRANCH == "develop"
           changes:

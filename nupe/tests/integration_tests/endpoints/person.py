@@ -127,27 +127,6 @@ class PersonAPITestCase(APITestCase):
         # mas deve ser mantido no banco de dados
         self.assertEqual(Person.all_objects.count(), 1)
 
-    def test_create_invalid_first_name_with_permission(self):
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
-        url = reverse("person-list")
-
-        # first_name e last_name devem conter somente letras e espaço
-        invalid_first_name = "1nv@lid"
-        person_data = {
-            "first_name": invalid_first_name,
-            "last_name": LAST_NAME,
-            "cpf": CPF,
-            "gender": GENDER,
-            "birthday_date": OLDER_BIRTHDAY_DATE,
-        }
-
-        response = client.post(path=url, data=person_data)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-
-        # deve emitir mensagem de erro do campo inválido
-        self.assertIsNotNone(response.data.get("first_name"))
-
     def test_create_invalid_cpf_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
         url = reverse("person-list")
@@ -220,25 +199,6 @@ class PersonAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         self.assertIsNotNone(response.data.get("contact"))
-
-    def test_partial_update_invalid_first_name_with_permission(self):
-        # cria uma pessoa no banco para poder atualiza-lo
-        person = baker.make(Person)
-
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
-        url = reverse("person-detail", args=[person.cpf])
-
-        invalid_first_name = "1nv@lid"
-        person_data = {
-            "first_name": invalid_first_name,
-        }
-
-        response = client.patch(path=url, data=person_data)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-
-        # deve emitir mensagem de erro do campo inválido
-        self.assertIsNotNone(response.data.get("first_name"))
 
     def test_partial_update_invalid_cpf_with_permission(self):
         person = baker.make(Person)

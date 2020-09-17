@@ -23,9 +23,6 @@ class LocationViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     perms_map_action = {
         "list": ["core.view_location"],
         "retrieve": ["core.view_location"],
-        "create": ["core.add_location"],
-        "partial_update": ["core.change_location"],
-        "destroy": ["core.delete_location"],
     }
 
 
@@ -46,9 +43,6 @@ class CityViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     perms_map_action = {
         "list": ["core.view_city"],
         "retrieve": ["core.view_city"],
-        "create": ["core.add_city"],
-        "partial_update": ["core.change_city"],
-        "destroy": ["core.delete_city"],
     }
 
 
@@ -69,7 +63,4 @@ class StateViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     perms_map_action = {
         "list": ["core.view_state"],
         "retrieve": ["core.view_state"],
-        "create": ["core.add_state"],
-        "partial_update": ["core.change_state"],
-        "destroy": ["core.delete_state"],
     }

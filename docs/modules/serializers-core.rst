@@ -64,14 +64,6 @@ Serializer para Listar um Campus
 
 .. autoclass:: nupe.core.serializers.institution.CampusListSerializer
 
-Módulo de Curso
----------------
-
-Serializer para Listar e Detalhar uma Formação Acadêmica
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. autoclass:: nupe.core.serializers.course.AcademicEducationSerializer
-
 Módulo de Localização
 ---------------------
 
@@ -89,3 +81,21 @@ Serializer para Listar e Detalhar um Estado
 +++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.location.StateSerializer
+
+Módulo de Curso
+---------------
+
+Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Curso
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.course.CourseSerializer
+
+Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Grau
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.course.GradeSerializer
+
+Serializer para Listar ou Detalhar uma Formação Acadêmica
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.course.AcademicEducationSerializer

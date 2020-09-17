@@ -48,3 +48,21 @@ Filtros para o Endpoint de Estado
 +++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.filters.location.StateFilter
+
+Módulo de Curso
+---------------
+
+Filtros para o Endpoint de Curso
+++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.filters.course.CourseFilter
+
+Filtros para o Endpoint de Grau
++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.filters.course.GradeFilter
+
+Filtros para o Endpoint de Formação Acadêmica
++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.filters.course.AcademicEducationFilter

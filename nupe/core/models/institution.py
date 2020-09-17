@@ -1,8 +1,6 @@
 from django.db import models
 from safedelete.models import NO_DELETE, SOFT_DELETE_CASCADE, SafeDeleteModel
 
-from nupe.core.utils.regex import ONLY_LETTERS_AND_SPACE
-
 INSTITUTION_MAX_LENGTH = 50
 CAMPUS_MAX_LENGTH = 50
 
@@ -26,7 +24,7 @@ class Institution(SafeDeleteModel):
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
 
-    name = models.CharField(max_length=INSTITUTION_MAX_LENGTH, unique=True, validators=[ONLY_LETTERS_AND_SPACE])
+    name = models.CharField(max_length=INSTITUTION_MAX_LENGTH, unique=True)
 
     def __str__(self):
         return self.name
@@ -57,7 +55,7 @@ class Campus(SafeDeleteModel):
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
 
-    name = models.CharField(max_length=CAMPUS_MAX_LENGTH, unique=True, validators=[ONLY_LETTERS_AND_SPACE])
+    name = models.CharField(max_length=CAMPUS_MAX_LENGTH, unique=True)
     location = models.ForeignKey("Location", related_name="campus", on_delete=models.PROTECT)
     institutions = models.ManyToManyField("Institution", related_name="campus", through="InstitutionCampus")
     academic_education = models.ManyToManyField(

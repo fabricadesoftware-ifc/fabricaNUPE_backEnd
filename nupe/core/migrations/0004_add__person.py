@@ -17,37 +17,9 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("deleted", models.DateTimeField(editable=False, null=True)),
-                (
-                    "first_name",
-                    models.CharField(
-                        max_length=50,
-                        validators=[
-                            django.core.validators.RegexValidator(
-                                "^[a-z A-Z]*$", message="Este campo deve conter somente letras"
-                            )
-                        ],
-                    ),
-                ),
-                (
-                    "last_name",
-                    models.CharField(
-                        max_length=100,
-                        validators=[
-                            django.core.validators.RegexValidator(
-                                "^[a-z A-Z]*$", message="Este campo deve conter somente letras"
-                            )
-                        ],
-                    ),
-                ),
-                (
-                    "cpf",
-                    models.CharField(
-                        max_length=11,
-                        unique=True,
-                        help_text="Somente números",
-                        validators=[django.core.validators.MinLengthValidator(11)],
-                    ),
-                ),
+                ("first_name", models.CharField(max_length=50,),),
+                ("last_name", models.CharField(max_length=100,),),
+                ("cpf", models.CharField(max_length=11, unique=True, help_text="Somente números",),),
                 ("birthday_date", models.DateField()),
                 ("gender", models.CharField(choices=[("F", "Feminino"), ("M", "Masculino")], max_length=1)),
                 (

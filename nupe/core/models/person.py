@@ -3,7 +3,7 @@ from django.db import models
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
 from nupe.core.utils.properties import calculate_age
-from nupe.core.utils.regex import ONLY_LETTERS_AND_SPACE, ONLY_NUMBERS
+from nupe.core.utils.regex import ONLY_NUMBERS
 
 PERSON_FIRST_NAME_MAX_LENGTH = 50
 PERSON_LAST_NAME_MAX_LENGTH = 100
@@ -66,14 +66,9 @@ class Person(SafeDeleteModel):
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
-    first_name = models.CharField(max_length=PERSON_FIRST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS_AND_SPACE])
-    last_name = models.CharField(max_length=PERSON_LAST_NAME_MAX_LENGTH, validators=[ONLY_LETTERS_AND_SPACE])
-    cpf = models.CharField(
-        max_length=PERSON_CPF_MAX_LENGTH,
-        validators=[MinLengthValidator(PERSON_CPF_MIN_LENGTH)],
-        unique=True,
-        help_text="Somente números",
-    )
+    first_name = models.CharField(max_length=PERSON_FIRST_NAME_MAX_LENGTH)
+    last_name = models.CharField(max_length=PERSON_LAST_NAME_MAX_LENGTH)
+    cpf = models.CharField(max_length=PERSON_CPF_MAX_LENGTH, unique=True, help_text="Somente números",)
     birthday_date = models.DateField()
     gender = models.CharField(max_length=PERSON_GENDER_MAX_LENGTH, choices=GENDER_CHOICES)
     contact = models.CharField(

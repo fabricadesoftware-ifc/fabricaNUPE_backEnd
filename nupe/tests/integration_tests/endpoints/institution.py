@@ -4,7 +4,6 @@ from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_204_NO_CONTENT,
-    HTTP_400_BAD_REQUEST,
     HTTP_403_FORBIDDEN,
     HTTP_404_NOT_FOUND,
 )
@@ -84,40 +83,6 @@ class InstitutionAPITestCase(APITestCase):
         # o dado não deve ser mascarado
         self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
         self.assertEqual(Institution.objects.count(), 1)
-
-    def test_create_invalid_name_with_permission(self):
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_institution"])
-        url = reverse("institution-list")
-
-        # name deve conter somente letras e espaço
-        invalid_name = "1nv@lid"
-        institution_data = {"name": invalid_name}
-
-        response = client.post(path=url, data=institution_data)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-
-        # deve emitir mensagem de erro do campo inválido
-        self.assertIsNotNone(response.data.get("name"))
-
-    def test_partial_update_invalid_name_with_permission(self):
-        # cria uma instituição no banco para poder atualiza-lo
-        institution = baker.make(Institution)
-
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_institution"])
-        url = reverse("institution-detail", args=[institution.id])
-
-        invalid_name = "1nv@lid"
-        institution_data = {
-            "name": invalid_name,
-        }
-
-        response = client.patch(path=url, data=institution_data)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-
-        # deve emitir mensagem de erro do campo inválido
-        self.assertIsNotNone(response.data.get("name"))
 
     def test_list_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
@@ -258,40 +223,6 @@ class CampusAPITestCase(APITestCase):
         # o dado não deve ser mascarado
         self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
         self.assertEqual(Campus.objects.count(), 1)
-
-    def test_create_invalid_name_with_permission(self):
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_campus"])
-        url = reverse("campus-list")
-
-        # name deve conter somente letras e espaço
-        invalid_name = "1nv@lid"
-        campus_data = {"name": invalid_name}
-
-        response = client.post(path=url, data=campus_data)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-
-        # deve emitir mensagem de erro do campo inválido
-        self.assertIsNotNone(response.data.get("name"))
-
-    def test_partial_update_invalid_name_with_permission(self):
-        # cria um campus no banco para poder atualiza-lo
-        campus = baker.make(Campus)
-
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_campus"])
-        url = reverse("campus-detail", args=[campus.id])
-
-        invalid_name = "1nv@lid"
-        campus_data = {
-            "name": invalid_name,
-        }
-
-        response = client.patch(path=url, data=campus_data)
-
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-
-        # deve emitir mensagem de erro do campo inválido
-        self.assertIsNotNone(response.data.get("name"))
 
     def test_list_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
