@@ -47,11 +47,6 @@ docs build:
     before_script:
         - ./manage.py generate_swagger -o docs/api/schema.yaml
     script: make -C docs/ html
-    artifacts:
-        name: docs
-        paths:
-            - $DOCS_PATH
-        expire_in: 1h
     rules:
         - if: $CI_COMMIT_BRANCH == "develop"
           changes:
@@ -61,6 +56,23 @@ docs build:
         policy: push
         paths:
             - $DOCS_PATH
+
+dev_frontend build:
+    image: $CI_REGISTRY_IMAGE/nupe:frontend
+    stage: build
+    before_script:
+        - cd nupe_frontend/
+        - npm install
+    script: npm run build
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - nupe_frontend/**/*
+    cache:
+        key: dev_frontend build
+        policy: push
+        paths:
+            - $DIST_PATH
 
 dev_backend test:
     image: $CI_REGISTRY_IMAGE/nupe:backend
@@ -100,23 +112,6 @@ docs deploy:
         url: $DOCS_URL
     needs:
         - docs build
-
-dev_frontend build:
-    image: $CI_REGISTRY_IMAGE/nupe:frontend
-    stage: build
-    before_script:
-        - cd nupe_frontend/
-        - npm install
-    script: npm run build
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - nupe_frontend/**/*
-    cache:
-        key: dev_frontend build
-        policy: push
-        paths:
-            - $DIST_PATH
 
 dev_frontend deploy:
     extends: docs deploy
