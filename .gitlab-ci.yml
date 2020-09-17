@@ -106,7 +106,7 @@ dev_frontend build:
     stage: build
     before_script:
         - mkdir nupe_frontend/node_modules/
-    script: npm run build
+    script: npm run --prefix nupe_frontend/ build
     # rules:
     #     - if: $CI_COMMIT_BRANCH == "develop"
     #       changes:
