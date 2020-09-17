@@ -126,7 +126,7 @@ dev_frontend deploy:
     #       changes:
     #           - nupe_frontend/**/*
     rules:
-        -
+        - allow_failure: false
     cache:
         key: dev_frontend build
         policy: pull
