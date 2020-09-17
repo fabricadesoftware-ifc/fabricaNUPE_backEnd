@@ -125,6 +125,8 @@ dev_frontend deploy:
     #     - if: $CI_COMMIT_BRANCH == "develop"
     #       changes:
     #           - nupe_frontend/**/*
+    rules:
+        -
     cache:
         key: dev_frontend build
         policy: pull
