@@ -1,7 +1,7 @@
 {
   "name": "nupe_frontend",
   "version": "1.0.0",
-  "description": "Frontend para a API NuPe, desenvolvida pela Fabrica de Software.",
+  "description": "Frontend para a API NuPe, desenvolvida pela Fabrica de Software",
   "author": "jorgebeeck",
   "private": true,
   "scripts": {
