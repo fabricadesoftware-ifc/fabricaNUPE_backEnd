@@ -88,10 +88,10 @@ docs deploy:
     before_script:
         - npm install -g surge
     script: surge -p $DOCS_PATH -d $DOCS_URL
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - docs/**/*
+    # rules:
+    #     - if: $CI_COMMIT_BRANCH == "develop"
+    #       changes:
+    #           - docs/**/*
     cache:
         key: docs build
         policy: pull
