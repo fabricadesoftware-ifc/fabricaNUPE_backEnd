@@ -105,10 +105,9 @@ dev_frontend build:
     image: $CI_REGISTRY_IMAGE/nupe:frontend
     stage: build
     before_script:
-        - ls -l nupe_frontend
-        - mkdir nupe_frontend/node_modules
-        - ls -l nupe_frontend/node_modules
-    script: npm run --prefix nupe_frontend/ build
+        - cd nupe_frontend/
+        - npm install
+    script: npm run build
     # rules:
     #     - if: $CI_COMMIT_BRANCH == "develop"
     #       changes:
