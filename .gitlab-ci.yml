@@ -107,7 +107,7 @@ dev_frontend build:
     variables:
         GIT_STRATEGY: none
     before_script:
-        - ls -l
+        - ls -l nupe_frontend/
     script: npm run --prefix nupe_frontend/ build
     # rules:
     #     - if: $CI_COMMIT_BRANCH == "develop"
