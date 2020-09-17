@@ -119,13 +119,7 @@ dev_frontend build:
             - $DIST_PATH
 
 dev_frontend deploy:
-    image: $CI_REGISTRY_IMAGE/nupe:frontend
-    stage: deploy
-    variables:
-        GIT_STRATEGY: none
-    before_script:
-        - npm install -g surge
-        - ls -l
+    extends: docs deploy
     script: surge -p $DIST_PATH -d $DIST_URL
     # rules:
     #     - if: $CI_COMMIT_BRANCH == "develop"
