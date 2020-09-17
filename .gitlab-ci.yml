@@ -108,10 +108,10 @@ dev_frontend build:
         - cd nupe_frontend/
         - npm install
     script: npm run build
-    # rules:
-    #     - if: $CI_COMMIT_BRANCH == "develop"
-    #       changes:
-    #           - nupe_frontend/**/*
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - nupe_frontend/**/*
     cache:
         key: dev_frontend build
         policy: push
@@ -121,10 +121,10 @@ dev_frontend build:
 dev_frontend deploy:
     extends: docs deploy
     script: surge -p $DIST_PATH -d $DIST_URL
-    # rules:
-    #     - if: $CI_COMMIT_BRANCH == "develop"
-    #       changes:
-    #           - nupe_frontend/**/*
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - nupe_frontend/**/*
     cache:
         key: dev_frontend build
         policy: pull
