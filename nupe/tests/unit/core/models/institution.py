@@ -54,6 +54,7 @@ class AcademicEducationCampusTestCase(TestCase):
         str_expected = f"{academic_education_campus.academic_education} - {academic_education_campus.campus}"
         self.assertEqual(str(academic_education_campus), str_expected)
 
+    # custom signals
     def test_signals_pre_delete_should_set_related_as_none(self):
         academic_education_campus = baker.make(AcademicEducationCampus)
         student = baker.make(Student, academic_education_campus=academic_education_campus)

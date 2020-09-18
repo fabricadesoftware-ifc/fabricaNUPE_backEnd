@@ -12,6 +12,8 @@ class Command(BaseCommand):
         CommandError: Algo de errado não está certo
     """
 
+    help = "Verifica se há vulnerabilidades nas dependências do projeto, e caso tenha, imprime"
+
     FILENAME = "vulnerabilities.json"
 
     def handle(self, *args, **options):

@@ -4,7 +4,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN, HTTP_404_NOT_
 from rest_framework.test import APITestCase
 
 from nupe.core.models import City, Location, State
-from nupe.tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
 
 
 class LocationAPITestCase(APITestCase):

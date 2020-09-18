@@ -1,97 +1,100 @@
-import json
-
-import requests
 from django.core.management.base import BaseCommand, CommandError
 
-from nupe.core.management.commands._academic_education_list import academic_educations
-from nupe.core.models import Campus, City, Course, Grade, Institution, Location, State
+from nupe.core.models import (
+    AcademicEducation,
+    AcademicEducationCampus,
+    Campus,
+    City,
+    Course,
+    Grade,
+    Institution,
+    Location,
+    State,
+)
+from nupe.resources.datas.core.populate import academic_educations, campi, cities, institutions, states
 
 
 class Command(BaseCommand):
     """
-    Popula o banco de dados com informações mínimas. Isso pode demorar alguns minutos (até 30min).
+    Popula o banco de dados com informações mínimas.
 
     Raises:
         CommandError: Algo de errado não está certo
     """
 
-    help = "Popula o banco de dados com informações mínimas. Isso pode demorar alguns minutos."
-
-    INSTITUTION_BASENAME = "Instituto Federal Catarinense"
-    CAMPUS_BASENAME = "Araquari"
+    help = "Popula o banco de dados com informações mínimas"
 
     def handle(self, *args, **options):
         try:
             self.populate_locations()
-            self.populate_academic_education()
             self.populate_institutions()
+            self.populate_academic_education()
+
             self.stdout.write(self.style.SUCCESS("Tudo populado com sucesso! :D"))
-        except CommandError:  # noqa
+
+        except CommandError:
             raise CommandError("Algo de errado não está certo")
 
     def populate_locations(self):
         """
-        Utiliza a API do IBGE para buscar os estados e cidades do Brasil e popular o banco de dados
+        Popula o banco de dados com base em uma lista pré-definida de municípios e estados
         """
-        if self.__already_was_populated():
-            return
-
-        states_data = self.__get_states()
-
-        for state in states_data:
-            state_object_model, state_created = self.__save_state_on_database(state)
-
-            counties_data = self.__get_counties_from_state_id(state_id=state.get("id"))
-
-            for county in counties_data:
-                city_object_model, city_created = self.__save_county_on_database(county)
-
-                if city_created:
-                    state_object_model.cities.add(city_object_model)
-
-    def populate_academic_education(self):
-        """
-        Popula o banco de dados com base em uma lista pré-definida de cursos oferecidos pelo
-        Instituto Federal Catarinense - Campus Araquari
-        """
-        for academic_education in academic_educations:
-            course_object_model, course_created = Course.objects.get_or_create(name=academic_education.get("course"))
-            grade_object_model, grade_created = Grade.objects.get_or_create(name=academic_education.get("grade"))
-
-            if course_created:
-                grade_object_model.courses.add(course_object_model)
+        self.__state_register()
+        self.__city_register()
 
     def populate_institutions(self):
         """
-        Cadastra o Instituto Federal Catarinense e o Campus Araquari no banco de dados
+        Popula o banco de dados com base em uma lista pré-definida de campi e instituições
         """
-        institution_object_model, institution_created = Institution.objects.get_or_create(
-            name=self.INSTITUTION_BASENAME
-        )
+        self.__campus_register()
+        self.__institution_register()
 
-        location_object_model = Location.objects.get(city__name=self.CAMPUS_BASENAME)
-        campus_object_model, campus_created = Campus.objects.get_or_create(
-            name=self.CAMPUS_BASENAME, location=location_object_model
-        )
+    def populate_academic_education(self):
+        """
+        Popula o banco de dados com base em uma lista pré-definida com nome, grau e qual campus oferece
+        """
+        for academic_education in academic_educations:
+            course_object_model, _ = Course.objects.get_or_create(name=academic_education.get("course"))
+            grade_object_model, _ = Grade.objects.get_or_create(name=academic_education.get("grade"))
 
-        if institution_created:
-            campus_object_model.institutions.add(institution_object_model)
+            academic_education_object_model, _ = AcademicEducation.objects.get_or_create(
+                course=course_object_model, grade=grade_object_model
+            )
+            try:
+                academic_education_campus_object_model, _ = AcademicEducationCampus.objects.get_or_create(
+                    academic_education=academic_education_object_model,
+                    campus=Campus.objects.get(name=academic_education.get("campus_name")),
+                )
+            except Campus.DoesNotExist:
+                raise ValueError("Campus não encontrado. Por favor, informe na lista para população.")
 
-    def __get_states(self):
-        url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
+    def __campus_register(self):
+        for campus in campi:
+            try:
+                campus_object_model, _ = Campus.objects.get_or_create(
+                    name=campus.get("name"), location=Location.objects.get(city__name=campus.get("location_city"))
+                )
 
-        return requests.get(url=url).json()
+                institution_object_model, _ = Institution.objects.get_or_create(name=campus.get("institution_name"))
+                campus_object_model.institutions.add(institution_object_model)
 
-    def __get_counties_from_state_id(self, state_id: int):
-        url = f"https://servicodados.ibge.gov.br/api/v1/localidades/estados/{state_id}/municipios"
+            except Location.DoesNotExist:
+                raise ValueError("Localização não encontrada. Por favor, informe na lista para população.")
 
-        return requests.get(url=url).json()
+    def __institution_register(self):
+        for institution in institutions:
+            institution_object_model, _ = Institution.objects.get_or_create(name=institution.get("name"))
 
-    def __save_state_on_database(self, state: json):
-        return State.objects.get_or_create(name=state.get("nome"), initials=state.get("sigla"))
+    def __state_register(self):
+        for state in states:
+            state_object_model, _ = State.objects.get_or_create(name=state.get("name"), initials=state.get("initials"))
 
-    def __save_county_on_database(self, county: json):
-        return City.objects.get_or_create(name=county.get("nome"))
+    def __city_register(self):
+        for city in cities:
+            city_object_model, _ = City.objects.get_or_create(name=city.get("name"))
 
-    def __already_was_populated(self):
-        return Location.objects.count() == 5570  # 5570 é a quantidade de municípios no Brasil
+            try:
+                state_object_model = State.objects.get(initials=city.get("state_initials"))
+                state_object_model.cities.add(city_object_model)
+            except State.DoesNotExist:
+                raise ValueError("Estado não cadastrado. Por favor, informe-o na lista para população.")

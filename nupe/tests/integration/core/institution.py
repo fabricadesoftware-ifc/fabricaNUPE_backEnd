@@ -10,8 +10,8 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Campus, Institution
-from nupe.resources.const.datas.institution import CAMPUS_NAME, INSTITUTION_NAME
-from nupe.tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.resources.datas.core.institution import CAMPUS_NAME, INSTITUTION_NAME
+from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
 
 
 class InstitutionAPITestCase(APITestCase):

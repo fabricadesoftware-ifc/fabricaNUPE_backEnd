@@ -4,7 +4,7 @@ from validate_docbr import CPF
 from nupe.core.models import Person
 from nupe.file.models import ProfileImage
 from nupe.file.services import ImageUploadService
-from nupe.resources.const.messages.person import PERSON_INVALID_CPF_MESSAGE
+from nupe.resources.messages.person import PERSON_INVALID_CPF_MESSAGE
 
 
 class PersonListSerializer(ModelSerializer):

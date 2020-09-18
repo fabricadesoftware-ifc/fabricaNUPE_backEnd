@@ -14,6 +14,7 @@ class PersonTestCase(TestCase):
         self.assertIs(hasattr(Person, "birthday_date"), True)
         self.assertIs(hasattr(Person, "gender"), True)
         self.assertIs(hasattr(Person, "contact"), True)
+        self.assertIs(hasattr(Person, "profile_image"), True)
         self.assertIs(hasattr(Person, "created_at"), True)
         self.assertIs(hasattr(Person, "updated_at"), True)
 

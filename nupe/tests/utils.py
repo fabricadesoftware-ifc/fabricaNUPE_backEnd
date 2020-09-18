@@ -6,7 +6,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from model_bakery import baker
 from PIL import Image
 
-from nupe.resources.const.datas.image_upload import PROFILE_IMAGE_INVALID, PROFILE_IMAGE_PNG
+from nupe.file.models import ProfileImage
+from nupe.resources.datas.file.image_upload import PROFILE_IMAGE_INVALID, PROFILE_IMAGE_PNG
 
 
 def remove_all_files_in_dir(dir: str = settings.MEDIA_ROOT):
@@ -18,7 +19,7 @@ def remove_all_files_in_dir(dir: str = settings.MEDIA_ROOT):
         rmtree(dir)
 
 
-def mock_image(filename: str = PROFILE_IMAGE_PNG):
+def mock_profile_image(filename: str = PROFILE_IMAGE_PNG) -> ProfileImage:
     """
     Cria uma imagem qualquer e retorna um objeto da model ProfileImage
 
@@ -29,7 +30,7 @@ def mock_image(filename: str = PROFILE_IMAGE_PNG):
     _, extension = filename.rsplit(".", 1)
 
     return baker.make(
-        "file.ProfileImage",
+        ProfileImage,
         image=SimpleUploadedFile(
             name=filename, content=open(filename, "rb").read(), content_type=f"image/{extension}"
         ),

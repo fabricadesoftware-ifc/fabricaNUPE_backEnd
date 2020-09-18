@@ -1,10 +1,8 @@
 from django.test import TestCase
-from model_bakery import baker
 
 from nupe.file.models.image_upload import ProfileImage
-from nupe.file.services import ImageUploadService
-from nupe.resources.const.datas.image_upload import PROFILE_IMAGE_JPEG, PROFILE_IMAGE_PNG
-from nupe.tests.utils import mock_image, remove_all_files_in_dir, remove_images
+from nupe.resources.datas.file.image_upload import PROFILE_IMAGE_JPEG, PROFILE_IMAGE_PNG
+from nupe.tests.utils import mock_profile_image, remove_all_files_in_dir, remove_images
 
 
 class ProfileImageTestCase(TestCase):
@@ -21,25 +19,17 @@ class ProfileImageTestCase(TestCase):
         self.assertIs(hasattr(ProfileImage, "updated_at"), True)
 
     def test_return_str(self):
-        mocked_image = mock_image()
+        mocked_image = mock_profile_image()
 
         self.assertEqual(str(mocked_image), mocked_image.image.url)
 
     def test_return_properties(self):
-        mocked_image = mock_image()
+        mocked_image = mock_profile_image()
 
         self.assertEqual(mocked_image.url, mocked_image.image.url)
 
-    def test_invalid_remove_file_service(self):
-        invalid_instace = baker.make("core.Person")
-
-        image_service = ImageUploadService()
-
-        with self.assertRaises(ValueError):
-            image_service.remove_file(instance=invalid_instace)
-
     def test_make_path_image_jpeg(self):
-        mocked_image = mock_image(filename=PROFILE_IMAGE_JPEG)
+        mocked_image = mock_profile_image(filename=PROFILE_IMAGE_JPEG)
         _, extension = mocked_image.url.rsplit(".", 1)
 
         self.assertEqual(extension, "jpeg")

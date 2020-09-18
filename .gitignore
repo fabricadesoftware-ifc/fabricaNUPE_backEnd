@@ -345,3 +345,6 @@ yarn-error.log
 
 # devcontainer
 .devcontainer/
+
+# check vulnerabilities
+vulnerabilities.json

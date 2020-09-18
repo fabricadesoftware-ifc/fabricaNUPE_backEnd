@@ -13,9 +13,9 @@ from rest_framework.status import (
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
-from nupe.resources.const.datas.person import CPF, FIRST_NAME, GENDER, LAST_NAME, OLDER_BIRTHDAY_DATE
-from nupe.tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
-from nupe.tests.utils import mock_image
+from nupe.resources.datas.core.person import CPF, FIRST_NAME, GENDER, LAST_NAME, OLDER_BIRTHDAY_DATE
+from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.utils import mock_profile_image
 
 
 class PersonAPITestCase(APITestCase):
@@ -46,7 +46,7 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.data.get("cpf"), person.cpf)
 
     def test_create_with_permission(self):
-        mocked_image = mock_image()
+        mocked_image = mock_profile_image()
 
         # pessoa com informações válidas para conseguir criar
         person = {
@@ -87,13 +87,13 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(Person.objects.get(pk=person.id).first_name, new_first_name)
 
     def test_partial_update_profile_image_with_permission(self):
-        mocked_image = mock_image()
+        mocked_image = mock_profile_image()
         person = baker.make(Person, profile_image=mocked_image)
 
         client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
         url = reverse("person-detail", args=[person.cpf])
 
-        mocked_image = mock_image()
+        mocked_image = mock_profile_image()
         person_update = {
             "profile_image": mocked_image.attachment_id,
         }

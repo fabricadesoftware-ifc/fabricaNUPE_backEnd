@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework.status import HTTP_200_OK
 from rest_framework.test import APITestCase
 
-from nupe.tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
 
 
 class UserAPITestCase(APITestCase):

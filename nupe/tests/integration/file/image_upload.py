@@ -4,9 +4,15 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 
 from nupe.file.models import ProfileImage
-from nupe.resources.const.datas.image_upload import PROFILE_IMAGE_INVALID, PROFILE_IMAGE_PNG
-from nupe.tests.integration_tests.endpoints.setup.user import create_user_with_permissions_and_do_authentication
-from nupe.tests.utils import create_image, create_invalid_image, mock_image, remove_all_files_in_dir, remove_images
+from nupe.resources.datas.file.image_upload import PROFILE_IMAGE_INVALID, PROFILE_IMAGE_PNG
+from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.utils import (
+    create_image,
+    create_invalid_image,
+    mock_profile_image,
+    remove_all_files_in_dir,
+    remove_images,
+)
 
 
 class ProfileImageAPITestCase(APITestCase):
@@ -41,7 +47,7 @@ class ProfileImageAPITestCase(APITestCase):
             self.assertIs(os.path.exists(profile_image_path), True)
 
     def test_destroy_with_permission(self):
-        mocked_image = mock_image()
+        mocked_image = mock_profile_image()
 
         client = create_user_with_permissions_and_do_authentication(permissions=["file.delete_profileimage"])
         url = reverse("profile_image-detail", args=[mocked_image.attachment_id])

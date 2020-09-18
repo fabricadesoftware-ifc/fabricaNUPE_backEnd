@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Permission, User
 from rest_framework.test import APIClient
 
-from nupe.resources.const.datas.user import PASSWORD, USERNAME
+from nupe.resources.datas.core.user import PASSWORD, USERNAME
 
 
 def create_user_with_permissions(
