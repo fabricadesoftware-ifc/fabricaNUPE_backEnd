@@ -3,7 +3,6 @@ from validate_docbr import CPF
 
 from nupe.core.models import Person
 from nupe.file.models import ProfileImage
-from nupe.file.services import ImageUploadService
 from nupe.resources.messages.person import PERSON_INVALID_CPF_MESSAGE
 
 
@@ -123,9 +122,7 @@ class PersonCreateSerializer(ModelSerializer):
         new_profile_image = validated_data.get("profile_image")
 
         if new_profile_image is not None:
-            image_service = ImageUploadService()
-
             # exclui a imagem de perfil antiga
-            image_service.remove_file(instance=instance.profile_image)
+            instance.profile_image.delete()
 
         return super().update(instance, validated_data)

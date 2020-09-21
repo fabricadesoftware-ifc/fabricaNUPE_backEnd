@@ -17,6 +17,9 @@ class PersonTestCase(TestCase):
         self.assertIs(hasattr(Person, "profile_image"), True)
         self.assertIs(hasattr(Person, "created_at"), True)
         self.assertIs(hasattr(Person, "updated_at"), True)
+        self.assertIs(hasattr(Person, "student_registrations"), True)
+        self.assertIs(hasattr(Person, "dependents"), True)
+        self.assertIs(hasattr(Person, "responsibles"), True)
 
     def test_return_str(self):
         person = baker.prepare(Person)

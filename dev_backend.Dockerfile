@@ -3,7 +3,8 @@ LABEL mantainer="Luis Guerreiro <luiscvlh11@gmail.com>"
 
 WORKDIR /usr/nupe
 
-ENV DEBUG=True \
+ENV SECRET_KEY=justasomekeytocandevelop \
+    DEBUG=True \
     MEDIA_ROOT=media/test \
     MEDIA_URL=/media/test/
 

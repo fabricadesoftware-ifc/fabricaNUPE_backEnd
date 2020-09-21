@@ -7,5 +7,6 @@ omit =
     nupe/wsgi.py
     */admin.py
     */apps.py
-    */migrations/*
     */__init__.py
+    */migrations/*
+    */tests/*

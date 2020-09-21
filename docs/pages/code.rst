@@ -7,7 +7,7 @@ App Core
 
 .. toctree::
    :maxdepth: 2
-   
+
    ../modules/commands-core
    ../modules/filters-core
    ../modules/models-core
@@ -23,4 +23,3 @@ App File
 
    ../modules/models-file
    ../modules/serializers-file
-   ../modules/services-file

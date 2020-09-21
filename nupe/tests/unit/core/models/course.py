@@ -8,6 +8,8 @@ class CourseTestCase(TestCase):
     def test_has_all_attributes(self):
         self.assertIs(hasattr(Course, "_safedelete_policy"), True)
         self.assertIs(hasattr(Course, "name"), True)
+        self.assertIs(hasattr(Course, "grades"), True)
+        self.assertIs(hasattr(Course, "academic_education"), True)
 
     def test_return_str(self):
         course = baker.prepare(Course)
@@ -20,6 +22,7 @@ class GradeTestCase(TestCase):
         self.assertIs(hasattr(Grade, "_safedelete_policy"), True)
         self.assertIs(hasattr(Grade, "name"), True)
         self.assertIs(hasattr(Grade, "courses"), True)
+        self.assertIs(hasattr(Grade, "academic_education"), True)
 
     def test_return_str(self):
         grade = baker.prepare(Grade)
@@ -32,6 +35,8 @@ class AcademicEducationTestCase(TestCase):
         self.assertIs(hasattr(AcademicEducation, "_safedelete_policy"), True)
         self.assertIs(hasattr(AcademicEducation, "course"), True)
         self.assertIs(hasattr(AcademicEducation, "grade"), True)
+        self.assertIs(hasattr(AcademicEducation, "campus"), True)
+        self.assertIs(hasattr(AcademicEducation, "courses_campus"), True)
 
     def test_return_str(self):
         academic_education = baker.prepare(AcademicEducation)

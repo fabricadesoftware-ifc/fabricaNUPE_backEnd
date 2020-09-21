@@ -1,18 +1,15 @@
 import os
+from shutil import rmtree
 
+from django.conf import settings
 from django.urls import reverse
+from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 from rest_framework.test import APITestCase
 
 from nupe.file.models import ProfileImage
 from nupe.resources.datas.file.image_upload import PROFILE_IMAGE_INVALID, PROFILE_IMAGE_PNG
 from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
-from nupe.tests.utils import (
-    create_image,
-    create_invalid_image,
-    mock_profile_image,
-    remove_all_files_in_dir,
-    remove_images,
-)
+from nupe.tests.utils import create_image, create_invalid_image, mock_profile_image
 
 
 class ProfileImageAPITestCase(APITestCase):
@@ -23,8 +20,8 @@ class ProfileImageAPITestCase(APITestCase):
 
     @classmethod
     def tearDownClass(cls):
-        remove_images(paths=[PROFILE_IMAGE_PNG, PROFILE_IMAGE_INVALID])
-        remove_all_files_in_dir()
+        os.remove(PROFILE_IMAGE_PNG)
+        rmtree(settings.MEDIA_ROOT)
 
     def test_create_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
@@ -36,15 +33,15 @@ class ProfileImageAPITestCase(APITestCase):
 
             response = client.post(path=url, data=profile_image_data, format="multipart")
 
-            self.assertEqual(response.status_code, 201)
+            self.assertEqual(response.status_code, HTTP_201_CREATED)
+
+            # campos que devem ser retornados
+            self.assertIsNotNone(response.data.get("id"))
             self.assertIsNotNone(response.data.get("attachment_id"))
-            self.assertEqual(ProfileImage.objects.count(), 1)  # deve ser criado no banco
+            self.assertIsNotNone(response.data.get("uploaded_at"))
 
-            # a midia deve ser criada no diretório "media/"
-            profile_image_pk = response.data.get("id")
-            profile_image_path = ProfileImage.objects.get(pk=profile_image_pk).image.path
-
-            self.assertIs(os.path.exists(profile_image_path), True)
+            # deve ser criado no banco
+            self.assertEqual(ProfileImage.objects.count(), 1)
 
     def test_destroy_with_permission(self):
         mocked_image = mock_profile_image()
@@ -54,33 +51,10 @@ class ProfileImageAPITestCase(APITestCase):
 
         response = client.delete(path=url)
 
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
+
+        # deve ser removido do banco
         self.assertEqual(ProfileImage.objects.count(), 0)
-        self.assertIs(os.path.exists(mocked_image.image.path), False)
-
-    def test_destroy_not_found_with_permission(self):
-        client = create_user_with_permissions_and_do_authentication(permissions=["file.delete_profileimage"])
-        url = reverse("profile_image-detail", args=[99])
-
-        response = client.delete(path=url)
-
-        self.assertEqual(response.status_code, 404)
-
-    def test_create_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
-        url = reverse("profile_image-list")
-
-        response = client.post(path=url)
-
-        self.assertEqual(response.status_code, 403)  # não deve ter permissão para acessar
-
-    def test_destroy_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
-        url = reverse("profile_image-detail", args=[99])
-
-        response = client.delete(path=url)
-
-        self.assertEqual(response.status_code, 403)  # não deve ter permissão para acessar
 
     def test_create_invalid_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
@@ -92,7 +66,28 @@ class ProfileImageAPITestCase(APITestCase):
 
             response = client.post(path=url, data=profile_image_data, format="multipart")
 
-            # deve retornar um erro avisando que é um arquivo de imagem inválido
-            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+
+            # deve retornar um erro informando que é um arquivo de imagem inválido
             self.assertIsNotNone(response.data.get("image"))
-            self.assertEqual(ProfileImage.objects.count(), 0)  # não deve ser criado no banco
+
+            # não deve ser criado no banco
+            self.assertEqual(ProfileImage.objects.count(), 0)
+
+    def test_create_without_permission(self):
+        client = create_user_with_permissions_and_do_authentication()
+        url = reverse("profile_image-list")
+
+        response = client.post(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
+    def test_destroy_without_permission(self):
+        client = create_user_with_permissions_and_do_authentication()
+        url = reverse("profile_image-detail", args=[99])
+
+        response = client.delete(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)

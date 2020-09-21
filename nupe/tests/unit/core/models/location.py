@@ -8,6 +8,7 @@ class CityTestCase(TestCase):
     def test_has_all_attributes(self):
         self.assertIs(hasattr(City, "_safedelete_policy"), True)
         self.assertIs(hasattr(City, "name"), True)
+        self.assertIs(hasattr(City, "states"), True)
 
     def test_return_str(self):
         city = baker.prepare(City)
@@ -33,6 +34,7 @@ class LocationTestCase(TestCase):
         self.assertIs(hasattr(Location, "_safedelete_policy"), True)
         self.assertIs(hasattr(Location, "city"), True)
         self.assertIs(hasattr(Location, "state"), True)
+        self.assertIs(hasattr(Location, "campus"), True)
 
     def test_return_str(self):
         location = baker.prepare(Location)

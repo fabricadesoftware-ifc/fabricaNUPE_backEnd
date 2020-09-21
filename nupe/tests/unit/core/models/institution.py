@@ -8,6 +8,8 @@ class InstitutionTestCase(TestCase):
     def test_has_all_attributes(self):
         self.assertIs(hasattr(Institution, "_safedelete_policy"), True)
         self.assertIs(hasattr(Institution, "name"), True)
+        self.assertIs(hasattr(Institution, "campus"), True)
+        self.assertIs(hasattr(Institution, "institutions_campus"), True)
 
     def test_return_str(self):
         institution = baker.prepare(Institution)
@@ -22,6 +24,8 @@ class CampusTestCase(TestCase):
         self.assertIs(hasattr(Campus, "location"), True)
         self.assertIs(hasattr(Campus, "institutions"), True)
         self.assertIs(hasattr(Campus, "academic_education"), True)
+        self.assertIs(hasattr(Campus, "institutions_campus"), True)
+        self.assertIs(hasattr(Campus, "courses_campus"), True)
 
     def test_return_str(self):
         campus = baker.prepare(Campus)
@@ -47,6 +51,7 @@ class AcademicEducationCampusTestCase(TestCase):
         self.assertIs(hasattr(AcademicEducationCampus, "_safedelete_policy"), True)
         self.assertIs(hasattr(AcademicEducationCampus, "academic_education"), True)
         self.assertIs(hasattr(AcademicEducationCampus, "campus"), True)
+        self.assertIs(hasattr(AcademicEducationCampus, "students"), True)
 
     def test_return_str(self):
         academic_education_campus = baker.prepare(AcademicEducationCampus)

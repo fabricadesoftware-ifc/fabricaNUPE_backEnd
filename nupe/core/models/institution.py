@@ -15,7 +15,7 @@ class Institution(SafeDeleteModel):
     Atributos:
         _safedelete_policy: NO_DELETE
 
-        name: nome da instituição
+        name: nome
 
         campus: relação inversa para a model Campus
 
@@ -40,9 +40,9 @@ class Campus(SafeDeleteModel):
     Atributos:
         _safedelete_policy: NO_DELETE
 
-        name: nome do campus
+        name: nome
 
-        location: localização do campus (o2m)
+        location: localização (o2m)
 
         institutions: instituições localizadas nesse campus (m2m)
 

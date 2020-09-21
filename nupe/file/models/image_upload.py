@@ -21,6 +21,17 @@ def make_path_image(instance, _) -> str:
     return f"images/profiles/{instance.public_id}{extension}"
 
 
+class ImageQuerySet(models.QuerySet):
+    def delete(self, *args, **kwargs):
+        for image in self:
+            image.image.delete()
+
+
+class ImageManager(models.Manager):
+    def get_queryset(self):
+        return ImageQuerySet(model=self.model, using=self._db)
+
+
 class Image(models.Model):
     """
     Define informações sobre uma imagem para poder acessa-la
@@ -58,6 +69,8 @@ class Image(models.Model):
     )
     uploaded_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = ImageManager()
 
     class Meta:
         abstract = True

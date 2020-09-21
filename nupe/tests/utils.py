@@ -1,7 +1,5 @@
 import os
-from shutil import rmtree
 
-from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from model_bakery import baker
 from PIL import Image
@@ -10,18 +8,9 @@ from nupe.file.models import ProfileImage
 from nupe.resources.datas.file.image_upload import PROFILE_IMAGE_INVALID, PROFILE_IMAGE_PNG
 
 
-def remove_all_files_in_dir(dir: str = settings.MEDIA_ROOT):
+def mock_profile_image(filename: str = PROFILE_IMAGE_PNG, quantity: int = 1) -> ProfileImage:
     """
-    Por padrão, remove todos os arquivos localizado no diretório especificado em MEDIA_ROOT,
-    mas é possível remover todos os arquivos de qualquer diretório passado como argumento
-    """
-    if os.path.exists(dir):  # pragma: no cover
-        rmtree(dir)
-
-
-def mock_profile_image(filename: str = PROFILE_IMAGE_PNG) -> ProfileImage:
-    """
-    Cria uma imagem qualquer e retorna um objeto da model ProfileImage
+    Cria uma imagem qualquer e retorna um ou mais objetos da model ProfileImage
 
     Retorna:
         [ProfileImage]: objeto da model
@@ -29,12 +18,18 @@ def mock_profile_image(filename: str = PROFILE_IMAGE_PNG) -> ProfileImage:
     filename = create_image(filename)
     _, extension = filename.rsplit(".", 1)
 
-    return baker.make(
+    profile_images = baker.make(
         ProfileImage,
         image=SimpleUploadedFile(
             name=filename, content=open(filename, "rb").read(), content_type=f"image/{extension}"
         ),
+        _quantity=quantity,
     )
+
+    if quantity == 1:
+        return profile_images[0]
+
+    return profile_images
 
 
 def create_image(filename: str = PROFILE_IMAGE_PNG) -> str:
@@ -55,14 +50,6 @@ def create_invalid_image():
     """
     Cria um arquivo de imagem inválido qualquer
     """
-    if not os.path.exists(PROFILE_IMAGE_INVALID):  # pragma: no cover
+    if not os.path.exists(PROFILE_IMAGE_INVALID):
         with open(PROFILE_IMAGE_INVALID, "w") as invalid_image:
             invalid_image.write("foo bar")
-
-
-def remove_images(paths: list):
-    """
-    Remove as imagens criadas em "create_image" e "create_invalid_image"
-    """
-    for path in paths:
-        os.remove(path)

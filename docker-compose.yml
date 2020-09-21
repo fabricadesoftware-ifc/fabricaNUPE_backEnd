@@ -1,40 +1,40 @@
 version: "3"
 
 networks:
-    dev_backend:
-    dev_frontend:
+  dev_backend:
+  dev_frontend:
 
 services:
-    dev_backend:
-        container_name: dev_backend
-        build:
-            context: .
-            dockerfile: dev_backend.Dockerfile
-        image: dev_backend:1.0
-        command: python manage.py runserver 0:8000
-        env_file: dev_backend.env
-        networks:
-            - dev_backend
-        ports:
-            - 80:8000
-        volumes:
-            - ./:/usr/nupe
-        restart: always
-    dev_frontend:
-        container_name: dev_frontend
-        build:
-            context: .
-            dockerfile: dev_frontend.Dockerfile
-        image: dev_frontend:1.0
-        command: npm run dev
-        env_file: dev_frontend.env
-        networks:
-            - dev_frontend
-        ports:
-            - 3000:3000
-        volumes:
-            - ./nupe_frontend/:/usr/nupe
-            - /usr/nupe/node_modules/ # https://stackoverflow.com/questions/29181032/add-a-volume-to-docker-but-exclude-a-sub-folder
-        restart: always
-        depends_on:
-            - dev_backend
+  dev_backend:
+    container_name: dev_backend
+    build:
+      context: .
+      dockerfile: dev_backend.Dockerfile
+    image: dev_backend:1.0
+    command: python manage.py runserver 0:8000
+    env_file: .env.dev_backend
+    networks:
+      - dev_backend
+    ports:
+      - 80:8000
+    volumes:
+      - ./:/usr/nupe
+    restart: always
+  dev_frontend:
+    container_name: dev_frontend
+    build:
+      context: .
+      dockerfile: dev_frontend.Dockerfile
+    image: dev_frontend:1.0
+    command: npm run dev
+    env_file: .env.dev_frontend
+    networks:
+      - dev_frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./nupe_frontend/:/usr/nupe
+      - /usr/nupe/node_modules/ # https://stackoverflow.com/questions/29181032/add-a-volume-to-docker-but-exclude-a-sub-folder
+    restart: always
+    depends_on:
+      - dev_backend

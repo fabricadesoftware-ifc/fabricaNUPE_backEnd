@@ -16,7 +16,7 @@ class City(SafeDeleteModel):
     Atributos:
         _safedelete_policy: NO_DELETE
 
-        name: nome da cidade
+        name: nome
 
         states: relação inversa para a model State
     """
@@ -39,7 +39,9 @@ class State(SafeDeleteModel):
     Atributos:
         _safedelete_policy: NO_DELETE
 
-        name: nome do estado
+        name: nome
+
+        initials: sigla
 
         cities: cidades pertencente à esse estado (m2m)
     """

@@ -15,7 +15,7 @@ class Course(SafeDeleteModel):
     Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
-        name: nome do curso
+        name: nome
 
         grades: relação inversa para a model Grade
 
@@ -40,7 +40,7 @@ class Grade(SafeDeleteModel):
     Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
-        name: nomenclatura do grau
+        name: nomenclatura
 
         courses: cursos que pertencem a esse grau (m2m)
 

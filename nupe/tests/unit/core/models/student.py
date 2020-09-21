@@ -15,6 +15,7 @@ class StudentTestCase(TestCase):
         self.assertIs(hasattr(Student, "graduated"), True)
         self.assertIs(hasattr(Student, "ingress_date"), True)
         self.assertIs(hasattr(Student, "updated_at"), True)
+        self.assertIs(hasattr(Student, "responsibles"), True)
 
     def test_return_str(self):
         student = baker.prepare(Student)
