@@ -25,7 +25,3 @@ def create_user_with_permissions_and_do_authentication(
     client.force_authenticate(user=user)
 
     return client
-
-
-def delete_all_users():
-    User.objects.all().delete()

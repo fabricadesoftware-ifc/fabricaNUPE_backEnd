@@ -3,37 +3,6 @@ from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRel
 from nupe.core.models import AcademicEducation, Course, Grade
 
 
-class AcademicEducationSerializer(ModelSerializer):
-    """
-    Detalha ou lista informações sobre uma ou mais formação acadêmica
-
-    Campos:
-        id: identificador
-
-        name: nome
-    """
-
-    name = CharField(source="__str__")
-
-    class Meta:
-        model = AcademicEducation
-        fields = ["id", "name"]
-
-    def create(self, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
-
-    def update(self, instance, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
-
-
 class CourseSerializer(ModelSerializer):
     """
     Recebe e valida informações para então cadastrar ou atualizar um curso, e também
@@ -71,3 +40,34 @@ class GradeSerializer(ModelSerializer):
     class Meta:
         model = Grade
         fields = ["id", "name", "courses", "courses_output"]
+
+
+class AcademicEducationSerializer(ModelSerializer):
+    """
+    Detalha ou lista informações sobre uma ou mais formação acadêmica
+
+    Campos:
+        id: identificador
+
+        name: nome
+    """
+
+    name = CharField(source="__str__")
+
+    class Meta:
+        model = AcademicEducation
+        fields = ["id", "name"]
+
+    def create(self, validated_data):
+        """
+        Raises:
+            NotImplementedError: Serializer somente leitura
+        """
+        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
+
+    def update(self, instance, validated_data):
+        """
+        Raises:
+            NotImplementedError: Serializer somente leitura
+        """
+        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
