@@ -59,6 +59,7 @@ class CourseAPITestCase(APITestCase):
 
         # deve ser criado no banco de dados
         self.assertEqual(Course.objects.count(), 1)
+        self.assertEqual(Course.objects.all().first().name, COURSE_NAME)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
@@ -203,6 +204,7 @@ class GradeAPITestCase(APITestCase):
 
         # deve ser criado no banco de dados
         self.assertEqual(Grade.objects.count(), 1)
+        self.assertEqual(Grade.objects.all().first().name, GRADE_NAME)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))

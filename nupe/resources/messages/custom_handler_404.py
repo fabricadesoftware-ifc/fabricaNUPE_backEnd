@@ -1,1 +1,1 @@
-ENDPOINT_NOT_FOUND = "sorry, endpoint not found"
+ENDPOINT_NOT_FOUND = "desculpe, o endpoint especificado não foi encontrado."

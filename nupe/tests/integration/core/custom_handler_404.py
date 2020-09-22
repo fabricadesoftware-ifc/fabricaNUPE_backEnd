@@ -16,4 +16,6 @@ class CustomHandler404APITestCase(APITestCase):
         response_data = response.content.decode()
 
         self.assertEqual(response.status_code, HTTP_404_NOT_FOUND)
+
+        # a mensagem informativa deve ser retornada
         self.assertEqual(loads(response_data).get("detail"), ENDPOINT_NOT_FOUND)
