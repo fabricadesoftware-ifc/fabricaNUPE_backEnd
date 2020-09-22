@@ -86,7 +86,7 @@ class PersonCreateSerializer(ModelSerializer):
         para obter o identificador de associação)
     """
 
-    profile_image = SlugRelatedField(slug_field="attachment_id", queryset=ProfileImage.objects.all())
+    profile_image = SlugRelatedField(slug_field="attachment_id", queryset=ProfileImage.objects.all(), required=False)
 
     class Meta:
         model = Person
