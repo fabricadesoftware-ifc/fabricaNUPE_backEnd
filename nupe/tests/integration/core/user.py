@@ -14,6 +14,10 @@ class UserAPITestCase(APITestCase):
         data = response.data.get("user")
 
         self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # campos que devem ser retornados
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("first_name"))
         self.assertIsNotNone(data.get("last_name"))
+
+        # campos que não devem ser retornados
