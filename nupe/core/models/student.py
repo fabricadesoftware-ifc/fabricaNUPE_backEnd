@@ -15,6 +15,10 @@ class Student(SafeDeleteModel):
         'Luis Guerreiro - 202008010001'
 
     Atributos:
+        _safedelete_policy: SOFT_DELETE_CASCADE
+
+        _academic_education_campus_deleted_id: identificador para restaurar a remoção (undelete)
+
         registration: número de matrícula do estudante
 
         person: objeto do tipo model 'Person' com as informações pessoais do estudante (o2m)

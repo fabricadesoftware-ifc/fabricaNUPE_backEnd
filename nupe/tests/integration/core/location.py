@@ -28,6 +28,10 @@ class CityAPITestCase(APITestCase):
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("name"))
 
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("states"))
+
     def test_retrieve_with_permission(self):
         # cria uma cidade no banco para detalhar suas informações
         city = baker.make(City)
@@ -45,6 +49,10 @@ class CityAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("states"))
 
     def test_list_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
@@ -87,6 +95,10 @@ class StateAPITestCase(APITestCase):
         self.assertIsNotNone(data.get("name"))
         self.assertIsNotNone(data.get("initials"))
 
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("cities"))
+
     def test_retrieve_with_permission(self):
         # cria um estado no banco para detalhar suas informações
         state = baker.make(State)
@@ -105,6 +117,10 @@ class StateAPITestCase(APITestCase):
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
         self.assertIsNotNone(response.data.get("initials"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("cities"))
 
     def test_list_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
@@ -146,6 +162,12 @@ class LocationAPITestCase(APITestCase):
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("name"))
 
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("city"))
+        self.assertIsNone(data.get("state"))
+        self.assertIsNone(data.get("campus"))
+
     def test_retrieve_with_permission(self):
         # cria uma localização no banco para detalhar suas informações
         location = baker.make(Location)
@@ -162,6 +184,12 @@ class LocationAPITestCase(APITestCase):
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("city"))
+        self.assertIsNone(response.data.get("state"))
+        self.assertIsNone(response.data.get("campus"))
 
     def test_list_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()

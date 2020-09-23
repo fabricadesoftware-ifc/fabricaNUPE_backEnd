@@ -29,6 +29,11 @@ class CourseAPITestCase(APITestCase):
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("name"))
 
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("grades"))
+        self.assertIsNone(data.get("academic_education"))
+
     def test_retrieve_with_permission(self):
         # cria um curso no banco para detalhar suas informações
         course = baker.make(Course)
@@ -45,6 +50,11 @@ class CourseAPITestCase(APITestCase):
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("grades"))
+        self.assertIsNone(response.data.get("academic_education"))
 
     def test_create_with_permission(self):
         # curso com informações válidas para conseguir criar
@@ -64,6 +74,11 @@ class CourseAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("grades"))
+        self.assertIsNone(response.data.get("academic_education"))
 
     def test_partial_update_with_permission(self):
         # cria um curso no banco para conseguir atualizar suas informações
@@ -87,6 +102,11 @@ class CourseAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("grades"))
+        self.assertIsNone(response.data.get("academic_education"))
 
     def test_destroy_with_permission(self):
         # cria um curso no banco para conseguir excluir
@@ -173,6 +193,10 @@ class GradeAPITestCase(APITestCase):
         self.assertIsNotNone(data.get("name"))
         self.assertIsNotNone(data.get("courses_output"))
 
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("academic_education"))
+
     def test_retrieve_with_permission(self):
         # cria um grau no banco para detalhar suas informações
         grade = baker.make(Grade)
@@ -190,6 +214,10 @@ class GradeAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("courses_output"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("academic_education"))
 
     def test_create_with_permission(self):
         # grau com informações válidas para conseguir criar
@@ -210,6 +238,10 @@ class GradeAPITestCase(APITestCase):
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
         self.assertIsNotNone(response.data.get("courses_output"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("academic_education"))
 
     def test_partial_update_with_permission(self):
         # cria um grau no banco para conseguir atualizar suas informações
@@ -234,6 +266,10 @@ class GradeAPITestCase(APITestCase):
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
         self.assertIsNotNone(response.data.get("courses_output"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("academic_education"))
 
     def test_destroy_with_permission(self):
         # cria um grau no banco para conseguir excluir
@@ -319,6 +355,13 @@ class AcademicEducationAPITestCase(APITestCase):
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("name"))
 
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("course"))
+        self.assertIsNone(data.get("grade"))
+        self.assertIsNone(data.get("campus"))
+        self.assertIsNone(data.get("courses_campus"))
+
     def test_retrieve_with_permission(self):
         # cria uma formação acadêmica no banco para detalhar suas informações
         academic_education = baker.make(AcademicEducation)
@@ -335,6 +378,13 @@ class AcademicEducationAPITestCase(APITestCase):
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("course"))
+        self.assertIsNone(response.data.get("grade"))
+        self.assertIsNone(response.data.get("campus"))
+        self.assertIsNone(response.data.get("courses_campus"))
 
     def test_list_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()

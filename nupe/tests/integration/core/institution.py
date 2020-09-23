@@ -29,6 +29,11 @@ class InstitutionAPITestCase(APITestCase):
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("name"))
 
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("campus"))
+        self.assertIsNone(data.get("institutions_campus"))
+
     def test_retrieve_with_permission(self):
         # cria uma instituição no banco para detalhar suas informações
         institution = baker.make(Institution)
@@ -45,6 +50,11 @@ class InstitutionAPITestCase(APITestCase):
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("campus"))
+        self.assertIsNone(response.data.get("institutions_campus"))
 
     def test_create_with_permission(self):
         # instituição com informações válidas para conseguir criar
@@ -64,6 +74,11 @@ class InstitutionAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("campus"))
+        self.assertIsNone(response.data.get("institutions_campus"))
 
     def test_partial_update_with_permission(self):
         # cria uma instituição no banco para conseguir atualizar suas informações
@@ -87,6 +102,11 @@ class InstitutionAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("campus"))
+        self.assertIsNone(response.data.get("institutions_campus"))
 
     def test_destroy_with_permission(self):
         # cria uma instituição no banco para conseguir excluir
@@ -170,6 +190,13 @@ class CampusAPITestCase(APITestCase):
         self.assertIsNotNone(data.get("name"))
         self.assertIsNotNone(data.get("location"))
 
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("institutions"))
+        self.assertIsNone(data.get("academic_education"))
+        self.assertIsNone(data.get("institutions_campus"))
+        self.assertIsNone(data.get("courses_campus"))
+
     def test_retrieve_with_permission(self):
         # cria um campus no banco para detalhar suas informações
         campus = baker.make(Campus)
@@ -191,8 +218,11 @@ class CampusAPITestCase(APITestCase):
         self.assertIsNotNone(response.data.get("academic_education_output"))
 
         # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
         self.assertIsNone(response.data.get("institutions"))
         self.assertIsNone(response.data.get("academic_education"))
+        self.assertIsNone(response.data.get("institutions_campus"))
+        self.assertIsNone(response.data.get("courses_campus"))
 
     def test_create_with_permission(self):
         location = baker.make("core.Location")
@@ -224,8 +254,11 @@ class CampusAPITestCase(APITestCase):
         self.assertIsNotNone(response.data.get("academic_education_output"))
 
         # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
         self.assertIsNone(response.data.get("institutions"))
         self.assertIsNone(response.data.get("academic_education"))
+        self.assertIsNone(response.data.get("institutions_campus"))
+        self.assertIsNone(response.data.get("courses_campus"))
 
     def test_partial_update_with_permission(self):
         # cria um campus no banco para conseguir atualizar suas informações
@@ -254,8 +287,11 @@ class CampusAPITestCase(APITestCase):
         self.assertIsNotNone(response.data.get("academic_education_output"))
 
         # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
         self.assertIsNone(response.data.get("institutions"))
         self.assertIsNone(response.data.get("academic_education"))
+        self.assertIsNone(response.data.get("institutions_campus"))
+        self.assertIsNone(response.data.get("courses_campus"))
 
     def test_destroy_with_permission(self):
         # cria um campus no banco para conseguir excluir
