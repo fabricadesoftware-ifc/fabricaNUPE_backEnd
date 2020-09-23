@@ -35,13 +35,16 @@ class ProfileImageAPITestCase(APITestCase):
 
             self.assertEqual(response.status_code, HTTP_201_CREATED)
 
+            # deve ser criado no banco
+            self.assertEqual(ProfileImage.objects.count(), 1)
+
             # campos que devem ser retornados
             self.assertIsNotNone(response.data.get("id"))
             self.assertIsNotNone(response.data.get("attachment_id"))
             self.assertIsNotNone(response.data.get("uploaded_at"))
 
-            # deve ser criado no banco
-            self.assertEqual(ProfileImage.objects.count(), 1)
+            # campos que não devem ser retornados
+            self.assertIsNone(response.data.get("image"))
 
     def test_destroy_with_permission(self):
         mocked_image = mock_profile_image()
@@ -68,11 +71,13 @@ class ProfileImageAPITestCase(APITestCase):
 
             self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
-            # deve retornar um erro informando que é um arquivo de imagem inválido
+            # deve emitir mensagem de erro do campo inválido
             self.assertIsNotNone(response.data.get("image"))
 
-            # não deve ser criado no banco
-            self.assertEqual(ProfileImage.objects.count(), 0)
+            # campos que não devem ser retornados
+            self.assertIsNone(response.data.get("id"))
+            self.assertIsNone(response.data.get("attachment_id"))
+            self.assertIsNone(response.data.get("uploaded_at"))
 
     def test_create_without_permission(self):
         client = create_user_with_permissions_and_do_authentication()
