@@ -27,8 +27,10 @@ class StudentFilter(FilterSet):
     """
 
     ingress_date = DateFromToRangeFilter()
-    course_id = NumberFilter(field_name="academic_education_campus__academic_education")
-    campus_name = CharFilter(field_name="academic_education_campus__campus__name", lookup_expr="iexact")
+    course_id = NumberFilter(field_name="academic_education_institution_campus__academic_education")
+    campus_name = CharFilter(
+        field_name="academic_education_institution_campus__institution_campus__campus__name", lookup_expr="iexact"
+    )
 
     class Meta:
         model = Student

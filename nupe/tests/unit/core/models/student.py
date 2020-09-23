@@ -7,15 +7,17 @@ from nupe.core.models import Responsible, Student
 class StudentTestCase(TestCase):
     def test_has_all_attributes(self):
         self.assertIs(hasattr(Student, "_safedelete_policy"), True)
-        self.assertIs(hasattr(Student, "_academic_education_campus_deleted_id"), True)
+        self.assertIs(hasattr(Student, "_academic_education_institution_campus_deleted_id"), True)
         self.assertIs(hasattr(Student, "registration"), True)
         self.assertIs(hasattr(Student, "person"), True)
-        self.assertIs(hasattr(Student, "academic_education_campus"), True)
+        self.assertIs(hasattr(Student, "academic_education_institution_campus"), True)
         self.assertIs(hasattr(Student, "responsibles_persons"), True)
         self.assertIs(hasattr(Student, "graduated"), True)
         self.assertIs(hasattr(Student, "ingress_date"), True)
         self.assertIs(hasattr(Student, "updated_at"), True)
         self.assertIs(hasattr(Student, "responsibles"), True)
+        self.assertIs(hasattr(Student, "age"), True)
+        self.assertIs(hasattr(Student, "academic_education"), True)
 
     def test_return_str(self):
         student = baker.prepare(Student)
@@ -24,11 +26,13 @@ class StudentTestCase(TestCase):
         self.assertEqual(str(student), str_expected)
 
     def test_return_properties(self):
-        academic_education_campus = baker.prepare("core.AcademicEducationCampus")
-        student = baker.prepare(Student, academic_education_campus=academic_education_campus)
+        academic_education_institution_campus = baker.prepare("core.AcademicEducationInstitutionCampus")
+        student = baker.prepare(Student, academic_education_institution_campus=academic_education_institution_campus)
 
         self.assertEqual(student.age, student.person.age)
-        self.assertEqual(student.academic_education, str(student.academic_education_campus.academic_education))
+        self.assertEqual(
+            student.academic_education, str(student.academic_education_institution_campus.academic_education)
+        )
 
 
 class ResponsibleTestCase(TestCase):

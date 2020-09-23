@@ -46,9 +46,9 @@ class StudentDetailSerializer(ModelSerializer):
 
         course: nome do curso que está cursando
 
-        campus: nome do campus onde estuda
+        institution: 'Instituição - Campus' onde estuda
 
-        academic_education_campus_id: identificador do objeto da model AcademicEducationCampus
+        academic_education_institution_campus: identificador do objeto da model AcademicEducationInstitutionCampus
 
         responsibles: responsáveis do estudante
 
@@ -58,8 +58,8 @@ class StudentDetailSerializer(ModelSerializer):
     """
 
     personal_info = PersonDetailSerializer(source="person")
-    course = CharField(source="academic_education_campus.academic_education")
-    campus = CharField(source="academic_education_campus.campus")
+    course = CharField(source="academic_education_institution_campus.academic_education")
+    institution = CharField(source="academic_education_institution_campus.institution_campus")
     responsibles = PersonListSerializer(source="responsibles_persons", many=True)
 
     class Meta:
@@ -69,8 +69,8 @@ class StudentDetailSerializer(ModelSerializer):
             "registration",
             "personal_info",
             "course",
-            "campus",
-            "academic_education_campus_id",
+            "institution",
+            "academic_education_institution_campus",
             "responsibles",
             "ingress_date",
             "graduated",
@@ -88,7 +88,7 @@ class StudentCreateSerializer(ModelSerializer):
 
         person: identificador do objeto da model Person
 
-        academic_education_campus: identificador do objeto da model AcademicEducationCampus
+        academic_education_institution_campus: identificador do objeto da model AcademicEducationInstitutionCampus
 
         responsibles: lista de id das pessoas responsáveis
 
@@ -99,7 +99,14 @@ class StudentCreateSerializer(ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ["id", "registration", "person", "academic_education_campus", "responsibles", "ingress_date"]
+        fields = [
+            "id",
+            "registration",
+            "person",
+            "academic_education_institution_campus",
+            "responsibles",
+            "ingress_date",
+        ]
 
     def validate(self, data):
         """

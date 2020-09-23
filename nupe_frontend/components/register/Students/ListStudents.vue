@@ -26,7 +26,7 @@ export default {
           searchable: true,
         },
         {
-          field: "academic_education_campus",
+          field: "academic_education_institution_campus",
           label: "CAMPUS",
           searchable: true,
         },

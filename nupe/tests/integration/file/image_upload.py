@@ -20,8 +20,12 @@ class ProfileImageAPITestCase(APITestCase):
 
     @classmethod
     def tearDownClass(cls):
-        os.remove(PROFILE_IMAGE_PNG)
-        rmtree(settings.MEDIA_ROOT)
+        try:
+            os.remove(PROFILE_IMAGE_PNG)
+            os.remove(PROFILE_IMAGE_INVALID)
+            rmtree(settings.MEDIA_ROOT)
+        except FileNotFoundError:
+            print("Imagens removidas")
 
     def test_create_with_permission(self):
         client = create_user_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])

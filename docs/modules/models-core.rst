@@ -38,10 +38,10 @@ Instituição do Campus
 
 .. autoclass:: nupe.core.models.institution.InstitutionCampus
 
-Formação Acadêmica do Campus
-++++++++++++++++++++++++++++
+Formação Acadêmica da Instituição do Campus
++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: nupe.core.models.institution.AcademicEducationCampus
+.. autoclass:: nupe.core.models.institution.AcademicEducationInstitutionCampus
 
 Módulo de Localização
 ---------------------

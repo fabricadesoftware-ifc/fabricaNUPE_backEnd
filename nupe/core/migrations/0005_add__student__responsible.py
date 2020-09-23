@@ -33,7 +33,10 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("deleted", models.DateTimeField(editable=False, null=True)),
-                ("_academic_education_campus_deleted_id", models.IntegerField(blank=True, default=None, null=True)),
+                (
+                    "_academic_education_institution_campus_deleted_id",
+                    models.IntegerField(blank=True, default=None, null=True),
+                ),
                 (
                     "registration",
                     models.CharField(
@@ -50,13 +53,13 @@ class Migration(migrations.Migration):
                 ("ingress_date", models.DateField()),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (
-                    "academic_education_campus",
+                    "academic_education_institution_campus",
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="students",
                         related_query_name="student",
-                        to="core.AcademicEducationCampus",
+                        to="core.AcademicEducationInstitutionCampus",
                     ),
                 ),
                 (
@@ -78,7 +81,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"unique_together": {("person", "academic_education_campus")},},
+            options={"unique_together": {("person", "academic_education_institution_campus")},},
         ),
         migrations.AddField(
             model_name="responsible",

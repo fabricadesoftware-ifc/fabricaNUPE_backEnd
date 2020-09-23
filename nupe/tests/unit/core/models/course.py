@@ -35,8 +35,7 @@ class AcademicEducationTestCase(TestCase):
         self.assertIs(hasattr(AcademicEducation, "_safedelete_policy"), True)
         self.assertIs(hasattr(AcademicEducation, "course"), True)
         self.assertIs(hasattr(AcademicEducation, "grade"), True)
-        self.assertIs(hasattr(AcademicEducation, "campus"), True)
-        self.assertIs(hasattr(AcademicEducation, "courses_campus"), True)
+        self.assertIs(hasattr(AcademicEducation, "institutions_campus"), True)
 
     def test_return_str(self):
         academic_education = baker.prepare(AcademicEducation)

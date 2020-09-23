@@ -17,13 +17,14 @@ class Student(SafeDeleteModel):
     Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
-        _academic_education_campus_deleted_id: identificador para restaurar a remoção (undelete)
+        _academic_education_institution_campus_deleted_id: identificador para restaurar a remoção de um objeto
+        do tipo model 'AcademicEducationInstitutionCampus'
 
         registration: número de matrícula do estudante
 
         person: objeto do tipo model 'Person' com as informações pessoais do estudante (o2m)
 
-        academic_education_campus: objeto do tipo model 'AcademicEducationCampus' com a formação acadêmica/campus
+        academic_education_institution_campus: objeto do tipo model 'AcademicEducationInstitutionCampus'
         do estudante (o2m)
 
         responsibles_persons: pessoas responsáveis pelo estudante (m2m)
@@ -43,7 +44,7 @@ class Student(SafeDeleteModel):
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
-    _academic_education_campus_deleted_id = models.IntegerField(default=None, null=True, blank=True)
+    _academic_education_institution_campus_deleted_id = models.IntegerField(default=None, null=True, blank=True)
 
     registration = models.CharField(max_length=STUDENT_REGISTRATION_MAX_LENGTH, validators=[ONLY_NUMBERS], unique=True)
     person = models.ForeignKey(
@@ -52,8 +53,8 @@ class Student(SafeDeleteModel):
         related_query_name="student_registration",
         on_delete=models.CASCADE,
     )
-    academic_education_campus = models.ForeignKey(
-        "AcademicEducationCampus",
+    academic_education_institution_campus = models.ForeignKey(
+        "AcademicEducationInstitutionCampus",
         related_name="students",
         related_query_name="student",
         on_delete=models.SET_NULL,
@@ -67,7 +68,7 @@ class Student(SafeDeleteModel):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ["person", "academic_education_campus"]
+        unique_together = ["person", "academic_education_institution_campus"]
 
     def __str__(self):
         return f"{self.person} - {self.registration}"
@@ -78,7 +79,7 @@ class Student(SafeDeleteModel):
 
     @property
     def academic_education(self):
-        return str(self.academic_education_campus.academic_education)
+        return str(self.academic_education_institution_campus.academic_education)
 
 
 class Responsible(SafeDeleteModel):
@@ -89,6 +90,8 @@ class Responsible(SafeDeleteModel):
         'João responsável pelo Luis Guerreiro'
 
     Atributos:
+        _safedelete_policy: SOFT_DELETE_CASCADE
+
         student: objeto do tipo model 'Student'
 
         person: objeto do tipo model 'Person'

@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="AcademicEducationCampus",
+            name="AcademicEducationInstitutionCampus",
             fields=[
                 ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("deleted", models.DateTimeField(editable=False, null=True)),
@@ -20,8 +20,8 @@ class Migration(migrations.Migration):
                     "academic_education",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="courses_campus",
-                        related_query_name="course_campus",
+                        related_name="institutions_campus",
+                        related_query_name="institution_campus",
                         to="core.AcademicEducation",
                     ),
                 ),
@@ -33,12 +33,6 @@ class Migration(migrations.Migration):
                 ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("deleted", models.DateTimeField(editable=False, null=True)),
                 ("name", models.CharField(max_length=50, unique=True,),),
-                (
-                    "academic_education",
-                    models.ManyToManyField(
-                        related_name="campus", through="core.AcademicEducationCampus", to="core.AcademicEducation"
-                    ),
-                ),
             ],
             options={"abstract": False,},
         ),
@@ -92,16 +86,15 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AddField(
-            model_name="academiceducationcampus",
-            name="campus",
+            model_name="AcademicEducationInstitutionCampus",
+            name="institution_campus",
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.PROTECT,
-                related_name="courses_campus",
-                related_query_name="course_campus",
-                to="core.Campus",
+                related_name="academic_education",
+                to="core.InstitutionCampus",
             ),
         ),
         migrations.AlterUniqueTogether(
-            name="academiceducationcampus", unique_together={("campus", "academic_education")},
+            name="AcademicEducationInstitutionCampus", unique_together={("institution_campus", "academic_education")},
         ),
     ]

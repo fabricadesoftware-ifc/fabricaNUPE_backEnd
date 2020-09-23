@@ -5,16 +5,20 @@ from django.conf import settings
 from django.test import TestCase
 
 from nupe.file.models.image_upload import ProfileImage
-from nupe.resources.datas.file.image_upload import PROFILE_IMAGE_JPEG, PROFILE_IMAGE_PNG
+from nupe.resources.datas.file.image_upload import PROFILE_IMAGE_INVALID, PROFILE_IMAGE_JPEG, PROFILE_IMAGE_PNG
 from nupe.tests.utils import mock_profile_image
 
 
 class ProfileImageTestCase(TestCase):
     @classmethod
     def tearDownClass(cls):
-        os.remove(PROFILE_IMAGE_JPEG)
-        os.remove(PROFILE_IMAGE_PNG)
-        rmtree(settings.MEDIA_ROOT)
+        try:
+            os.remove(PROFILE_IMAGE_JPEG)
+            os.remove(PROFILE_IMAGE_PNG)
+            os.remove(PROFILE_IMAGE_INVALID)
+            rmtree(settings.MEDIA_ROOT)
+        except FileNotFoundError:
+            print("Imagens removidas")
 
     def test_has_all_attributes(self):
         self.assertIs(hasattr(ProfileImage, "image"), True)

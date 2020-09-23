@@ -2,12 +2,13 @@ from django.core.management.base import BaseCommand, CommandError
 
 from nupe.core.models import (
     AcademicEducation,
-    AcademicEducationCampus,
+    AcademicEducationInstitutionCampus,
     Campus,
     City,
     Course,
     Grade,
     Institution,
+    InstitutionCampus,
     Location,
     State,
 )
@@ -61,9 +62,14 @@ class Command(BaseCommand):
                 course=course_object_model, grade=grade_object_model
             )
             try:
-                academic_education_campus_object_model, _ = AcademicEducationCampus.objects.get_or_create(
+                (
+                    academic_education_institution_campus_object_model,
+                    _,
+                ) = AcademicEducationInstitutionCampus.objects.get_or_create(
                     academic_education=academic_education_object_model,
-                    campus=Campus.objects.get(name=academic_education.get("campus_name")),
+                    institution_campus=InstitutionCampus.objects.get(
+                        campus__name=academic_education.get("campus_name")
+                    ),
                 )
             except Campus.DoesNotExist:
                 raise ValueError("Campus não encontrado. Por favor, informe na lista para população.")

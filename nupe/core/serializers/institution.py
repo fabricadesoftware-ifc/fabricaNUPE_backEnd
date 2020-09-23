@@ -1,7 +1,6 @@
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField, StringRelatedField
 
-from nupe.core.models import AcademicEducation, Campus, Institution
-from nupe.core.serializers import AcademicEducationSerializer
+from nupe.core.models import Campus, Institution
 
 
 class InstitutionSerializer(ModelSerializer):
@@ -34,18 +33,13 @@ class CampusSerializer(ModelSerializer):
 
         institutions: identificadores das instituições desse campus
 
-        academic_education: identificadores das formações acadêmicas desse campus
+        institution_output: nome das instituições desse campus
     """
 
     institutions = PrimaryKeyRelatedField(
         many=True, queryset=Institution.objects.all(), write_only=True, required=False
     )
-    academic_education = PrimaryKeyRelatedField(
-        many=True, queryset=AcademicEducation.objects.all(), write_only=True, required=False
-    )
-
     institution_output = InstitutionSerializer(source="institutions", many=True, read_only=True)
-    academic_education_output = AcademicEducationSerializer(source="academic_education", many=True, read_only=True)
 
     class Meta:
         model = Campus
@@ -54,9 +48,7 @@ class CampusSerializer(ModelSerializer):
             "name",
             "location",
             "institutions",
-            "academic_education",
             "institution_output",
-            "academic_education_output",
         ]
 
 

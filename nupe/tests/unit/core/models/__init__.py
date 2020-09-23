@@ -1,6 +1,6 @@
 from nupe.tests.unit.core.models.course import AcademicEducationTestCase, CourseTestCase, GradeTestCase
 from nupe.tests.unit.core.models.institution import (
-    AcademicEducationCampusTestCase,
+    AcademicEducationInstitutionCampusTestCase,
     CampusTestCase,
     InstitutionCampusTestCase,
     InstitutionTestCase,

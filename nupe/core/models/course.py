@@ -72,9 +72,7 @@ class AcademicEducation(SafeDeleteModel):
 
         grade: objeto do tipo model 'Grade' (o2m)
 
-        campus: relação inversa para a model Campus
-
-        courses_campus: relação inversa para a model AcademicEducationCampus
+        institutions_campus: relação inversa para a model AcademicEducationInstitutionCampus
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
