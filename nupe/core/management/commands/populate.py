@@ -1,3 +1,5 @@
+import os
+
 from django.core.management.base import BaseCommand, CommandError
 
 from nupe.core.models import (
@@ -30,6 +32,7 @@ class Command(BaseCommand):
             self.populate_locations()
             self.populate_institutions()
             self.populate_academic_education()
+            self.populate_superuser()
 
             self.stdout.write(self.style.SUCCESS("Tudo populado com sucesso! :D"))
 
@@ -73,6 +76,9 @@ class Command(BaseCommand):
                 )
             except Campus.DoesNotExist:
                 raise ValueError("Campus não encontrado. Por favor, informe na lista para população.")
+
+    def populate_superuser(self):
+        os.system("./manage.py createsuperuser --noinput")
 
     def __campus_register(self):
         for campus in campi:
