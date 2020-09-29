@@ -23,3 +23,12 @@ App File
 
    ../modules/models-file
    ../modules/serializers-file
+
+App Account
+-----------
+
+.. toctree::
+   :maxdepth: 2
+
+   ../modules/models-account
+   ../modules/serializers-account

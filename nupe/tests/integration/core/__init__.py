@@ -4,4 +4,3 @@ from nupe.tests.integration.core.institution import CampusAPITestCase, Instituti
 from nupe.tests.integration.core.location import CityAPITestCase, LocationAPITestCase, StateAPITestCase
 from nupe.tests.integration.core.person import PersonAPITestCase
 from nupe.tests.integration.core.student import StudentAPITestCase
-from nupe.tests.integration.core.user import UserAPITestCase

@@ -4,7 +4,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN
 from rest_framework.test import APITestCase
 
 from nupe.core.models import City, Location, State
-from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.integration.account.setup.account import create_account_with_permissions_and_do_authentication
 
 
 class CityAPITestCase(APITestCase):
@@ -12,7 +12,7 @@ class CityAPITestCase(APITestCase):
         # cria uma cidade no banco para retornar no list
         baker.make(City)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_city"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_city"])
         url = reverse("city-list")
 
         response = client.get(path=url)
@@ -36,7 +36,7 @@ class CityAPITestCase(APITestCase):
         # cria uma cidade no banco para detalhar suas informações
         city = baker.make(City)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_city"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_city"])
         url = reverse("city-detail", args=[city.id])
 
         response = client.get(path=url)
@@ -55,7 +55,7 @@ class CityAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("states"))
 
     def test_list_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("city-list")
         response = client.get(path=url)
@@ -64,7 +64,7 @@ class CityAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("city-detail", args=[99])
         response = client.get(path=url)
@@ -78,7 +78,7 @@ class StateAPITestCase(APITestCase):
         # cria um estado no banco para retornar no list
         baker.make(State)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_state"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_state"])
         url = reverse("state-list")
 
         response = client.get(path=url)
@@ -103,7 +103,7 @@ class StateAPITestCase(APITestCase):
         # cria um estado no banco para detalhar suas informações
         state = baker.make(State)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_state"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_state"])
         url = reverse("state-detail", args=[state.id])
 
         response = client.get(path=url)
@@ -123,7 +123,7 @@ class StateAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("cities"))
 
     def test_list_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("state-list")
         response = client.get(path=url)
@@ -132,7 +132,7 @@ class StateAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("state-detail", args=[99])
         response = client.get(path=url)
@@ -146,7 +146,7 @@ class LocationAPITestCase(APITestCase):
         # cria uma localização no banco para retornar no list
         baker.make(Location)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_location"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_location"])
         url = reverse("location-list")
 
         response = client.get(path=url)
@@ -172,7 +172,7 @@ class LocationAPITestCase(APITestCase):
         # cria uma localização no banco para detalhar suas informações
         location = baker.make(Location)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_location"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_location"])
         url = reverse("location-detail", args=[location.id])
 
         response = client.get(path=url)
@@ -192,7 +192,7 @@ class LocationAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("campus"))
 
     def test_list_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("location-list")
         response = client.get(path=url)
@@ -201,7 +201,7 @@ class LocationAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("location-detail", args=[99])
         response = client.get(path=url)

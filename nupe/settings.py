@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     # apps
     "nupe.core",
     "nupe.file",
+    "nupe.account",
 ]
 
 MIDDLEWARE = [
@@ -106,6 +107,9 @@ OAUTH2_PROVIDER = {
     "REFRESH_TOKEN_EXPIRE_SECONDS": timedelta(hours=8).seconds,
     "OAUTH2_BACKEND_CLASS": "oauth2_provider.oauth2_backends.JSONOAuthLibCore",
 }
+
+
+AUTH_USER_MODEL = "account.Account"
 
 
 LANGUAGE_CODE = "pt-br"

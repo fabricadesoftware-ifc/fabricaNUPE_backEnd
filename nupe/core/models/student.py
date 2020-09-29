@@ -37,7 +37,7 @@ class Student(SafeDeleteModel):
 
         responsibles: relação inversa para a model Responsible
 
-    Properties
+    Propriedades:
         age: idade do estudante
 
         academic_education: nome do curso que o estudante participa

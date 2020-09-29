@@ -12,7 +12,7 @@ from rest_framework.test import APITestCase
 from nupe.core.models import Student
 from nupe.resources.datas.core.person import OLDER_BIRTHDAY_DATE
 from nupe.resources.datas.core.student import INGRESS_DATE, REGISTRATION
-from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.integration.account.setup.account import create_account_with_permissions_and_do_authentication
 
 
 class StudentAPITestCase(APITestCase):
@@ -20,7 +20,7 @@ class StudentAPITestCase(APITestCase):
         # cria um estudante no banco para retornar no list
         baker.make(Student)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_student"])
         url = reverse("student-list")
 
         response = client.get(path=url)
@@ -55,7 +55,7 @@ class StudentAPITestCase(APITestCase):
         academic_education_institution_campus = baker.make("AcademicEducationInstitutionCampus")
         student = baker.make(Student, academic_education_institution_campus=academic_education_institution_campus)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_student"])
         url = reverse("student-detail", args=[student.registration])
 
         response = client.get(path=url)
@@ -90,7 +90,7 @@ class StudentAPITestCase(APITestCase):
         older_person = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE)
         academic_education_institution_campus = baker.make("AcademicEducationInstitutionCampus")
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
 
         student_data = {
@@ -137,7 +137,7 @@ class StudentAPITestCase(APITestCase):
         # cria um estudante no banco para conseguir atualiza-lo
         student = baker.make(Student, person__birthday_date=OLDER_BIRTHDAY_DATE)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
 
         # somente um campo e com informação válida para conseguir atualizar
@@ -172,7 +172,7 @@ class StudentAPITestCase(APITestCase):
         # cria um estudante no banco para conseguir mascara-lo
         student = baker.make(Student)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.delete_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.delete_student"])
         url = reverse("student-detail", args=[student.registration])
 
         response = client.delete(path=url)
@@ -189,7 +189,7 @@ class StudentAPITestCase(APITestCase):
         older_person = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE)
         academic_education_institution_campus = baker.make("AcademicEducationInstitutionCampus")
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
 
         invalid_registration = "teste"
@@ -226,7 +226,7 @@ class StudentAPITestCase(APITestCase):
         under_age_person = baker.make("Person")
         academic_education_institution_campus = baker.make("AcademicEducationInstitutionCampus")
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
 
         student = {
@@ -263,7 +263,7 @@ class StudentAPITestCase(APITestCase):
         under_age_person = baker.make("Person")
         academic_education_institution_campus = baker.make("AcademicEducationInstitutionCampus")
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
 
         student = {
@@ -299,7 +299,7 @@ class StudentAPITestCase(APITestCase):
         under_age_person = baker.make("Person")
         academic_education_institution_campus = baker.make("AcademicEducationInstitutionCampus")
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
 
         student = {
@@ -334,7 +334,7 @@ class StudentAPITestCase(APITestCase):
         # cria um estudante no banco para conseguir atualiza-lo
         student = baker.make(Student)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
 
         invalid_registration = "invalid_registration"
@@ -366,7 +366,7 @@ class StudentAPITestCase(APITestCase):
     def test_partial_update_invalid_empty_responsible_with_permission(self):
         student = baker.make(Student)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
 
         student_data = {
@@ -398,7 +398,7 @@ class StudentAPITestCase(APITestCase):
         student = baker.make(Student)
         under_age_person = baker.make("Person")
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
 
         student_data = {
@@ -429,7 +429,7 @@ class StudentAPITestCase(APITestCase):
     def test_partial_update_invalid_self_responsible_with_permission(self):
         student = baker.make(Student)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_student"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
 
         student_data = {
@@ -457,7 +457,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("academic_education"))
 
     def test_list_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("student-list")
         response = client.get(path=url)
@@ -466,7 +466,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("student-detail", args=[99])
         response = client.get(path=url)
@@ -475,7 +475,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_create_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("student-list")
         response = client.post(path=url, data={})
@@ -484,7 +484,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_partial_update_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("student-detail", args=[99])
         response = client.patch(path=url)
@@ -493,7 +493,7 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_destroy_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("student-detail", args=[99])
         response = client.delete(path=url)

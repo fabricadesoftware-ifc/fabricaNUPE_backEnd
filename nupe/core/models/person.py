@@ -50,7 +50,9 @@ class Person(SafeDeleteModel):
 
         responsibles: relação inversa para a model Responsible
 
-    Properties:
+        account: relação inversa para a model Account
+
+    Propriedades:
         full_name: nome completo da pessoa
 
         age: idade da pessoa

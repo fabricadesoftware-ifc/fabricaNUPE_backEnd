@@ -14,7 +14,7 @@ from rest_framework.test import APITestCase
 
 from nupe.core.models import Person
 from nupe.resources.datas.core.person import CPF, FIRST_NAME, GENDER, LAST_NAME, OLDER_BIRTHDAY_DATE
-from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.integration.account.setup.account import create_account_with_permissions_and_do_authentication
 from nupe.tests.utils import mock_profile_image
 
 
@@ -23,7 +23,7 @@ class PersonAPITestCase(APITestCase):
         # cria uma pessoa no banco para retornar no list
         baker.make(Person)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_person"])
         url = reverse("person-list")
 
         response = client.get(path=url)
@@ -59,7 +59,7 @@ class PersonAPITestCase(APITestCase):
         # cria uma pessoa no banco para detalhar suas informações
         person = baker.make(Person)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_person"])
         url = reverse("person-detail", args=[person.cpf])
 
         response = client.get(path=url)
@@ -102,7 +102,7 @@ class PersonAPITestCase(APITestCase):
             "profile_image": mocked_image.attachment_id,
         }
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_person"])
         url = reverse("person-list")
 
         response = client.post(path=url, data=person)
@@ -143,7 +143,7 @@ class PersonAPITestCase(APITestCase):
         # cria uma pessoa no banco para conseguir atualizar suas informações
         person = baker.make(Person)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_person"])
         url = reverse("person-detail", args=[person.cpf])
 
         new_first_name = "first name updated"
@@ -182,7 +182,7 @@ class PersonAPITestCase(APITestCase):
         mocked_image = mock_profile_image()
         person = baker.make(Person, profile_image=mocked_image)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_person"])
         url = reverse("person-detail", args=[person.cpf])
 
         new_mocked_image = mock_profile_image()
@@ -227,7 +227,7 @@ class PersonAPITestCase(APITestCase):
         # cria uma pessoa no banco para conseguir excluir
         person = baker.make(Person)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.delete_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.delete_person"])
         url = reverse("person-detail", args=[person.cpf])
 
         response = client.delete(path=url)
@@ -241,7 +241,7 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(Person.all_objects.count(), 1)
 
     def test_create_invalid_cpf_with_permission(self):
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_person"])
         url = reverse("person-list")
 
         invalid_cpf = "12345678910"
@@ -277,7 +277,7 @@ class PersonAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("age"))
 
     def test_create_invalid_contact_with_permission(self):
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_person"])
         url = reverse("person-list")
 
         invalid_contact = "999999999"
@@ -316,7 +316,7 @@ class PersonAPITestCase(APITestCase):
     def test_partial_update_invalid_cpf_with_permission(self):
         person = baker.make(Person)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_person"])
         url = reverse("person-detail", args=[person.cpf])
 
         invalid_cpf = "12345678910"
@@ -350,7 +350,7 @@ class PersonAPITestCase(APITestCase):
     def test_partial_update_invalid_contact_with_permission(self):
         person = baker.make(Person)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_person"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_person"])
         url = reverse("person-detail", args=[person.cpf])
 
         invalid_contact = "999999999"
@@ -382,7 +382,7 @@ class PersonAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("age"))
 
     def test_list_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("person-list")
         response = client.get(path=url)
@@ -391,7 +391,7 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("person-detail", args=[99])
         response = client.get(path=url)
@@ -400,7 +400,7 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_create_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("person-list")
         response = client.post(path=url)
@@ -409,7 +409,7 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_partial_update_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("person-detail", args=[99])
         response = client.patch(path=url)
@@ -418,7 +418,7 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_destroy_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("person-detail", args=[99])
         response = client.delete(path=url)

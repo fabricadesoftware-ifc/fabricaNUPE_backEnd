@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 
 from nupe.core.models import AcademicEducation, Course, Grade
 from nupe.resources.datas.core.course import COURSE_NAME, GRADE_NAME
-from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.integration.account.setup.account import create_account_with_permissions_and_do_authentication
 
 
 class CourseAPITestCase(APITestCase):
@@ -13,7 +13,7 @@ class CourseAPITestCase(APITestCase):
         # cria um curso no banco para retornar no list
         baker.make(Course)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_course"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_course"])
         url = reverse("course-list")
 
         response = client.get(path=url)
@@ -38,7 +38,7 @@ class CourseAPITestCase(APITestCase):
         # cria um curso no banco para detalhar suas informações
         course = baker.make(Course)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_course"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_course"])
         url = reverse("course-detail", args=[course.id])
 
         response = client.get(path=url)
@@ -60,7 +60,7 @@ class CourseAPITestCase(APITestCase):
         # curso com informações válidas para conseguir criar
         course = {"name": COURSE_NAME}
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_course"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_course"])
         url = reverse("course-list")
 
         response = client.post(path=url, data=course)
@@ -84,7 +84,7 @@ class CourseAPITestCase(APITestCase):
         # cria um curso no banco para conseguir atualizar suas informações
         course = baker.make(Course)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_course"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_course"])
         url = reverse("course-detail", args=[course.id])
 
         new_name = "name updated"
@@ -112,7 +112,7 @@ class CourseAPITestCase(APITestCase):
         # cria um curso no banco para conseguir excluir
         course = baker.make(Course)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.delete_course"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.delete_course"])
         url = reverse("course-detail", args=[course.id])
 
         response = client.delete(path=url)
@@ -126,7 +126,7 @@ class CourseAPITestCase(APITestCase):
         self.assertEqual(Course.all_objects.count(), 1)
 
     def test_list_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("course-list")
         response = client.get(path=url)
@@ -135,7 +135,7 @@ class CourseAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("course-detail", args=[99])
         response = client.get(path=url)
@@ -144,7 +144,7 @@ class CourseAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_create_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("course-list")
         response = client.post(path=url)
@@ -153,7 +153,7 @@ class CourseAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_partial_update_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("course-detail", args=[99])
         response = client.patch(path=url)
@@ -162,7 +162,7 @@ class CourseAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_destroy_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("course-detail", args=[99])
         response = client.delete(path=url)
@@ -176,7 +176,7 @@ class GradeAPITestCase(APITestCase):
         # cria um grau no banco para retornar no list
         baker.make(Grade)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_grade"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_grade"])
         url = reverse("grade-list")
 
         response = client.get(path=url)
@@ -201,7 +201,7 @@ class GradeAPITestCase(APITestCase):
         # cria um grau no banco para detalhar suas informações
         grade = baker.make(Grade)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_grade"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_grade"])
         url = reverse("grade-detail", args=[grade.id])
 
         response = client.get(path=url)
@@ -223,7 +223,7 @@ class GradeAPITestCase(APITestCase):
         # grau com informações válidas para conseguir criar
         grade = {"name": GRADE_NAME}
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.add_grade"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_grade"])
         url = reverse("grade-list")
 
         response = client.post(path=url, data=grade)
@@ -247,7 +247,7 @@ class GradeAPITestCase(APITestCase):
         # cria um grau no banco para conseguir atualizar suas informações
         grade = baker.make(Grade)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.change_grade"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_grade"])
         url = reverse("grade-detail", args=[grade.id])
 
         new_name = "name updated"
@@ -275,7 +275,7 @@ class GradeAPITestCase(APITestCase):
         # cria um grau no banco para conseguir excluir
         grade = baker.make(Grade)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.delete_grade"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.delete_grade"])
         url = reverse("grade-detail", args=[grade.id])
 
         response = client.delete(path=url)
@@ -289,7 +289,7 @@ class GradeAPITestCase(APITestCase):
         self.assertEqual(Grade.all_objects.count(), 1)
 
     def test_list_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("grade-list")
         response = client.get(path=url)
@@ -298,7 +298,7 @@ class GradeAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("grade-detail", args=[99])
         response = client.get(path=url)
@@ -307,7 +307,7 @@ class GradeAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_create_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("grade-list")
         response = client.post(path=url)
@@ -316,7 +316,7 @@ class GradeAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_partial_update_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("grade-detail", args=[99])
         response = client.patch(path=url)
@@ -325,7 +325,7 @@ class GradeAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_destroy_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("grade-detail", args=[99])
         response = client.delete(path=url)
@@ -339,7 +339,7 @@ class AcademicEducationAPITestCase(APITestCase):
         # cria uma formação acadêmica no banco para retornar no list
         baker.make(AcademicEducation)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_academiceducation"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_academiceducation"])
         url = reverse("academic_education-list")
 
         response = client.get(path=url)
@@ -366,7 +366,7 @@ class AcademicEducationAPITestCase(APITestCase):
         # cria uma formação acadêmica no banco para detalhar suas informações
         academic_education = baker.make(AcademicEducation)
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["core.view_academiceducation"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_academiceducation"])
         url = reverse("academic_education-detail", args=[academic_education.id])
 
         response = client.get(path=url)
@@ -387,7 +387,7 @@ class AcademicEducationAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("courses_campus"))
 
     def test_list_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("academic_education-list")
         response = client.get(path=url)
@@ -396,7 +396,7 @@ class AcademicEducationAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_retrieve_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
 
         url = reverse("academic_education-detail", args=[99])
         response = client.get(path=url)

@@ -16,3 +16,6 @@
 "visualstudioexptteam.vscodeintellicode",
 "vscode-icons-team.vscode-icons",
 "redhat.vscode-yaml",
+"ms-pyright.pyright",
+"dongli.python-preview",
+"littlefoxteam.vscode-python-test-adapter",

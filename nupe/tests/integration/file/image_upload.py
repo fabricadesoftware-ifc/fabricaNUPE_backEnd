@@ -8,7 +8,7 @@ from rest_framework.test import APITestCase
 
 from nupe.file.models import ProfileImage
 from nupe.resources.datas.file.image_upload import PROFILE_IMAGE_INVALID, PROFILE_IMAGE_PNG
-from nupe.tests.integration.core.setup.user import create_user_with_permissions_and_do_authentication
+from nupe.tests.integration.account.setup.account import create_account_with_permissions_and_do_authentication
 from nupe.tests.utils import create_image, create_invalid_image, mock_profile_image
 
 
@@ -28,7 +28,7 @@ class ProfileImageAPITestCase(APITestCase):
             print("Imagens removidas")
 
     def test_create_with_permission(self):
-        client = create_user_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
         url = reverse("profile_image-list")
 
         with open(PROFILE_IMAGE_PNG, "rb") as image:
@@ -53,7 +53,7 @@ class ProfileImageAPITestCase(APITestCase):
     def test_destroy_with_permission(self):
         mocked_image = mock_profile_image()
 
-        client = create_user_with_permissions_and_do_authentication(permissions=["file.delete_profileimage"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["file.delete_profileimage"])
         url = reverse("profile_image-detail", args=[mocked_image.attachment_id])
 
         response = client.delete(path=url)
@@ -64,7 +64,7 @@ class ProfileImageAPITestCase(APITestCase):
         self.assertEqual(ProfileImage.objects.count(), 0)
 
     def test_create_invalid_with_permission(self):
-        client = create_user_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
+        client = create_account_with_permissions_and_do_authentication(permissions=["file.add_profileimage"])
         url = reverse("profile_image-list")
 
         with open(PROFILE_IMAGE_INVALID, "rb") as invalid_image:
@@ -84,7 +84,7 @@ class ProfileImageAPITestCase(APITestCase):
             self.assertIsNone(response.data.get("uploaded_at"))
 
     def test_create_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
         url = reverse("profile_image-list")
 
         response = client.post(path=url)
@@ -93,7 +93,7 @@ class ProfileImageAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
     def test_destroy_without_permission(self):
-        client = create_user_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication()
         url = reverse("profile_image-detail", args=[99])
 
         response = client.delete(path=url)

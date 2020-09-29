@@ -74,6 +74,8 @@ class InstitutionCampus(SafeDeleteModel):
         campus: objeto do tipo model Campus (o2m)
 
         academic_education: relação inversa para a model AcademicEducationInstitutionCampus
+
+        workers: relação inversa para a model Account
     """
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto

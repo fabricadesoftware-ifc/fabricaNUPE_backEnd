@@ -81,3 +81,16 @@ Responsável
 +++++++++++
 
 .. autoclass:: nupe.core.models.student.Responsible
+
+Módulo de Trabalho
+------------------
+
+Função
+++++++
+
+.. autoclass:: nupe.core.models.job.Function
+
+Setor
++++++
+
+.. autoclass:: nupe.core.models.job.Sector

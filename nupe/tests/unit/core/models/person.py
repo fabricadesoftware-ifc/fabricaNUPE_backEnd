@@ -20,6 +20,7 @@ class PersonTestCase(TestCase):
         self.assertIs(hasattr(Person, "student_registrations"), True)
         self.assertIs(hasattr(Person, "dependents"), True)
         self.assertIs(hasattr(Person, "responsibles"), True)
+        self.assertIs(hasattr(Person, "account"), True)
         self.assertIs(hasattr(Person, "full_name"), True)
         self.assertIs(hasattr(Person, "age"), True)
 

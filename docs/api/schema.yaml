@@ -21,11 +21,240 @@ securityDefinitions:
 security:
   - NUPE Authentication: []
 paths:
+  /academic_education/:
+    get:
+      operationId: academic_education_list
+      description: "retorna todas as forma\xE7\xF5es acad\xEAmicas do banco de dados"
+      parameters:
+        - name: course_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: grade_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/AcademicEducation'
+      tags:
+        - academic_education
+    parameters: []
+  /academic_education/{id}/:
+    get:
+      operationId: academic_education_read
+      description: "retorna uma forma\xE7\xE3o acad\xEAmica espec\xEDfica do banco\
+        \ de dados"
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AcademicEducation'
+      tags:
+        - academic_education
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this academic education.
+        required: true
+        type: integer
+  /account/:
+    get:
+      operationId: account_list
+      description: "*Endpoint em constru\xE7\xE3o*"
+      parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/CurrentAccount'
+      tags:
+        - account
+    post:
+      operationId: account_create
+      description: "*Endpoint em constru\xE7\xE3o*"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CurrentAccount'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/CurrentAccount'
+      tags:
+        - account
+    parameters: []
+  /account/current/:
+    get:
+      operationId: account_current
+      description: "retorna informa\xE7\xF5es sobre o usu\xE1rio logado atual"
+      parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/CurrentAccount'
+      tags:
+        - account
+    parameters: []
+  /account/{id}/:
+    get:
+      operationId: account_read
+      description: "*Endpoint em constru\xE7\xE3o*"
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/CurrentAccount'
+      tags:
+        - account
+    put:
+      operationId: account_update
+      description: "*Endpoint em constru\xE7\xE3o*"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CurrentAccount'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/CurrentAccount'
+      tags:
+        - account
+    patch:
+      operationId: account_partial_update
+      description: "*Endpoint em constru\xE7\xE3o*"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CurrentAccount'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/CurrentAccount'
+      tags:
+        - account
+    delete:
+      operationId: account_delete
+      description: "*Endpoint em constru\xE7\xE3o*"
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - account
+    parameters:
+      - name: id
+        in: path
+        description: "A unique integer value identifying this usu\xE1rio."
+        required: true
+        type: integer
   /campus/:
     get:
       operationId: campus_list
       description: retorna todos os campus do banco de dados
       parameters:
+        - name: name
+          in: query
+          description: ''
+          required: false
+          type: string
         - name: search
           in: query
           description: A search term.
@@ -83,7 +312,7 @@ paths:
       tags:
         - campus
     parameters: []
-  /campus/{name__iexact}/:
+  /campus/{id}/:
     get:
       operationId: campus_read
       description: retorna um campus especifico do banco de dados
@@ -121,15 +350,315 @@ paths:
       tags:
         - campus
     parameters:
-      - name: name__iexact
+      - name: id
         in: path
+        description: A unique integer value identifying this campus.
         required: true
-        type: string
+        type: integer
+  /city/:
+    get:
+      operationId: city_list
+      description: retorna todas as cidades do banco de dados
+      parameters:
+        - name: name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/City'
+      tags:
+        - city
+    parameters: []
+  /city/{id}/:
+    get:
+      operationId: city_read
+      description: retorna uma cidade especifica do banco de dados
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/City'
+      tags:
+        - city
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this city.
+        required: true
+        type: integer
+  /course/:
+    get:
+      operationId: course_list
+      description: retorna todos os cursos do banco de dados
+      parameters:
+        - name: name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Course'
+      tags:
+        - course
+    post:
+      operationId: course_create
+      description: cadastra um curso no banco de dados
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Course'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Course'
+      tags:
+        - course
+    parameters: []
+  /course/{id}/:
+    get:
+      operationId: course_read
+      description: retorna um curso especifico do banco de dados
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Course'
+      tags:
+        - course
+    patch:
+      operationId: course_partial_update
+      description: atualiza um ou mais atributos de um curso
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Course'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Course'
+      tags:
+        - course
+    delete:
+      operationId: course_delete
+      description: exclui um curso do banco de dados
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - course
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this course.
+        required: true
+        type: integer
+  /grade/:
+    get:
+      operationId: grade_list
+      description: retorna todos os graus do banco de dados
+      parameters:
+        - name: name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: course_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Grade'
+      tags:
+        - grade
+    post:
+      operationId: grade_create
+      description: cadastra um grau no banco de dados
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Grade'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Grade'
+      tags:
+        - grade
+    parameters: []
+  /grade/{id}/:
+    get:
+      operationId: grade_read
+      description: retorna um grau especifico do banco de dados
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Grade'
+      tags:
+        - grade
+    patch:
+      operationId: grade_partial_update
+      description: atualiza um ou mais atributos de um grau
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Grade'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Grade'
+      tags:
+        - grade
+    delete:
+      operationId: grade_delete
+      description: exclui um grau do banco de dados
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - grade
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this grade.
+        required: true
+        type: integer
   /institution/:
     get:
       operationId: institution_list
       description: "retorna todas as institui\xE7\xF5es do banco de dados"
       parameters:
+        - name: name
+          in: query
+          description: ''
+          required: false
+          type: string
         - name: campus_name
           in: query
           description: ''
@@ -192,7 +721,7 @@ paths:
       tags:
         - institution
     parameters: []
-  /institution/{name__iexact}/:
+  /institution/{id}/:
     get:
       operationId: institution_read
       description: "retorna uma institui\xE7\xE3o especifica do banco de dados"
@@ -230,10 +759,85 @@ paths:
       tags:
         - institution
     parameters:
-      - name: name__iexact
+      - name: id
         in: path
+        description: A unique integer value identifying this institution.
         required: true
-        type: string
+        type: integer
+  /location/:
+    get:
+      operationId: location_list
+      description: "retorna todas as localiza\xE7\xF5es do banco de dados"
+      parameters:
+        - name: city_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: state_initials
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Location'
+      tags:
+        - location
+    parameters: []
+  /location/{id}/:
+    get:
+      operationId: location_read
+      description: "retorna uma localiza\xE7\xE3o especifica do banco de dados"
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Location'
+      tags:
+        - location
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this location.
+        required: true
+        type: integer
   /person/:
     get:
       operationId: person_list
@@ -387,6 +991,75 @@ paths:
           \ objeto"
         required: true
         type: string
+  /state/:
+    get:
+      operationId: state_list
+      description: retorna todas os estados do banco de dados
+      parameters:
+        - name: initials
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/State'
+      tags:
+        - state
+    parameters: []
+  /state/{id}/:
+    get:
+      operationId: state_read
+      description: retorna um estado especifico do banco de dados
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/State'
+      tags:
+        - state
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this state.
+        required: true
+        type: integer
   /student/:
     get:
       operationId: student_list
@@ -512,160 +1185,10 @@ paths:
         required: true
         type: string
         pattern: ^[0-9]*$
-  /user/:
-    get:
-      operationId: user_list
-      description: "*Endpoint em constru\xE7\xE3o*"
-      parameters:
-        - name: search
-          in: query
-          description: A search term.
-          required: false
-          type: string
-        - name: ordering
-          in: query
-          description: Which field to use when ordering the results.
-          required: false
-          type: string
-        - name: page
-          in: query
-          description: A page number within the paginated result set.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/CurrentUser'
-      tags:
-        - user
-    post:
-      operationId: user_create
-      description: "*Endpoint em constru\xE7\xE3o*"
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/CurrentUser'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/CurrentUser'
-      tags:
-        - user
-    parameters: []
-  /user/current/:
-    get:
-      operationId: user_current
-      description: "retorna informa\xE7\xF5es sobre o usu\xE1rio logado atual"
-      parameters:
-        - name: search
-          in: query
-          description: A search term.
-          required: false
-          type: string
-        - name: ordering
-          in: query
-          description: Which field to use when ordering the results.
-          required: false
-          type: string
-        - name: page
-          in: query
-          description: A page number within the paginated result set.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/CurrentUser'
-      tags:
-        - user
-    parameters: []
-  /user/{id}/:
-    get:
-      operationId: user_read
-      description: "*Endpoint em constru\xE7\xE3o*"
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/CurrentUser'
-      tags:
-        - user
-    put:
-      operationId: user_update
-      description: "*Endpoint em constru\xE7\xE3o*"
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/CurrentUser'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/CurrentUser'
-      tags:
-        - user
-    patch:
-      operationId: user_partial_update
-      description: "*Endpoint em constru\xE7\xE3o*"
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/CurrentUser'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/CurrentUser'
-      tags:
-        - user
-    delete:
-      operationId: user_delete
-      description: "*Endpoint em constru\xE7\xE3o*"
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-        - user
-    parameters:
-      - name: id
-        in: path
-        description: "A unique integer value identifying this usu\xE1rio."
-        required: true
-        type: integer
 definitions:
-  CampusList:
+  AcademicEducation:
     required:
       - name
-      - location
     type: object
     properties:
       id:
@@ -675,44 +1198,109 @@ definitions:
       name:
         title: Name
         type: string
-        pattern: ^[a-z A-Z]*$
+        minLength: 1
+  PersonDetail:
+    title: Person
+    required:
+      - first_name
+      - last_name
+      - cpf
+      - birthday_date
+      - gender
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      first_name:
+        title: First name
+        type: string
+        maxLength: 50
+        minLength: 1
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 100
+        minLength: 1
+      cpf:
+        title: Cpf
+        description: "Somente n\xFAmeros"
+        type: string
+        maxLength: 11
+        minLength: 1
+      birthday_date:
+        title: Birthday date
+        type: string
+        format: date
+      gender:
+        title: Gender
+        type: string
+        enum:
+          - F
+          - M
+      contact:
+        title: Contact
+        description: "DDD+N\xFAmero"
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 12
+        minLength: 11
+        x-nullable: true
+      profile_image:
+        title: Profile image
+        type: string
+        minLength: 1
+  CurrentAccount:
+    required:
+      - email
+      - person
+      - local_job
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      email:
+        title: Email
+        type: string
+        format: email
+        maxLength: 254
+        minLength: 1
+      person:
+        $ref: '#/definitions/PersonDetail'
+      local_job:
+        title: Local job
+        type: string
+        minLength: 1
+      is_active:
+        title: Is active
+        type: boolean
+      is_staff:
+        title: Is staff
+        type: boolean
+      is_admin:
+        title: Is admin
+        type: boolean
+  CampusList:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
         maxLength: 50
         minLength: 1
       location:
         title: Location
-        type: integer
-  Campus:
-    required:
-      - name
-      - locations
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
         type: string
-        pattern: ^[a-z A-Z]*$
-        maxLength: 50
-        minLength: 1
-      locations:
-        title: Locations
-        type: string
-        minLength: 1
-      institutions:
-        type: array
-        items:
-          type: integer
         readOnly: true
-        uniqueItems: true
-      academic_education:
-        type: array
-        items:
-          type: integer
-        readOnly: true
-        uniqueItems: true
   Institution:
     required:
       - name
@@ -725,8 +1313,100 @@ definitions:
       name:
         title: Name
         type: string
-        pattern: ^[a-z A-Z]*$
         maxLength: 50
+        minLength: 1
+  Campus:
+    required:
+      - name
+      - location
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      location:
+        title: Location
+        type: integer
+      institutions:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+      institution_output:
+        type: array
+        items:
+          $ref: '#/definitions/Institution'
+        readOnly: true
+  City:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+  Course:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+  Grade:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      courses:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+      courses_output:
+        type: array
+        items:
+          type: string
+        readOnly: true
+        uniqueItems: true
+  Location:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        readOnly: true
         minLength: 1
   PersonList:
     required:
@@ -746,7 +1426,7 @@ definitions:
         description: "Somente n\xFAmeros"
         type: string
         maxLength: 11
-        minLength: 11
+        minLength: 1
       contact:
         title: Contact
         description: "DDD+N\xFAmero"
@@ -762,7 +1442,6 @@ definitions:
       - cpf
       - birthday_date
       - gender
-      - profile_image
     type: object
     properties:
       id:
@@ -772,13 +1451,11 @@ definitions:
       first_name:
         title: First name
         type: string
-        pattern: ^[a-z A-Z]*$
         maxLength: 50
         minLength: 1
       last_name:
         title: Last name
         type: string
-        pattern: ^[a-z A-Z]*$
         maxLength: 100
         minLength: 1
       cpf:
@@ -786,7 +1463,7 @@ definitions:
         description: "Somente n\xFAmeros"
         type: string
         maxLength: 11
-        minLength: 11
+        minLength: 1
       birthday_date:
         title: Birthday date
         type: string
@@ -808,59 +1485,6 @@ definitions:
       profile_image:
         title: Profile image
         type: string
-  PersonDetail:
-    required:
-      - first_name
-      - last_name
-      - cpf
-      - birthday_date
-      - gender
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      first_name:
-        title: First name
-        type: string
-        pattern: ^[a-z A-Z]*$
-        maxLength: 50
-        minLength: 1
-      last_name:
-        title: Last name
-        type: string
-        pattern: ^[a-z A-Z]*$
-        maxLength: 100
-        minLength: 1
-      cpf:
-        title: Cpf
-        description: "Somente n\xFAmeros"
-        type: string
-        maxLength: 11
-        minLength: 11
-      birthday_date:
-        title: Birthday date
-        type: string
-        format: date
-      gender:
-        title: Gender
-        type: string
-        enum:
-          - F
-          - M
-      contact:
-        title: Contact
-        description: "DDD+N\xFAmero"
-        type: string
-        pattern: ^[0-9]*$
-        maxLength: 12
-        minLength: 11
-        x-nullable: true
-      profile_image:
-        title: Profile image
-        type: string
-        minLength: 1
   ProfileImageCreate:
     type: object
     properties:
@@ -885,6 +1509,26 @@ definitions:
         type: string
         format: date-time
         readOnly: true
+  State:
+    required:
+      - name
+      - initials
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      initials:
+        title: Initials
+        type: string
+        maxLength: 2
+        minLength: 1
   StudentList:
     required:
       - registration
@@ -917,7 +1561,7 @@ definitions:
     required:
       - registration
       - person
-      - academic_education_campus
+      - academic_education_institution_campus
       - responsibles
       - ingress_date
     type: object
@@ -935,8 +1579,8 @@ definitions:
       person:
         title: Person
         type: integer
-      academic_education_campus:
-        title: Academic education campus
+      academic_education_institution_campus:
+        title: Academic education institution campus
         type: integer
       responsibles:
         type: array
@@ -952,7 +1596,7 @@ definitions:
       - registration
       - personal_info
       - course
-      - campus
+      - institution
       - responsibles
       - ingress_date
     type: object
@@ -973,14 +1617,14 @@ definitions:
         title: Course
         type: string
         minLength: 1
-      campus:
-        title: Campus
+      institution:
+        title: Institution
         type: string
         minLength: 1
-      academic_education_campus_id:
-        title: Academic education campus id
-        type: string
-        readOnly: true
+      academic_education_institution_campus:
+        title: Academic education institution campus
+        type: integer
+        x-nullable: true
       responsibles:
         type: array
         items:
@@ -992,18 +1636,3 @@ definitions:
       graduated:
         title: Graduated
         type: boolean
-  CurrentUser:
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      first_name:
-        title: Primeiro nome
-        type: string
-        maxLength: 150
-      last_name:
-        title: "\xDAltimo nome"
-        type: string
-        maxLength: 150

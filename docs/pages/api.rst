@@ -16,7 +16,7 @@ Mas caso deseje executar manualmente, utilize:
 Super Usuário Padrão:
 +++++++++++++++++++++
 
-   Username: nupexample
+   Email: nupexample@example.com
 
    Senha: nuperoot
 
