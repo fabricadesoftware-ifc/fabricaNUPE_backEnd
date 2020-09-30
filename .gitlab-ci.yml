@@ -47,12 +47,13 @@ docs build:
     before_script:
         - ./manage.py generate_swagger -o docs/api/schema.yaml
     script: make -C docs/ html
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - docs/**/*
+    # rules:
+    #     - if: $CI_COMMIT_BRANCH == "develop"
+    #       changes:
+    #           - docs/**/*
     cache:
         key: docs build
+        # untracked: true
         policy: push
         paths:
             - $DOCS_PATH
@@ -99,11 +100,12 @@ docs deploy:
         GIT_STRATEGY: none
     before_script:
         - npm install -g surge
+        - ls -l
     script: surge -p $DOCS_PATH -d $DOCS_URL
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - docs/**/*
+    # rules:
+    #     - if: $CI_COMMIT_BRANCH == "develop"
+    #       changes:
+    #           - docs/**/*
     cache:
         key: docs build
         policy: pull
