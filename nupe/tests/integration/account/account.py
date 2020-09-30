@@ -81,9 +81,9 @@ class AccountAPITestCase(APITestCase):
         sector = baker.make("core.Sector")
 
         # conta com informações válidas para conseguir criar
-        new_account_email = "somemail@example.com"
+        email = "somemail@example.com"
         account = {
-            "email": new_account_email,
+            "email": email,
             "person": person.id,
             "local_job": local_job.id,
             "function": function.id,
@@ -98,9 +98,9 @@ class AccountAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
         # deve ser criado no banco de dados
-        account_object_model = Account.objects.get(email=new_account_email)
+        account_object_model = Account.objects.get(email=email)
         self.assertEqual(Account.objects.count(), 2)
-        self.assertEqual(account_object_model.email, new_account_email)
+        self.assertEqual(account_object_model.email, email)
         self.assertEqual(account_object_model.person, person)
         self.assertEqual(account_object_model.local_job, local_job)
         self.assertEqual(account_object_model.function, function)
