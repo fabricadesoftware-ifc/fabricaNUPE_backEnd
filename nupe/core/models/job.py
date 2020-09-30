@@ -21,6 +21,9 @@ class Function(SafeDeleteModel):
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(max_length=150)
 
+    def __str__(self):
+        return self.name
+
 
 class Sector(SafeDeleteModel):
     """
@@ -40,3 +43,6 @@ class Sector(SafeDeleteModel):
 
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(max_length=150)
+
+    def __str__(self):
+        return self.name

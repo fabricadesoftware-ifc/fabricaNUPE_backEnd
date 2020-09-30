@@ -1,7 +1,10 @@
 import os
 
 from django.core.management.base import BaseCommand, CommandError
+from django.db.utils import IntegrityError
+from model_bakery import baker
 
+from nupe.account.models import Account
 from nupe.core.models import (
     AcademicEducation,
     AcademicEducationInstitutionCampus,
@@ -14,6 +17,7 @@ from nupe.core.models import (
     Location,
     State,
 )
+from nupe.resources.datas.account.account import EMAIL, PASSWORD
 from nupe.resources.datas.core.populate import academic_educations, campi, cities, institutions, states
 
 
@@ -75,10 +79,22 @@ class Command(BaseCommand):
                     ),
                 )
             except Campus.DoesNotExist:
-                raise ValueError("Campus não encontrado. Por favor, informe na lista para população.")
+                message = "Campus não encontrado. Por favor, informe na lista para população."
+
+                raise ValueError(message)
 
     def populate_superuser(self):
-        os.system("./manage.py createsuperuser --noinput")
+        email = os.getenv(key="DJANGO_SUPERUSER_EMAIL", default=EMAIL)
+        password = os.getenv(key="DJANGO_SUPERUSER_PASSWORD", default=PASSWORD)
+
+        try:
+            Account.objects.create_superuser(
+                email=email, password=password, function=baker.make("core.Function"), sector=baker.make("core.Sector")
+            )
+        except IntegrityError:
+            message = f"Super Usuário já criado!\nEmail: {email}\nSenha: {password}"
+
+            raise ValueError(message)
 
     def __campus_register(self):
         for campus in campi:
@@ -91,7 +107,9 @@ class Command(BaseCommand):
                 campus_object_model.institutions.add(institution_object_model)
 
             except Location.DoesNotExist:
-                raise ValueError("Localização não encontrada. Por favor, informe na lista para população.")
+                message = "Localização não encontrada. Por favor, informe na lista para população."
+
+                raise ValueError(message)
 
     def __institution_register(self):
         for institution in institutions:
@@ -109,4 +127,6 @@ class Command(BaseCommand):
                 state_object_model = State.objects.get(initials=city.get("state_initials"))
                 state_object_model.cities.add(city_object_model)
             except State.DoesNotExist:
-                raise ValueError("Estado não cadastrado. Por favor, informe-o na lista para população.")
+                message = "Estado não cadastrado. Por favor, informe-o na lista para população."
+
+                raise ValueError(message)

@@ -37,6 +37,7 @@ class InstitutionCampusTestCase(TestCase):
         self.assertIs(hasattr(InstitutionCampus, "institution"), True)
         self.assertIs(hasattr(InstitutionCampus, "campus"), True)
         self.assertIs(hasattr(InstitutionCampus, "academic_education"), True)
+        self.assertIs(hasattr(InstitutionCampus, "workers"), True)
 
     def test_return_str(self):
         institution_campus = baker.prepare(InstitutionCampus)

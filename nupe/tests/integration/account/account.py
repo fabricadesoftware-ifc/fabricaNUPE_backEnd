@@ -172,9 +172,6 @@ class AccountAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
 
-        print(Account.objects.count())
-        print(Account.all_objects.count())
-
         # o dado deve ser mascarado
         self.assertEqual(Account.objects.count(), 1)
 
