@@ -32,18 +32,18 @@ class AccountViewSet(ModelViewSet):
     queryset = Account.objects.all()
 
     filterset_class = AccountFilter
-    search_fields = ["email"]
-    ordering_fields = ["email", "full_name"]
-    ordering = ["full_name"]
+    search_fields = ["email", "person__first_name", "person__last_name"]
+    ordering_fields = ["email", "person__first_name", "person__last_name"]
+    ordering = ["person__first_name", "person__last_name"]
 
     http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {
-        "list": ["core.view_account"],
-        "retrieve": ["core.view_account"],
-        "create": ["core.add_account"],
-        "partial_update": ["core.change_account"],
-        "destroy": ["core.delete_account"],
+        "list": ["account.view_account"],
+        "retrieve": ["account.view_account"],
+        "create": ["account.add_account"],
+        "partial_update": ["account.change_account"],
+        "destroy": ["account.delete_account"],
     }
 
     per_action_serializer = {

@@ -39,7 +39,7 @@ class Account(AbstractUser, SafeDeleteModel):
         short_name: primeiro nome do usuário
     """
 
-    _safedelete_policy = SOFT_DELETE_CASCADE
+    _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
     email = models.EmailField(unique=True)
     person = models.OneToOneField("core.Person", related_name="account", on_delete=models.CASCADE, null=True)

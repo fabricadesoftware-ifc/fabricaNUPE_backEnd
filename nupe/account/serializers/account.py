@@ -103,6 +103,10 @@ class CurrentAccountSerializer(ModelSerializer):
 
         local_job: instituição/campus onde trabalha
 
+        function: cargo que ocupa
+
+        sector: setor onde trabalha
+
         date_joined: data da criação da conta
 
         is_active: conta ativa ou não
