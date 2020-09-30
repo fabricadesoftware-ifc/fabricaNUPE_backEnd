@@ -5,7 +5,6 @@ stages:
     - deploy
 
 variables:
-    GIT_STRATEGY: fetch
     DOCS_PATH: docs/_build/html
     DOCS_URL: http://nupe-documentation.surge.sh
     DIST_PATH: nupe_frontend/dist
@@ -51,10 +50,9 @@ docs build:
     #     - if: $CI_COMMIT_BRANCH == "develop"
     #       changes:
     #           - docs/**/*
-    cache:
-        key: docs build
-        # untracked: true
-        policy: push
+    artifacts:
+        name: docs-nupe builded
+        expire_in: 30min
         paths:
             - $DOCS_PATH
 
@@ -69,9 +67,9 @@ dev_frontend build:
         - if: $CI_COMMIT_BRANCH == "develop"
           changes:
               - nupe_frontend/**/*
-    cache:
-        key: dev_frontend build
-        policy: push
+    artifacts:
+        name: dev_frontend builded
+        expire_in: 30min
         paths:
             - $DIST_PATH
 
@@ -100,15 +98,13 @@ docs deploy:
         GIT_STRATEGY: none
     before_script:
         - npm install -g surge
-        - ls -l
     script: surge -p $DOCS_PATH -d $DOCS_URL
     # rules:
     #     - if: $CI_COMMIT_BRANCH == "develop"
     #       changes:
     #           - docs/**/*
-    cache:
-        key: docs build
-        policy: pull
+    dependencies:
+        - docs build
     environment:
         name: docs-nupe
         url: $DOCS_URL
@@ -122,9 +118,8 @@ dev_frontend deploy:
         - if: $CI_COMMIT_BRANCH == "develop"
           changes:
               - nupe_frontend/**/*
-    cache:
-        key: dev_frontend build
-        policy: pull
+    dependencies:
+        - dev_frontend build
     environment:
         name: frontend-nupe
         url: $DIST_URL
