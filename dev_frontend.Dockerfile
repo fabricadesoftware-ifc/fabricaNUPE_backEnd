@@ -6,5 +6,7 @@ WORKDIR /usr/nupe
 ENV API_URL=http://localhost/ \
     NUXT_MODE=spa
 
+RUN apk add --no-cache git
+
 COPY nupe_frontend /usr/nupe
 RUN npm install
