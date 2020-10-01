@@ -60,7 +60,6 @@ class AccountAPITestCase(APITestCase):
         self.assertIsNot(response.data.get("person", False), False)
         self.assertIsNot(response.data.get("local_job", False), False)
         self.assertIsNotNone(response.data.get("id"))
-        self.assertIsNotNone(response.data.get("email"))
         self.assertIsNotNone(response.data.get("function"))
         self.assertIsNotNone(response.data.get("sector"))
 
@@ -98,13 +97,13 @@ class AccountAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
         # deve ser criado no banco de dados
-        account_object_model = Account.objects.get(email=email)
+        account = Account.objects.get(email=email)
         self.assertEqual(Account.objects.count(), 2)
-        self.assertEqual(account_object_model.email, email)
-        self.assertEqual(account_object_model.person, person)
-        self.assertEqual(account_object_model.local_job, local_job)
-        self.assertEqual(account_object_model.function, function)
-        self.assertEqual(account_object_model.sector, sector)
+        self.assertEqual(account.email, email)
+        self.assertEqual(account.person, person)
+        self.assertEqual(account.local_job, local_job)
+        self.assertEqual(account.function, function)
+        self.assertEqual(account.sector, sector)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))

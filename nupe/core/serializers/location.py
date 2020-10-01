@@ -17,20 +17,6 @@ class CitySerializer(ModelSerializer):
         model = City
         fields = ["id", "name"]
 
-    def create(self, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
-
-    def update(self, instance, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
-
 
 class StateSerializer(ModelSerializer):
     """
@@ -48,20 +34,6 @@ class StateSerializer(ModelSerializer):
         model = State
         fields = ["id", "name", "initials"]
 
-    def create(self, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
-
-    def update(self, instance, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
-
 
 class LocationSerializer(ModelSerializer):
     """
@@ -78,17 +50,3 @@ class LocationSerializer(ModelSerializer):
     class Meta:
         model = Location
         fields = ["id", "name"]
-
-    def create(self, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
-
-    def update(self, instance, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover

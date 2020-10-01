@@ -110,14 +110,14 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
         # deve ser criado no banco de dados
-        person_object_model = Person.objects.all().first()
+        person = Person.objects.all().first()
         self.assertEqual(Person.objects.count(), 1)
-        self.assertEqual(person_object_model.first_name, FIRST_NAME)
-        self.assertEqual(person_object_model.last_name, LAST_NAME)
-        self.assertEqual(person_object_model.cpf, CPF)
-        self.assertEqual(person_object_model.gender, GENDER)
-        self.assertEqual(person_object_model.birthday_date, datetime.strptime(OLDER_BIRTHDAY_DATE, "%Y-%m-%d").date())
-        self.assertEqual(person_object_model.profile_image, mocked_image)
+        self.assertEqual(person.first_name, FIRST_NAME)
+        self.assertEqual(person.last_name, LAST_NAME)
+        self.assertEqual(person.cpf, CPF)
+        self.assertEqual(person.gender, GENDER)
+        self.assertEqual(person.birthday_date, datetime.strptime(OLDER_BIRTHDAY_DATE, "%Y-%m-%d").date())
+        self.assertEqual(person.profile_image, mocked_image)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))

@@ -91,3 +91,16 @@ Serializer para Listar ou Detalhar uma Formação Acadêmica
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.course.AcademicEducationSerializer
+
+Módulo de Trabalho
+------------------
+
+Serializer para Listar, Detalhar, Cadastrar ou Atualizar uma Função/Cargo
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.job.FunctionSerializer
+
+Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Setor
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.job.SectorSerializer

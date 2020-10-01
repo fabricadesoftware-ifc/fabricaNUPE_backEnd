@@ -106,15 +106,13 @@ class StudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
         # o estudante deve ser criado no banco de dados
-        student_object_model = Student.objects.all().first()
+        student = Student.objects.all().first()
         self.assertEqual(Student.objects.count(), 1)
-        self.assertEqual(student_object_model.registration, REGISTRATION)
-        self.assertEqual(student_object_model.person, under_age_person)
-        self.assertEqual(
-            student_object_model.academic_education_institution_campus, academic_education_institution_campus
-        )
-        self.assertEqual(student_object_model.responsibles_persons.all().first(), older_person)
-        self.assertEqual(student_object_model.ingress_date, INGRESS_DATE)
+        self.assertEqual(student.registration, REGISTRATION)
+        self.assertEqual(student.person, under_age_person)
+        self.assertEqual(student.academic_education_institution_campus, academic_education_institution_campus)
+        self.assertEqual(student.responsibles_persons.all().first(), older_person)
+        self.assertEqual(student.ingress_date, INGRESS_DATE)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))

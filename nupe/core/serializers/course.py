@@ -57,17 +57,3 @@ class AcademicEducationSerializer(ModelSerializer):
     class Meta:
         model = AcademicEducation
         fields = ["id", "name"]
-
-    def create(self, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
-
-    def update(self, instance, validated_data):
-        """
-        Raises:
-            NotImplementedError: Serializer somente leitura
-        """
-        raise NotImplementedError("Serializer somente leitura")  # pragma: no cover
