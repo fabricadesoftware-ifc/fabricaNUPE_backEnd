@@ -38,8 +38,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:8080",
     "http://localhost:3000",
 ]
 
@@ -63,14 +64,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "nupe.wsgi.application"
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
-
 
 REST_FRAMEWORK = {
     # autenticação
@@ -92,7 +91,6 @@ REST_FRAMEWORK = {
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
-
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
     "SECURITY_DEFINITIONS": {
@@ -101,16 +99,24 @@ SWAGGER_SETTINGS = {
     "DEFAULT_INFO": "nupe.urls.api_info",
 }
 
-
 OAUTH2_PROVIDER = {
     "ACCESS_TOKEN_EXPIRE_SECONDS": timedelta(hours=4).seconds,
     "REFRESH_TOKEN_EXPIRE_SECONDS": timedelta(hours=8).seconds,
     "OAUTH2_BACKEND_CLASS": "oauth2_provider.oauth2_backends.JSONOAuthLibCore",
 }
 
+DATABASES = {
+    "default": {
+        "ENGINE": os.getenv(key="SQL_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": os.getenv(key="POSTGRES_DB", default=os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": os.getenv(key="POSTGRES_USER", default="user"),
+        "PASSWORD": os.getenv(key="POSTGRES_PASSWORD", default="password"),
+        "HOST": os.getenv(key="SQL_HOST", default="localhost"),
+        "PORT": os.getenv(key="SQL_PORT", default="5432"),
+    }
+}
 
 AUTH_USER_MODEL = "account.Account"
-
 
 LANGUAGE_CODE = "pt-br"
 
@@ -122,27 +128,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, os.getenv(key="MEDIA_ROOT"))
 
 MEDIA_URL = os.getenv(key="MEDIA_URL")
-
-# modo desenvolvimento
-if DEBUG:
-    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": os.path.join(BASE_DIR, "db.sqlite3")}}
-# modo produção
-else:
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.postgresql",
-    #         "NAME": os.getenv(key="DB_NAME"),
-    #         "USER": os.getenv(key="DB_USER"),
-    #         "PASSWORD": os.getenv(key="DB_PASSWORD"),
-    #         "HOST": "prod_db",  # esse valor deve ser o mesmo nome do serviço do docker-compose para o auto mapping
-    #         "PORT": "5432",
-    #     }
-    # }

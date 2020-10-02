@@ -5,7 +5,7 @@ Documentação da API
 Informações Relevantes
 ----------------------
 
-Por padrão quando o container é iniciado o backend estará rodando no endereço **localhost:80** ou apenas **localhost**, e o frontend estará rodando no endereço **localhost:3000**
+Por padrão quando o container é iniciado o backend estará rodando no endereço **localhost:8000**, e o frontend estará rodando no endereço **localhost:3000**
 
 Mas caso deseje executar manualmente, utilize:
 

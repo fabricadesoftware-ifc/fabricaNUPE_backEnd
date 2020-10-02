@@ -3,7 +3,7 @@ LABEL mantainer="Luis Guerreiro <luiscvlh11@gmail.com>"
 
 WORKDIR /usr/nupe
 
-ENV API_URL=http://localhost/ \
+ENV API_URL=http://localhost:8000/ \
     NUXT_MODE=spa
 
 RUN apk add --no-cache git
