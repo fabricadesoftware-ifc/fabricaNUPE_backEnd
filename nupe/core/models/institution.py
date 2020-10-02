@@ -26,7 +26,7 @@ class Institution(SafeDeleteModel):
 
     name = models.CharField(max_length=INSTITUTION_MAX_LENGTH, unique=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -55,7 +55,7 @@ class Campus(SafeDeleteModel):
     location = models.ForeignKey("Location", related_name="campus", on_delete=models.PROTECT)
     institutions = models.ManyToManyField("Institution", related_name="campus", through="InstitutionCampus")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -96,7 +96,7 @@ class InstitutionCampus(SafeDeleteModel):
     class Meta:
         unique_together = ["institution", "campus"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.institution} - {self.campus}"
 
 
@@ -133,5 +133,5 @@ class AcademicEducationInstitutionCampus(SafeDeleteModel):
     class Meta:
         unique_together = ["institution_campus", "academic_education"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.academic_education} - {self.institution_campus}"

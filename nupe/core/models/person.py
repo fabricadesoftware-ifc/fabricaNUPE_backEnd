@@ -90,7 +90,7 @@ class Person(SafeDeleteModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.full_name
 
     @property

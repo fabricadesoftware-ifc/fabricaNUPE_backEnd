@@ -564,9 +564,9 @@ class AttendanceReasonAPITestCase(APITestCase):
         attendance_reason_description = "Some description to this new attendance reason! :D"
         attendance_reason = {
             "description": attendance_reason_description,
-            "special_need": special_need_type.id,
-            "crisis": crisis_type.id,
-            "drug": drug_type.id,
+            "special_need": [special_need_type.id],
+            "crisis": [crisis_type.id],
+            "drug": [drug_type.id],
         }
 
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_attendancereason"])

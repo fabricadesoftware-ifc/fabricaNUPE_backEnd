@@ -26,7 +26,7 @@ class Course(SafeDeleteModel):
 
     name = models.CharField(max_length=COURSE_MAX_LENGTH, unique=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -54,7 +54,7 @@ class Grade(SafeDeleteModel):
         "Course", related_name="grades", related_query_name="grade", through="AcademicEducation"
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -83,5 +83,5 @@ class AcademicEducation(SafeDeleteModel):
     class Meta:
         unique_together = ["grade", "course"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.grade} em {self.course}"

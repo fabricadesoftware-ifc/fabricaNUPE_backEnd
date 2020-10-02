@@ -70,7 +70,7 @@ class Student(SafeDeleteModel):
     class Meta:
         unique_together = ["person", "academic_education_institution_campus"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.person} - {self.registration}"
 
     @property
@@ -109,5 +109,5 @@ class Responsible(SafeDeleteModel):
     class Meta:
         unique_together = ["student", "person"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.person} responsável de {self.student.person}"

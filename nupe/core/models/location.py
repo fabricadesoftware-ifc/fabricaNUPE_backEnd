@@ -25,7 +25,7 @@ class City(SafeDeleteModel):
 
     name = models.CharField(max_length=CITY_MAX_LENGTH, unique=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -52,7 +52,7 @@ class State(SafeDeleteModel):
     initials = models.CharField(max_length=INITIALS_STATE_MAX_LENGTH, unique=True)
     cities = models.ManyToManyField("City", related_name="states", related_query_name="state", through="Location")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -85,5 +85,5 @@ class Location(SafeDeleteModel):
     class Meta:
         unique_together = ["city", "state"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.city} - {self.state.initials}"

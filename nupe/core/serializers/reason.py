@@ -66,11 +66,11 @@ class AttendanceCreateReasonSerializer(ModelSerializer):
 
         description: descrição
 
-        special_need: necessidade especial a ser atendida
+        special_need: necessidades especiais a ser atendida
 
-        crisis: crise a ser atendida
+        crisis: crises a ser atendida
 
-        drug: tipo de droga que o aluno que será atendido utilizou
+        drug: tipos de drogas que o aluno que será atendido utilizou
     """
 
     class Meta:
@@ -87,11 +87,11 @@ class AttendanceReasonSerializer(ModelSerializer):
 
         description: descrição
 
-        special_need: necessidade especial a ser atendida
+        special_need: necessidades especiais a ser atendida
 
-        crisis: crise a ser atendida
+        crisis: crises a ser atendida
 
-        drug: tipo de droga que o aluno que será atendido utilizou
+        drug: tipos de drogas que o aluno que será atendido utilizou
     """
 
     special_need = CharField()
