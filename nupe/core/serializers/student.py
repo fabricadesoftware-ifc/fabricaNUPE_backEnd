@@ -15,7 +15,7 @@ class StudentListSerializer(ModelSerializer):
     Retorna uma lista de estudantes cadastrados no banco de dados
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         registration: número da matrícula
 
@@ -38,7 +38,7 @@ class StudentDetailSerializer(ModelSerializer):
     Retorna os detalhes de um estudante específico
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         registration: número da matrícula
 
@@ -82,7 +82,7 @@ class StudentCreateSerializer(ModelSerializer):
     Recebe e valida as informações para então cadastrar ou atualizar um estudante
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         registration: número da matrícula
 

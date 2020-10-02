@@ -1,4 +1,4 @@
-from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField, StringRelatedField
+from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField
 
 from nupe.core.models import AcademicEducation, Course, Grade
 
@@ -9,7 +9,7 @@ class CourseSerializer(ModelSerializer):
     detalha ou lista informações sobre um ou mais cursos
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         name: nome
     """
@@ -25,21 +25,18 @@ class GradeSerializer(ModelSerializer):
     detalha ou lista informações sobre um ou mais graus
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         name: nome
 
         courses: identificadores dos cursos desse grau
-
-        courses_output: nome dos cursos pertencentes ao grau
     """
 
-    courses = PrimaryKeyRelatedField(queryset=Course.objects.all(), many=True, write_only=True, required=False)
-    courses_output = StringRelatedField(source="courses", many=True, read_only=True)
+    courses = PrimaryKeyRelatedField(queryset=Course.objects.all(), many=True, required=False)
 
     class Meta:
         model = Grade
-        fields = ["id", "name", "courses", "courses_output"]
+        fields = ["id", "name", "courses"]
 
 
 class AcademicEducationSerializer(ModelSerializer):
@@ -47,7 +44,7 @@ class AcademicEducationSerializer(ModelSerializer):
     Detalha ou lista informações sobre uma ou mais formação acadêmica
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         name: nome
     """

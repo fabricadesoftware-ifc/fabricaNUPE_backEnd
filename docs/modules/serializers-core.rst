@@ -104,3 +104,31 @@ Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Setor
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.job.SectorSerializer
+
+Módulo de Motivo
+----------------
+
+Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Tipo de Necessidade Especial
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.reason.SpecialNeedTypeSerializer
+
+Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Tipo de Crise
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.reason.CrisisTypeSerializer
+
+Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Tipo de Droga
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.reason.DrugTypeSerializer
+
+Serializer Cadastrar ou Atualizar um Motivo de Atendimento
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.reason.AttendanceCreateReasonSerializer
+
+Serializer para Listar ou Detalhar um Motivo de Atendimento
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.reason.AttendanceReasonSerializer

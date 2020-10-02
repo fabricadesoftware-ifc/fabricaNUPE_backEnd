@@ -8,7 +8,7 @@ class CitySerializer(ModelSerializer):
     Detalha ou lista informações sobre uma ou mais cidade
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         name: nome
     """
@@ -23,7 +23,7 @@ class StateSerializer(ModelSerializer):
     Detalha ou lista informações sobre um ou mais estado
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         name: nome
 
@@ -40,9 +40,9 @@ class LocationSerializer(ModelSerializer):
     Detalha ou lista informações sobre uma ou mais localização
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
-        name: nome
+        name: nome (somente leitura)
     """
 
     name = CharField(source="__str__", read_only=True)

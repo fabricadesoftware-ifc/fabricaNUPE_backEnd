@@ -71,11 +71,10 @@ class FuctionAPITestCase(APITestCase):
 
         # deve ser criado no banco de dados
         function = Function.objects.get(name=function_name)
+        self.assertEqual(function.name, function_name)
 
         # uma função/cargo é criada em 'create_account_with_permissions_and_do_authentication', por isso deve conter 2
         self.assertEqual(Function.objects.count(), 2)
-
-        self.assertEqual(function.name, function_name)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
@@ -241,11 +240,10 @@ class SectorAPITestCase(APITestCase):
 
         # deve ser criado no banco de dados
         sector = Sector.objects.get(name=sector_name)
+        self.assertEqual(sector.name, sector_name)
 
         # um setor é criado em 'create_account_with_permissions_and_do_authentication', por isso deve conter 2
         self.assertEqual(Sector.objects.count(), 2)
-
-        self.assertEqual(sector.name, sector_name)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))

@@ -3,4 +3,11 @@ from nupe.core.serializers.institution import CampusListSerializer, CampusSerial
 from nupe.core.serializers.job import FunctionSerializer, SectorSerializer
 from nupe.core.serializers.location import CitySerializer, LocationSerializer, StateSerializer
 from nupe.core.serializers.person import PersonCreateSerializer, PersonDetailSerializer, PersonListSerializer
+from nupe.core.serializers.reason import (
+    AttendanceCreateReasonSerializer,
+    AttendanceReasonSerializer,
+    CrisisTypeSerializer,
+    DrugTypeSerializer,
+    SpecialNeedTypeSerializer,
+)
 from nupe.core.serializers.student import StudentCreateSerializer, StudentDetailSerializer, StudentListSerializer

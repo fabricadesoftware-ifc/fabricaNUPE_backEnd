@@ -11,7 +11,7 @@ class PersonListSerializer(ModelSerializer):
     Retorna uma lista de pessoas cadastradas no banco de dados
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         full_name: nome completo
 
@@ -30,7 +30,7 @@ class PersonDetailSerializer(ModelSerializer):
     Retorna os detalhes de uma pessoa específica
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         first_name: nome
 

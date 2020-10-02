@@ -191,7 +191,7 @@ class GradeAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("name"))
-        self.assertIsNotNone(data.get("courses_output"))
+        self.assertIsNotNone(data.get("courses"))
 
         # campos que não devem ser retornados
         self.assertIsNone(data.get("_safedelete_policy"))
@@ -213,7 +213,7 @@ class GradeAPITestCase(APITestCase):
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
-        self.assertIsNotNone(response.data.get("courses_output"))
+        self.assertIsNotNone(response.data.get("courses"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
@@ -237,7 +237,7 @@ class GradeAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
-        self.assertIsNotNone(response.data.get("courses_output"))
+        self.assertIsNotNone(response.data.get("courses"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
@@ -265,7 +265,7 @@ class GradeAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
-        self.assertIsNotNone(response.data.get("courses_output"))
+        self.assertIsNotNone(response.data.get("courses"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))

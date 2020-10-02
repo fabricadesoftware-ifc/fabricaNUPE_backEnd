@@ -9,7 +9,7 @@ class InstitutionSerializer(ModelSerializer):
     detalha ou lista informações sobre uma ou mais instituições
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         name: nome
     """
@@ -21,35 +21,24 @@ class InstitutionSerializer(ModelSerializer):
 
 class CampusSerializer(ModelSerializer):
     """
-    Recebe e valida informações para então cadastrar/atualizar um campus, e também
+    Recebe e valida informações para então cadastrar ou atualizar um campus, e também
     detalha informações sobre um campus específico
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         name: nome
 
         location: identificador da localização, 'Cidade - Estado'
 
         institutions: identificadores das instituições desse campus
-
-        institution_output: nome das instituições desse campus
     """
 
-    institutions = PrimaryKeyRelatedField(
-        many=True, queryset=Institution.objects.all(), write_only=True, required=False
-    )
-    institution_output = InstitutionSerializer(source="institutions", many=True, read_only=True)
+    institutions = PrimaryKeyRelatedField(queryset=Institution.objects.all(), many=True, required=False)
 
     class Meta:
         model = Campus
-        fields = [
-            "id",
-            "name",
-            "location",
-            "institutions",
-            "institution_output",
-        ]
+        fields = ["id", "name", "location", "institutions"]
 
 
 class CampusListSerializer(ModelSerializer):
@@ -57,7 +46,7 @@ class CampusListSerializer(ModelSerializer):
     Retorna uma lista de campus cadastrados no banco de dados
 
     Campos:
-        id: identificador
+        id: identificador (somente leitura)
 
         name: nome
 

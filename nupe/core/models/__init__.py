@@ -3,4 +3,5 @@ from nupe.core.models.institution import AcademicEducationInstitutionCampus, Cam
 from nupe.core.models.job import Function, Sector
 from nupe.core.models.location import City, Location, State
 from nupe.core.models.person import Person
+from nupe.core.models.reason import AttendanceReason, CrisisType, DrugType, SpecialNeedType
 from nupe.core.models.student import Responsible, Student
