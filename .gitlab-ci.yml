@@ -1,5 +1,4 @@
 stages:
-    - pre-build
     - build
     - test
     - deploy
@@ -14,7 +13,7 @@ dev_backend_image push to container_registry:
     image:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
-    stage: pre-build
+    stage: build
     variables:
         IMAGE_TAG: $CI_REGISTRY_IMAGE/nupe:backend
     before_script:
@@ -59,14 +58,11 @@ docs build:
 dev_frontend build:
     image: $CI_REGISTRY_IMAGE/nupe:frontend
     stage: build
-    before_script:
-        - cd nupe_frontend/
-        - npm install
     script: npm run build
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - nupe_frontend/**/*
+    # rules:
+    #     - if: $CI_COMMIT_BRANCH == "develop"
+    #       changes:
+    #           - nupe_frontend/**/*
     artifacts:
         name: dev_frontend builded
         expire_in: 30min

@@ -6,7 +6,7 @@ authors = ["\"eduardo\", \"yuri\", \"luis\", \"jorge\""]
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
-django = "^3.0.5"
+django = "^2.2"
 djangorestframework = "^3.11.0"
 validate-docbr = "^1.7.0"
 drf-action-permissions = "^0.1.1"
@@ -17,6 +17,7 @@ django-filter = "^2.3.0"
 Pillow = "^7.1.2"
 django-cors-headers = "^3.4.0"
 psycopg2-binary = "^2.8.6"
+django-environ = "^0.4.5"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.2.0"

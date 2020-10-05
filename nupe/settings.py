@@ -1,11 +1,15 @@
 import os
 from datetime import timedelta
 
+import environ
+
+env = environ.Env()
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.getenv(key="SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY")
 
-DEBUG = os.getenv(key="DEBUG")
+DEBUG = env("DEBUG", bool, False)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -65,7 +69,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "nupe.wsgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -105,16 +108,7 @@ OAUTH2_PROVIDER = {
     "OAUTH2_BACKEND_CLASS": "oauth2_provider.oauth2_backends.JSONOAuthLibCore",
 }
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.getenv(key="SQL_ENGINE", default="django.db.backends.sqlite3"),
-        "NAME": os.getenv(key="POSTGRES_DB", default=os.path.join(BASE_DIR, "db.sqlite3")),
-        "USER": os.getenv(key="POSTGRES_USER", default="user"),
-        "PASSWORD": os.getenv(key="POSTGRES_PASSWORD", default="password"),
-        "HOST": os.getenv(key="SQL_HOST", default="localhost"),
-        "PORT": os.getenv(key="SQL_PORT", default="5432"),
-    }
-}
+DATABASES = {"default": env.db()}
 
 AUTH_USER_MODEL = "account.Account"
 
@@ -130,6 +124,6 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, os.getenv(key="MEDIA_ROOT"))
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
-MEDIA_URL = os.getenv(key="MEDIA_URL")
+MEDIA_URL = "/media/"
