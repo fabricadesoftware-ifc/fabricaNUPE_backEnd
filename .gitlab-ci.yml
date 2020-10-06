@@ -29,12 +29,12 @@ dev_backend_image push to container_registry:
         - mkdir -p /kaniko/.docker
         - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     script: /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dev_backend.Dockerfile --destination $IMAGE_TAG
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - dev_backend.Dockerfile
-              - poetry.lock
-              - pyproject.toml
+    # rules:
+    #     - if: $CI_COMMIT_BRANCH == "develop"
+    #       changes:
+    #           - dev_backend.Dockerfile
+    #           - poetry.lock
+    #           - pyproject.toml
 
 dev_frontend_image push to container_registry:
     extends: dev_backend_image push to container_registry
