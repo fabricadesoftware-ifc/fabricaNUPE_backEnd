@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            os.system(f"safety check --json -o {self.FILENAME}")
+            os.system(f"safety check --full-report --json -o {self.FILENAME}")  # nosec
 
             with open(f"{self.FILENAME}", "r") as vulnerabilities_file:
                 content_str = vulnerabilities_file.read()

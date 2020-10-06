@@ -1,13 +1,22 @@
+default:
+    services:
+        - postgres:13.0-alpine
+
 stages:
     - build
     - test
     - deploy
 
 variables:
+    # deploy
     DOCS_PATH: docs/_build/html
     DOCS_URL: http://nupe-documentation.surge.sh
     DIST_PATH: nupe_frontend/dist
     DIST_URL: http://nupe-frontend.surge.sh
+    #db
+    POSTGRES_DB: nupe
+    POSTGRES_USER: nupe
+    POSTGRES_PASSWORD: anypasswordtotest
 
 dev_backend_image push to container_registry:
     image:
@@ -61,10 +70,10 @@ dev_frontend build:
     before_script:
         - ls -l
     script: npm run build
-    # rules:
-    #     - if: $CI_COMMIT_BRANCH == "develop"
-    #       changes:
-    #           - nupe_frontend/**/*
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - nupe_frontend/**/*
     artifacts:
         name: dev_frontend builded
         expire_in: 30min
@@ -73,14 +82,22 @@ dev_frontend build:
 
 dev_backend test:
     image: $CI_REGISTRY_IMAGE/nupe:backend
+    services:
+        - postgres:13.0-alpine
     stage: test
-    script: python manage.py test
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - manage.py
-              - nupe/**/*
-          allow_failure: true
+    script:
+        - black --check --diff nupe
+        - isort -rc -q nupe
+        - flake8 --show-source nupe
+        - bandit -rq -x nupe/tests/ nupe
+        - coverage run manage.py test
+        - coverage report
+    # rules:
+    #     - if: $CI_COMMIT_BRANCH == "develop"
+    #       changes:
+    #           - manage.py
+    #           - nupe/**/*
+    #       allow_failure: true
 
 dev_backend check dependencies:
     extends: dev_backend test

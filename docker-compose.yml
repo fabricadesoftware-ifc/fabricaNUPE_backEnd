@@ -47,7 +47,7 @@ services:
         container_name: db
         image: postgres:13.0-alpine
         environment:
-            # em caso de alteração, deve ser atualizado a imagem docker do backend
+            # em caso de alteração, deve ser atualizado as variáveis da imagem docker do backend
             POSTGRES_USER: nupe
             POSTGRES_PASSWORD: nupe
             POSTGRES_DB: nupe

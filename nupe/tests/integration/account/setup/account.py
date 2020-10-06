@@ -10,7 +10,11 @@ def create_account_with_permissions(
     *, email: str = EMAIL, password: str = PASSWORD, permissions: list = []
 ) -> Account:
     account = Account.objects.create_user(
-        email=email, password=password, function=baker.make("core.Function"), sector=baker.make("core.Sector"),
+        email=email,
+        password=password,
+        person=baker.make("core.Person"),
+        function=baker.make("core.Function"),
+        sector=baker.make("core.Sector"),
     )
 
     for permission in permissions:

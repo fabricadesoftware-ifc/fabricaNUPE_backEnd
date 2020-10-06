@@ -110,8 +110,11 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
         # deve ser criado no banco de dados
-        person = Person.objects.all().first()
-        self.assertEqual(Person.objects.count(), 1)
+        person = Person.objects.get(cpf=CPF)
+
+        # uma pessoa é criada em 'create_account_with_permissions_and_do_authentication', por isso deve conter 2
+        self.assertEqual(Person.objects.count(), 2)
+
         self.assertEqual(person.first_name, FIRST_NAME)
         self.assertEqual(person.last_name, LAST_NAME)
         self.assertEqual(person.cpf, CPF)
@@ -235,10 +238,11 @@ class PersonAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
 
         # o dado deve ser mascarado
-        self.assertEqual(Person.objects.count(), 0)
+        self.assertEqual(Person.objects.count(), 1)
 
         # mas deve ser mantido no banco de dados
-        self.assertEqual(Person.all_objects.count(), 1)
+        # uma pessoa é criada em 'create_account_with_permissions_and_do_authentication', por isso deve conter 2
+        self.assertEqual(Person.all_objects.count(), 2)
 
     def test_create_invalid_cpf_with_permission(self):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_person"])

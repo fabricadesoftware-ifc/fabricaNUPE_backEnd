@@ -1,32 +1,41 @@
 repos:
-  - repo: local
-    hooks:
-      - id: black
-        name: "format code with black"
-        entry: black
-        language: system
-        types:
-          - python
-      - id: isort
-        name: "format imports with isort"
-        entry: isort
-        language: system
-        types:
-          - python
-      - id: flake8
-        name: "lint code with flake8"
-        entry: flake8
-        language: system
-        types:
-          - python
-      - id: dev_backend_test
-        name: "dev_backend test with unittest"
-        entry: ./manage.py test
-        language: system
-        types:
-          - python
-        stages:
-          - push
-        pass_filenames: false
+    - repo: local
+      hooks:
+          - id: black
+            name: "format code with black"
+            entry: black
+            language: system
+            types:
+                - python
+          - id: isort
+            name: "format imports with isort"
+            entry: isort
+            language: system
+            types:
+                - python
+          - id: flake8
+            name: "lint code with flake8"
+            entry: flake8
+            language: system
+            types:
+                - python
+          - id: bandit
+            name: "check security"
+            entry: bandit
+            language: system
+            args:
+                - --quiet
+                - --exclude=nupe/tests/
+            types:
+                - python
+          - id: dev_backend_test
+            name: "dev_backend test with unittest"
+            entry: ./manage.py test
+            language: system
+            types:
+                - python
+            stages:
+                - push
+            pass_filenames: false
 default_stages:
-  - commit
+    - commit

@@ -7,7 +7,7 @@ from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteManager, SafeDelete
 class AccountManager(BaseUserManager, SafeDeleteManager):
     use_in_migrations = True
 
-    def _create_user(self, email, password, **extra_fields):
+    def _create_user(self, email, password, **extra_fields):  # pragma: no cover
         """
         Create and save a user with the given email, and password.
         """
@@ -19,12 +19,12 @@ class AccountManager(BaseUserManager, SafeDeleteManager):
 
         return user
 
-    def create_user(self, email=None, password=None, **extra_fields):
+    def create_user(self, email=None, password=None, **extra_fields):  # pragma: no cover
         extra_fields.setdefault("is_superuser", False)
 
         return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email=None, password=None, **extra_fields):
+    def create_superuser(self, email=None, password=None, **extra_fields):  # pragma: no cover
         extra_fields.setdefault("is_superuser", True)
 
         if extra_fields.get("is_superuser") is not True:
@@ -72,7 +72,7 @@ class Account(AbstractBaseUser, PermissionsMixin, SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
     email = models.EmailField(unique=True)
-    person = models.OneToOneField("core.Person", related_name="account", on_delete=models.CASCADE, null=True)
+    person = models.OneToOneField("core.Person", related_name="account", on_delete=models.CASCADE)
     local_job = models.ForeignKey(
         "core.InstitutionCampus",
         related_name="workers",
@@ -101,14 +101,8 @@ class Account(AbstractBaseUser, PermissionsMixin, SafeDeleteModel):
 
     @property
     def full_name(self):
-        if self.person is not None:
-            return self.person.full_name
-
-        return None
+        return self.person.full_name
 
     @property
     def short_name(self):
-        if self.person is not None:
-            return self.person.first_name
-
-        return None
+        return self.person.first_name

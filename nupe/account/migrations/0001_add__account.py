@@ -69,10 +69,7 @@ class Migration(migrations.Migration):
                 (
                     "person",
                     models.OneToOneField(
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="account",
-                        to="core.Person",
+                        on_delete=django.db.models.deletion.CASCADE, related_name="account", to="core.Person",
                     ),
                 ),
                 (
