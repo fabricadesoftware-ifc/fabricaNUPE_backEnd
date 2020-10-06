@@ -38,8 +38,8 @@ services:
         ports:
             - 3000:3000
         volumes:
-            - ./nupe_frontend/:/usr/nupe
-            - /usr/nupe/node_modules/ # https://stackoverflow.com/questions/29181032/add-a-volume-to-docker-but-exclude-a-sub-folder
+            - ./nupe_frontend/:/usr/nupe_frontend
+            - /usr/nupe_frontend/node_modules/ # https://stackoverflow.com/questions/30043872/docker-compose-node-modules-not-present-in-a-volume-after-npm-install-succeeds
         restart: always
         depends_on:
             - dev_backend

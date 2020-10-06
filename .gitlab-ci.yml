@@ -1,7 +1,3 @@
-# default:
-#     services:
-#         - postgres:13.0-alpine
-
 stages:
     - build
     - test
@@ -68,7 +64,8 @@ dev_frontend build:
     image: $CI_REGISTRY_IMAGE/nupe:frontend
     stage: build
     before_script:
-        - ls -l
+        - cd nupe_frontend
+        - npm install
     script: npm run build
     rules:
         - if: $CI_COMMIT_BRANCH == "develop"
@@ -94,12 +91,12 @@ dev_backend test:
         - bandit -rq -x nupe/tests/ nupe
         - coverage run manage.py test
         - coverage report
-    # rules:
-    #     - if: $CI_COMMIT_BRANCH == "develop"
-    #       changes:
-    #           - manage.py
-    #           - nupe/**/*
-    #       allow_failure: true
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - manage.py
+              - nupe/**/*
+          allow_failure: true
 
 dev_backend check dependencies:
     extends: dev_backend test
