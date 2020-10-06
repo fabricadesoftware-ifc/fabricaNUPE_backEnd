@@ -1,6 +1,6 @@
-default:
-    services:
-        - postgres:13.0-alpine
+# default:
+#     services:
+#         - postgres:13.0-alpine
 
 stages:
     - build
@@ -29,12 +29,12 @@ dev_backend_image push to container_registry:
         - mkdir -p /kaniko/.docker
         - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     script: /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dev_backend.Dockerfile --destination $IMAGE_TAG
-    # rules:
-    #     - if: $CI_COMMIT_BRANCH == "develop"
-    #       changes:
-    #           - dev_backend.Dockerfile
-    #           - poetry.lock
-    #           - pyproject.toml
+    rules:
+        - if: $CI_COMMIT_BRANCH == "develop"
+          changes:
+              - dev_backend.Dockerfile
+              - poetry.lock
+              - pyproject.toml
 
 dev_frontend_image push to container_registry:
     extends: dev_backend_image push to container_registry
@@ -84,6 +84,8 @@ dev_backend test:
     image: $CI_REGISTRY_IMAGE/nupe:backend
     services:
         - postgres:13.0-alpine
+    variables:
+        DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB
     stage: test
     script:
         - black --check --diff nupe
