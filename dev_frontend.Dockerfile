@@ -1,5 +1,5 @@
 FROM node:14.11-alpine3.10
-LABEL mantainer="Luis Guerreiro <luiscvlh11@gmail.com>"
+LABEL maintainer="Luis Guerreiro <luiscvlh11@gmail.com>"
 
 WORKDIR /usr/nupe_frontend
 

@@ -1,5 +1,5 @@
 FROM python:3.6-slim-buster
-LABEL mantainer="Luis Guerreiro <luiscvlh11@gmail.com>"
+LABEL maintainer="Luis Guerreiro <luiscvlh11@gmail.com>"
 
 WORKDIR /usr/nupe
 
