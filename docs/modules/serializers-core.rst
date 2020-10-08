@@ -132,3 +132,21 @@ Serializer para Listar ou Detalhar um Motivo de Atendimento
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.reason.AttendanceReasonSerializer
+
+Módulo de Atendimento
+---------------------
+
+Serializer para Listar um Atendimento
++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.attendance.AttendanceListSerializer
+
+Serializer para Detalhar um Atendimento
++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.attendance.AttendanceDetailSerializer
+
+Serializer para Cadastrar ou Atualizar um Atendimento
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.attendance.AttendanceCreateSerializer

@@ -20,11 +20,17 @@ class StudentViewSet(ModelViewSet):
 
     queryset = Student.objects.all()
     lookup_field = "registration"
-
     filterset_class = StudentFilter
     search_fields = ["person__first_name", "person__last_name"]
     ordering_fields = ["registration", "person__first_name", "person__last_name"]
-    ordering = ["person__first_name", "person__last_name"]  # ordem padrão
+    ordering = ["person__first_name", "person__last_name"]
+
+    per_action_serializer = {
+        "list": StudentListSerializer,
+        "retrieve": StudentDetailSerializer,
+        "create": StudentCreateSerializer,
+        "partial_update": StudentCreateSerializer,
+    }
 
     http_method_names = ["get", "post", "patch", "delete"]
 
@@ -34,13 +40,6 @@ class StudentViewSet(ModelViewSet):
         "create": ["core.add_student"],
         "partial_update": ["core.change_student"],
         "destroy": ["core.delete_student"],
-    }
-
-    per_action_serializer = {
-        "list": StudentListSerializer,
-        "retrieve": StudentDetailSerializer,
-        "create": StudentCreateSerializer,
-        "partial_update": StudentCreateSerializer,
     }
 
     def get_serializer_class(self):

@@ -99,7 +99,180 @@ paths:
   /account/:
     get:
       operationId: account_list
-      description: "*Endpoint em constru\xE7\xE3o*"
+      description: retorna todas as contas do banco de dados
+      parameters:
+        - name: campus_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: institution_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: function
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: sector
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/AccountList'
+      tags:
+        - account
+    post:
+      operationId: account_create
+      description: cadastra uma conta no banco de dados
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Account'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Account'
+      tags:
+        - account
+    parameters: []
+  /account/current/:
+    get:
+      operationId: account_current
+      description: "retorna informa\xE7\xF5es sobre a conta logada atual"
+      parameters:
+        - name: campus_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: institution_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: function
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: sector
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/CurrentAccount'
+      tags:
+        - account
+    parameters: []
+  /account/{id}/:
+    get:
+      operationId: account_read
+      description: retorna uma conta especifica do banco de dados
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AccountDetail'
+      tags:
+        - account
+    patch:
+      operationId: account_partial_update
+      description: atualiza um ou mais atributos de uma conta
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Account'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Account'
+      tags:
+        - account
+    delete:
+      operationId: account_delete
+      description: exclui uma conta do banco de dados
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - account
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this account.
+        required: true
+        type: integer
+  /attendance/:
+    get:
+      operationId: attendance_list
+      description: retorna todas os atendimentos do banco de dados
       parameters:
         - name: search
           in: query
@@ -138,30 +311,73 @@ paths:
               results:
                 type: array
                 items:
-                  $ref: '#/definitions/CurrentAccount'
+                  $ref: '#/definitions/AttendanceList'
       tags:
-        - account
+        - attendance
     post:
-      operationId: account_create
-      description: "*Endpoint em constru\xE7\xE3o*"
+      operationId: attendance_create
+      description: cadastra um atendimento no banco de dados
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/CurrentAccount'
+            $ref: '#/definitions/AttendanceCreate'
       responses:
         '201':
           description: ''
           schema:
-            $ref: '#/definitions/CurrentAccount'
+            $ref: '#/definitions/AttendanceCreate'
       tags:
-        - account
+        - attendance
     parameters: []
-  /account/current/:
+  /attendance/{id}/:
     get:
-      operationId: account_current
-      description: "retorna informa\xE7\xF5es sobre o usu\xE1rio logado atual"
+      operationId: attendance_read
+      description: retorna um atendimento especifico do banco de dados
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AttendanceDetail'
+      tags:
+        - attendance
+    patch:
+      operationId: attendance_partial_update
+      description: atualiza um ou mais atributos de um atendimento
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AttendanceCreate'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AttendanceCreate'
+      tags:
+        - attendance
+    delete:
+      operationId: attendance_delete
+      description: exclui um atendimento do banco de dados
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - attendance
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this attendance.
+        required: true
+        type: integer
+  /attendance_reason/:
+    get:
+      operationId: attendance_reason_list
+      description: ''
       parameters:
         - name: search
           in: query
@@ -182,67 +398,85 @@ paths:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/CurrentAccount'
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/AttendanceReason'
       tags:
-        - account
+        - attendance_reason
+    post:
+      operationId: attendance_reason_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AttendanceCreateReason'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/AttendanceCreateReason'
+      tags:
+        - attendance_reason
     parameters: []
-  /account/{id}/:
+  /attendance_reason/{id}/:
     get:
-      operationId: account_read
-      description: "*Endpoint em constru\xE7\xE3o*"
+      operationId: attendance_reason_read
+      description: ''
       parameters: []
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/CurrentAccount'
+            $ref: '#/definitions/AttendanceReason'
       tags:
-        - account
-    put:
-      operationId: account_update
-      description: "*Endpoint em constru\xE7\xE3o*"
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/CurrentAccount'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/CurrentAccount'
-      tags:
-        - account
+        - attendance_reason
     patch:
-      operationId: account_partial_update
-      description: "*Endpoint em constru\xE7\xE3o*"
+      operationId: attendance_reason_partial_update
+      description: ''
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/CurrentAccount'
+            $ref: '#/definitions/AttendanceCreateReason'
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/CurrentAccount'
+            $ref: '#/definitions/AttendanceCreateReason'
       tags:
-        - account
+        - attendance_reason
     delete:
-      operationId: account_delete
-      description: "*Endpoint em constru\xE7\xE3o*"
+      operationId: attendance_reason_delete
+      description: ''
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - account
+        - attendance_reason
     parameters:
       - name: id
         in: path
-        description: "A unique integer value identifying this usu\xE1rio."
+        description: A unique integer value identifying this attendance reason.
         required: true
         type: integer
   /campus/:
@@ -532,6 +766,321 @@ paths:
       - name: id
         in: path
         description: A unique integer value identifying this course.
+        required: true
+        type: integer
+  /crisis_type/:
+    get:
+      operationId: crisis_type_list
+      description: ''
+      parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/CrisisType'
+      tags:
+        - crisis_type
+    post:
+      operationId: crisis_type_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CrisisType'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/CrisisType'
+      tags:
+        - crisis_type
+    parameters: []
+  /crisis_type/{id}/:
+    get:
+      operationId: crisis_type_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/CrisisType'
+      tags:
+        - crisis_type
+    patch:
+      operationId: crisis_type_partial_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CrisisType'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/CrisisType'
+      tags:
+        - crisis_type
+    delete:
+      operationId: crisis_type_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - crisis_type
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this crisis type.
+        required: true
+        type: integer
+  /drug_type/:
+    get:
+      operationId: drug_type_list
+      description: ''
+      parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/DrugType'
+      tags:
+        - drug_type
+    post:
+      operationId: drug_type_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DrugType'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/DrugType'
+      tags:
+        - drug_type
+    parameters: []
+  /drug_type/{id}/:
+    get:
+      operationId: drug_type_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/DrugType'
+      tags:
+        - drug_type
+    patch:
+      operationId: drug_type_partial_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DrugType'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/DrugType'
+      tags:
+        - drug_type
+    delete:
+      operationId: drug_type_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - drug_type
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this drug type.
+        required: true
+        type: integer
+  /function/:
+    get:
+      operationId: function_list
+      description: "retorna todas as fun\xE7\xF5es/cargos do banco de dados"
+      parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Function'
+      tags:
+        - function
+    post:
+      operationId: function_create
+      description: "cadastra uma fun\xE7\xE3o/cargo no banco de dados"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Function'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Function'
+      tags:
+        - function
+    parameters: []
+  /function/{id}/:
+    get:
+      operationId: function_read
+      description: "retorna uma fun\xE7\xE3o/cargo especifica do banco de dados"
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Function'
+      tags:
+        - function
+    patch:
+      operationId: function_partial_update
+      description: "atualiza um ou mais atributos de uma fun\xE7\xE3o/cargo"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Function'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Function'
+      tags:
+        - function
+    delete:
+      operationId: function_delete
+      description: "exclui uma fun\xE7\xE3o/cargo do banco de dados"
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - function
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this function.
         required: true
         type: integer
   /grade/:
@@ -991,6 +1540,216 @@ paths:
           \ objeto"
         required: true
         type: string
+  /sector/:
+    get:
+      operationId: sector_list
+      description: retorna todos os setores do banco de dados
+      parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Sector'
+      tags:
+        - sector
+    post:
+      operationId: sector_create
+      description: cadastra um setor no banco de dados
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Sector'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Sector'
+      tags:
+        - sector
+    parameters: []
+  /sector/{id}/:
+    get:
+      operationId: sector_read
+      description: retorna um setor especifico do banco de dados
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Sector'
+      tags:
+        - sector
+    patch:
+      operationId: sector_partial_update
+      description: atualiza um ou mais atributos de um setor
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Sector'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Sector'
+      tags:
+        - sector
+    delete:
+      operationId: sector_delete
+      description: exclui um setor do banco de dados
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - sector
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this sector.
+        required: true
+        type: integer
+  /special_need_type/:
+    get:
+      operationId: special_need_type_list
+      description: ''
+      parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/SpecialNeedType'
+      tags:
+        - special_need_type
+    post:
+      operationId: special_need_type_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/SpecialNeedType'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/SpecialNeedType'
+      tags:
+        - special_need_type
+    parameters: []
+  /special_need_type/{id}/:
+    get:
+      operationId: special_need_type_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/SpecialNeedType'
+      tags:
+        - special_need_type
+    patch:
+      operationId: special_need_type_partial_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/SpecialNeedType'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/SpecialNeedType'
+      tags:
+        - special_need_type
+    delete:
+      operationId: special_need_type_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - special_need_type
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this special need type.
+        required: true
+        type: integer
   /state/:
     get:
       operationId: state_list
@@ -1199,6 +1958,61 @@ definitions:
         title: Name
         type: string
         minLength: 1
+  AccountList:
+    required:
+      - email
+      - local_job
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      full_name:
+        title: Full name
+        type: string
+        readOnly: true
+      email:
+        title: Email
+        type: string
+        format: email
+        maxLength: 254
+        minLength: 1
+      local_job:
+        title: Local job
+        type: string
+        minLength: 1
+  Account:
+    required:
+      - email
+      - person
+      - function
+      - sector
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      email:
+        title: Email
+        type: string
+        format: email
+        maxLength: 254
+        minLength: 1
+      person:
+        title: Person
+        type: integer
+      local_job:
+        title: Local job
+        type: integer
+        x-nullable: true
+      function:
+        title: Function
+        type: integer
+      sector:
+        title: Sector
+        type: integer
   PersonDetail:
     title: Person
     required:
@@ -1256,6 +2070,8 @@ definitions:
       - email
       - person
       - local_job
+      - function
+      - sector
     type: object
     properties:
       id:
@@ -1274,15 +2090,245 @@ definitions:
         title: Local job
         type: string
         minLength: 1
+      function:
+        title: Function
+        type: string
+        minLength: 1
+      sector:
+        title: Sector
+        type: string
+        minLength: 1
+      date_joined:
+        title: Date joined
+        type: string
+        format: date
+        readOnly: true
       is_active:
         title: Is active
         type: boolean
       is_staff:
         title: Is staff
         type: boolean
-      is_admin:
-        title: Is admin
+      is_superuser:
+        title: "Status de superusu\xE1rio"
+        description: "Indica que este usu\xE1rio tem todas as permiss\xF5es sem atribu\xED\
+          -las explicitamente."
         type: boolean
+  AccountDetail:
+    required:
+      - email
+      - person
+      - local_job
+      - function
+      - sector
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      email:
+        title: Email
+        type: string
+        format: email
+        maxLength: 254
+        minLength: 1
+      person:
+        $ref: '#/definitions/PersonDetail'
+      local_job:
+        title: Local job
+        type: string
+        minLength: 1
+      function:
+        title: Function
+        type: string
+        minLength: 1
+      sector:
+        title: Sector
+        type: string
+        minLength: 1
+  AttendanceList:
+    required:
+      - attendants
+      - student
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      attendants:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+      student:
+        title: Student
+        type: string
+        minLength: 1
+      status:
+        title: Status
+        description: Aberto = O, Em Espero = OH, Em Andamento = IP, Fechado = C
+        type: string
+        enum:
+          - O
+          - OH
+          - IP
+          - C
+  AttendanceCreate:
+    required:
+      - attendance_reason
+      - attendance_severity
+      - student
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      attendance_reason:
+        title: Attendance reason
+        type: integer
+      attendance_severity:
+        title: Attendance severity
+        description: "Baixa = L, M\xE9dia = M, Alta = H, Grave = S"
+        type: string
+        enum:
+          - L
+          - M
+          - H
+          - S
+      attendants:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+      student:
+        title: Student
+        type: integer
+      status:
+        title: Status
+        description: Aberto = O, Em Espero = OH, Em Andamento = IP, Fechado = C
+        type: string
+        enum:
+          - O
+          - OH
+          - IP
+          - C
+  AttendanceDetail:
+    required:
+      - attendance_reason
+      - attendance_severity
+      - attendants
+      - student
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      attendance_reason:
+        title: Attendance reason
+        type: string
+        minLength: 1
+      attendance_severity:
+        title: Attendance severity
+        description: "Baixa = L, M\xE9dia = M, Alta = H, Grave = S"
+        type: string
+        enum:
+          - L
+          - M
+          - H
+          - S
+      attendants:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+      student:
+        title: Student
+        type: string
+        minLength: 1
+      status:
+        title: Status
+        description: Aberto = O, Em Espero = OH, Em Andamento = IP, Fechado = C
+        type: string
+        enum:
+          - O
+          - OH
+          - IP
+          - C
+      opened_at:
+        title: Opened at
+        type: string
+        format: date-time
+        readOnly: true
+      closed_at:
+        title: Closed at
+        type: string
+        format: date-time
+        x-nullable: true
+  AttendanceReason:
+    required:
+      - description
+      - special_need
+      - crisis
+      - drug
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      description:
+        title: Description
+        type: string
+        maxLength: 255
+        minLength: 1
+      special_need:
+        title: Special need
+        type: string
+        minLength: 1
+      crisis:
+        title: Crisis
+        type: string
+        minLength: 1
+      drug:
+        title: Drug
+        type: string
+        minLength: 1
+  AttendanceCreateReason:
+    required:
+      - description
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      description:
+        title: Description
+        type: string
+        maxLength: 255
+        minLength: 1
+      special_need:
+        type: array
+        items:
+          type: integer
+        readOnly: true
+        uniqueItems: true
+      crisis:
+        type: array
+        items:
+          type: integer
+        readOnly: true
+        uniqueItems: true
+      drug:
+        type: array
+        items:
+          type: integer
+        readOnly: true
+        uniqueItems: true
   CampusList:
     required:
       - name
@@ -1301,20 +2347,6 @@ definitions:
         title: Location
         type: string
         readOnly: true
-  Institution:
-    required:
-      - name
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 50
-        minLength: 1
   Campus:
     required:
       - name
@@ -1338,11 +2370,6 @@ definitions:
         items:
           type: integer
         uniqueItems: true
-      institution_output:
-        type: array
-        items:
-          $ref: '#/definitions/Institution'
-        readOnly: true
   City:
     required:
       - name
@@ -1371,6 +2398,63 @@ definitions:
         type: string
         maxLength: 50
         minLength: 1
+  CrisisType:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        maxLength: 150
+        x-nullable: true
+  DrugType:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        maxLength: 150
+        x-nullable: true
+  Function:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        maxLength: 150
+        x-nullable: true
   Grade:
     required:
       - name
@@ -1390,12 +2474,20 @@ definitions:
         items:
           type: integer
         uniqueItems: true
-      courses_output:
-        type: array
-        items:
-          type: string
+  Institution:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
         readOnly: true
-        uniqueItems: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
   Location:
     type: object
     properties:
@@ -1509,6 +2601,44 @@ definitions:
         type: string
         format: date-time
         readOnly: true
+  Sector:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        maxLength: 150
+        x-nullable: true
+  SpecialNeedType:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        maxLength: 150
+        x-nullable: true
   State:
     required:
       - name
@@ -1562,7 +2692,6 @@ definitions:
       - registration
       - person
       - academic_education_institution_campus
-      - responsibles
       - ingress_date
     type: object
     properties:

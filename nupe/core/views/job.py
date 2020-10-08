@@ -19,12 +19,11 @@ class FunctionViewSet(ModelViewSet):
 
     queryset = Function.objects.all()
     serializer_class = FunctionSerializer
-
-    http_method_names = ["get", "post", "patch", "delete"]
-
     search_fields = ["name"]
     ordering_fields = ["name"]
     ordering = "name"
+
+    http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {
         "list": ["core.view_function"],
@@ -50,12 +49,11 @@ class SectorViewSet(ModelViewSet):
 
     queryset = Sector.objects.all()
     serializer_class = SectorSerializer
-
-    http_method_names = ["get", "post", "patch", "delete"]
-
     search_fields = ["name"]
     ordering_fields = ["name"]
     ordering = "name"
+
+    http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {
         "list": ["core.view_sector"],

@@ -5,13 +5,24 @@ from nupe.core.serializers import AttendanceCreateSerializer, AttendanceDetailSe
 
 
 class AttendanceViewSet(ModelViewSet):
+    """
+    list: retorna todas os atendimentos do banco de dados
+
+    retrieve: retorna um atendimento especifico do banco de dados
+
+    create: cadastra um atendimento no banco de dados
+
+    destroy: exclui um atendimento do banco de dados
+
+    partial_update: atualiza um ou mais atributos de um atendimento
+    """
+
     queryset = Attendance.objects.all()
+    ordering = "attendance_severity"
 
     per_action_serializer = {"list": AttendanceListSerializer, "retrieve": AttendanceDetailSerializer}
 
     http_method_names = ["get", "post", "patch", "delete"]
-
-    ordering = "attendance_severity"
 
     perms_map_action = {
         "list": ["core.view_attendance"],

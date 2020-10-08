@@ -15,9 +15,7 @@ class LocationViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
-
     filterset_class = LocationFilter
-
     ordering = "city__name"
 
     perms_map_action = {
@@ -35,9 +33,7 @@ class CityViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     queryset = City.objects.all()
     serializer_class = CitySerializer
-
     filterset_class = CityFilter
-
     ordering = "name"
 
     perms_map_action = {
@@ -55,9 +51,7 @@ class StateViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     queryset = State.objects.all()
     serializer_class = StateSerializer
-
     filterset_class = StateFilter
-
     ordering = "name"
 
     perms_map_action = {

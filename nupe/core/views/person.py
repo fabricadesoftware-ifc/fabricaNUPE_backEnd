@@ -20,11 +20,17 @@ class PersonViewSet(ModelViewSet):
 
     queryset = Person.objects.all()
     lookup_field = "cpf"
-
     filterset_class = PersonFilter
     search_fields = ["first_name", "last_name"]
     ordering_fields = ["first_name", "last_name"]
-    ordering = ["first_name", "last_name"]  # ordem padrão
+    ordering = ["first_name", "last_name"]
+
+    per_action_serializer = {
+        "list": PersonListSerializer,
+        "retrieve": PersonDetailSerializer,
+        "create": PersonCreateSerializer,
+        "partial_update": PersonCreateSerializer,
+    }
 
     http_method_names = ["get", "post", "patch", "delete"]
 
@@ -34,13 +40,6 @@ class PersonViewSet(ModelViewSet):
         "create": ["core.add_person"],
         "partial_update": ["core.change_person"],
         "destroy": ["core.delete_person"],
-    }
-
-    per_action_serializer = {
-        "list": PersonListSerializer,
-        "retrieve": PersonDetailSerializer,
-        "create": PersonCreateSerializer,
-        "partial_update": PersonCreateSerializer,
     }
 
     def get_serializer_class(self):

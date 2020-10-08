@@ -13,12 +13,11 @@ from nupe.core.serializers import (
 class SpecialNeedTypeViewSet(ModelViewSet):
     queryset = SpecialNeedType.objects.all()
     serializer_class = SpecialNeedTypeSerializer
-
-    http_method_names = ["get", "post", "patch", "delete"]
-
     search_fields = ["name"]
     ordering_fields = ["name"]
     ordering = "name"
+
+    http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {
         "list": ["core.view_specialneedtype"],
@@ -32,12 +31,11 @@ class SpecialNeedTypeViewSet(ModelViewSet):
 class CrisisTypeViewSet(ModelViewSet):
     queryset = CrisisType.objects.all()
     serializer_class = CrisisTypeSerializer
-
-    http_method_names = ["get", "post", "patch", "delete"]
-
     search_fields = ["name"]
     ordering_fields = ["name"]
     ordering = "name"
+
+    http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {
         "list": ["core.view_crisistype"],
@@ -51,12 +49,11 @@ class CrisisTypeViewSet(ModelViewSet):
 class DrugTypeViewSet(ModelViewSet):
     queryset = DrugType.objects.all()
     serializer_class = DrugTypeSerializer
-
-    http_method_names = ["get", "post", "patch", "delete"]
-
     search_fields = ["name"]
     ordering_fields = ["name"]
     ordering = "name"
+
+    http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {
         "list": ["core.view_drugtype"],

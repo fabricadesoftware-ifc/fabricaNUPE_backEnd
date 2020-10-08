@@ -117,3 +117,16 @@ Motivo do Atendimento
 +++++++++++++++++++++
 
 .. autoclass:: nupe.core.models.reason.AttendanceReason
+
+Módulo de Atendimento
+---------------------
+
+Atendimento
++++++++++++
+
+.. autoclass:: nupe.core.models.attendance.Attendance
+
+Atendimento do Usuário
+++++++++++++++++++++++
+
+.. autoclass:: nupe.core.models.attendance.AccountAttendance

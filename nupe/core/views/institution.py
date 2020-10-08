@@ -20,7 +20,6 @@ class InstitutionViewSet(ModelViewSet):
 
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
-
     filterset_class = InstitutionFilter
     ordering = "name"
 
@@ -49,9 +48,12 @@ class CampusViewSet(ModelViewSet):
     """
 
     queryset = Campus.objects.all()
-
     filterset_class = CampusFilter
     ordering = "name"
+
+    per_action_serializer = {
+        "list": CampusListSerializer,
+    }
 
     http_method_names = ["get", "post", "patch", "delete"]
 
@@ -61,10 +63,6 @@ class CampusViewSet(ModelViewSet):
         "create": ["core.add_campus"],
         "partial_update": ["core.change_campus"],
         "destroy": ["core.delete_campus"],
-    }
-
-    per_action_serializer = {
-        "list": CampusListSerializer,
     }
 
     def get_serializer_class(self):
