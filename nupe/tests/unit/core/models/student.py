@@ -29,6 +29,7 @@ class StudentTestCase(TestCase):
         academic_education_institution_campus = baker.prepare("core.AcademicEducationInstitutionCampus")
         student = baker.prepare(Student, academic_education_institution_campus=academic_education_institution_campus)
 
+        self.assertEqual(student.full_name, student.person.full_name)
         self.assertEqual(student.age, student.person.age)
         self.assertEqual(
             student.academic_education, str(student.academic_education_institution_campus.academic_education)
