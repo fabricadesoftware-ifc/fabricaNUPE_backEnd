@@ -87,7 +87,7 @@ class Responsible(SafeDeleteModel):
     Define os responsáveis de um estudante caso seja menor de idade. É uma associativa entre Student e Person
 
     Exemplo:
-        'João responsável pelo Luis Guerreiro'
+        'João responsável por Luis Guerreiro'
 
     Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE

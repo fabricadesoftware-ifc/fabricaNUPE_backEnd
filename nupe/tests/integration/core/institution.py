@@ -58,12 +58,12 @@ class InstitutionAPITestCase(APITestCase):
 
     def test_create_with_permission(self):
         # instituição com informações válidas para conseguir criar
-        institution = {"name": INSTITUTION_NAME}
+        institution_data = {"name": INSTITUTION_NAME}
 
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_institution"])
         url = reverse("institution-list")
 
-        response = client.post(path=url, data=institution)
+        response = client.post(path=url, data=institution_data)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
@@ -88,11 +88,11 @@ class InstitutionAPITestCase(APITestCase):
         url = reverse("institution-detail", args=[institution.id])
 
         new_name = "name updated"
-        institution_update = {
+        institution_update_data = {
             "name": new_name,
         }
 
-        response = client.patch(path=url, data=institution_update)
+        response = client.patch(path=url, data=institution_update_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
@@ -260,11 +260,11 @@ class CampusAPITestCase(APITestCase):
         url = reverse("campus-detail", args=[campus.id])
 
         new_name = "name updated"
-        campus_update = {
+        campus_update_data = {
             "name": new_name,
         }
 
-        response = client.patch(path=url, data=campus_update)
+        response = client.patch(path=url, data=campus_update_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 

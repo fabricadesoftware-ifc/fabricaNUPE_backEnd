@@ -1,11 +1,12 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.serializers import CharField, ModelSerializer, StringRelatedField
+from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField, StringRelatedField
 
 from nupe.account.models.account import Account
 from nupe.core.models import Attendance
 
 
 class AttendanceCreateSerializer(ModelSerializer):
+    attendants = PrimaryKeyRelatedField(queryset=Account.objects.all(), many=True, required=False)
+
     class Meta:
         model = Attendance
         fields = [
@@ -16,19 +17,6 @@ class AttendanceCreateSerializer(ModelSerializer):
             "student",
             "status",
         ]
-
-    def create(self, validated_data):
-        if validated_data.get("attendants") is not None:
-            attendants = validated_data.pop("attendants")
-
-            attendance = Attendance.objects.create(**validated_data)
-
-            for attendant_id in attendants:
-                attendance.attendants.add(get_object_or_404(Account, pk=attendant_id))
-
-            return attendance
-
-        return Attendance.objects.create(**validated_data)
 
 
 class AttendanceListSerializer(ModelSerializer):

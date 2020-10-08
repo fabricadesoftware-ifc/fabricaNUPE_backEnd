@@ -1,14 +1,10 @@
 from django.urls import reverse
 from model_bakery import baker
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Attendance
 from nupe.tests.integration.account.setup.account import create_account_with_permissions_and_do_authentication
-
-from rest_framework.status import (  # HTTP_204_NO_CONTENT,; HTTP_400_BAD_REQUEST,; HTTP_403_FORBIDDEN,
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-)
 
 
 class AttendanceAPITestCase(APITestCase):
@@ -67,12 +63,12 @@ class AttendanceAPITestCase(APITestCase):
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
 
-    def test_create_with_permission(self):
+    def test_create_without_attendant_with_permission(self):
         # atendimento com informações válidas para conseguir criar
         attendance_reason = baker.make("core.AttendanceReason")
         student = baker.make("core.Student")
 
-        attendance = {
+        attendance_data = {
             "attendance_reason": attendance_reason.id,
             "attendance_severity": "L",
             "student": student.id,
@@ -81,7 +77,7 @@ class AttendanceAPITestCase(APITestCase):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_attendance"])
         url = reverse("attendance-list")
 
-        response = client.post(path=url, data=attendance)
+        response = client.post(path=url, data=attendance_data)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
@@ -103,93 +99,237 @@ class AttendanceAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("opened_at"))
         self.assertIsNone(response.data.get("closed_at"))
 
+    def test_create_with_one_attendant_with_permission(self):
+        # atendimento com informações válidas para conseguir criar
+        attendance_reason = baker.make("core.AttendanceReason")
+        attendant = baker.make("account.Account")
+        student = baker.make("core.Student")
 
-# def test_partial_update_with_permission(self):
-#     # cria uma função/cargo para conseguir atualiza-lo
-#     function = baker.make(Function)
+        attendance_data = {
+            "attendance_reason": attendance_reason.id,
+            "attendance_severity": "L",
+            "attendants": [attendant.id],
+            "student": student.id,
+        }
 
-#     client = create_account_with_permissions_and_do_authentication(permissions=["core.change_function"])
-#     url = reverse("function-detail", args=[function.id])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_attendance"])
+        url = reverse("attendance-list")
 
-#     # somente um campo e com informação válida para conseguir atualizar
-#     new_name = "nameupdated"
-#     function_data = {"name": new_name}
+        response = client.post(path=url, data=attendance_data)
 
-#     response = client.patch(path=url, data=function_data)
+        self.assertEqual(response.status_code, HTTP_201_CREATED)
 
-#     self.assertEqual(response.status_code, HTTP_200_OK)
+        # deve ser criado no banco de dados
+        attendance = Attendance.objects.get(pk=response.data.get("id"))
+        self.assertEqual(attendance.attendants.all().first(), attendant)
+        self.assertEqual(Attendance.objects.count(), 1)
 
-#     # deve ser atualizado no banco
-#     self.assertEqual(Function.objects.get(pk=function.id).name, new_name)
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("attendance_reason"))
+        self.assertIsNotNone(response.data.get("attendance_severity"))
+        self.assertIsNotNone(response.data.get("student"))
+        self.assertIsNotNone(response.data.get("status"))
+        self.assertIsNot(response.data.get("attendants", False), False)
 
-#     # campos que devem ser retornados
-#     self.assertIsNotNone(response.data.get("id"))
-#     self.assertIsNotNone(response.data.get("name"))
-#     self.assertIsNot(response.data.get("description", False), False)
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("opened_at"))
+        self.assertIsNone(response.data.get("closed_at"))
 
-#     # campos que não devem ser retornados
-#     self.assertIsNone(response.data.get("_safedelete_policy"))
-#     self.assertIsNone(response.data.get("workers"))
+    def test_create_with_more_than_one_attendant_with_permission(self):
+        # atendimento com informações válidas para conseguir criar
+        attendance_reason = baker.make("core.AttendanceReason")
+        attendants = baker.make("account.Account", _quantity=2)
+        student = baker.make("core.Student")
 
-# def test_destroy_with_permission(self):
-#     # cria uma função/cargo no banco para conseguir mascara-lo
-#     function = baker.make(Function)
+        attendance_data = {
+            "attendance_reason": attendance_reason.id,
+            "attendance_severity": "L",
+            "attendants": [attendants[0].id, attendants[1].id],
+            "student": student.id,
+        }
 
-#     client = create_account_with_permissions_and_do_authentication(permissions=["core.delete_function"])
-#     url = reverse("function-detail", args=[function.id])
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_attendance"])
+        url = reverse("attendance-list")
 
-#     response = client.delete(path=url)
+        response = client.post(path=url, data=attendance_data)
 
-#     self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, HTTP_201_CREATED)
 
-#     # deve ser mascarado
-#     self.assertEqual(Function.objects.count(), 1)
+        # deve ser criado no banco de dados
+        attendance = Attendance.objects.get(pk=response.data.get("id"))
+        self.assertEqual(list(attendance.attendants.all()), attendants)
+        self.assertEqual(Attendance.objects.count(), 1)
 
-#     # mas deve ser mantido no banco de dados
-#     # uma função/cargo é criada em 'create_account_with_permissions_and_do_authentication', por isso deve conter 2
-#     self.assertEqual(Function.all_objects.count(), 2)
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("attendance_reason"))
+        self.assertIsNotNone(response.data.get("attendance_severity"))
+        self.assertIsNotNone(response.data.get("student"))
+        self.assertIsNotNone(response.data.get("status"))
+        self.assertIsNot(response.data.get("attendants", False), False)
 
-# def test_list_without_permission(self):
-#     client = create_account_with_permissions_and_do_authentication()
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("opened_at"))
+        self.assertIsNone(response.data.get("closed_at"))
 
-#     url = reverse("function-list")
-#     response = client.get(path=url)
+    def test_partial_update_without_attendant_with_permission(self):
+        # cria um atendimento para conseguir atualiza-lo
+        attendance = baker.make(Attendance)
 
-#     # não deve ter permissão para acessar
-#     self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+        # somente um campo e com informação válida para conseguir atualizar
+        new_attendance_severity = "H"
+        attendance_data = {"attendance_severity": new_attendance_severity}
 
-# def test_retrieve_without_permission(self):
-#     client = create_account_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_attendance"])
+        url = reverse("attendance-detail", args=[attendance.id])
 
-#     url = reverse("function-detail", args=[99])
-#     response = client.get(path=url)
+        response = client.patch(path=url, data=attendance_data)
 
-#     # não deve ter permissão para acessar
-#     self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, HTTP_200_OK)
 
-# def test_create_without_permission(self):
-#     client = create_account_with_permissions_and_do_authentication()
+        # deve ser atualizado no banco
+        self.assertEqual(Attendance.objects.get(pk=attendance.id).attendance_severity, new_attendance_severity)
 
-#     url = reverse("function-list")
-#     response = client.post(path=url, data={})
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("attendance_reason"))
+        self.assertIsNotNone(response.data.get("attendance_severity"))
+        self.assertIsNotNone(response.data.get("student"))
+        self.assertIsNotNone(response.data.get("status"))
+        self.assertIsNot(response.data.get("attendants", False), False)
 
-#     # não deve ter permissão para acessar
-#     self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("opened_at"))
+        self.assertIsNone(response.data.get("closed_at"))
 
-# def test_partial_update_without_permission(self):
-#     client = create_account_with_permissions_and_do_authentication()
+    def test_partial_update_with_one_attendant_with_permission(self):
+        # cria um atendimento para conseguir atualiza-lo
+        attendance = baker.make(Attendance)
 
-#     url = reverse("function-detail", args=[99])
-#     response = client.patch(path=url)
+        new_attendant = baker.make("account.Account")
 
-#     # não deve ter permissão para acessar
-#     self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+        attendance_data = {
+            "attendants": [new_attendant.id],
+        }
 
-# def test_destroy_without_permission(self):
-#     client = create_account_with_permissions_and_do_authentication()
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_attendance"])
+        url = reverse("attendance-detail", args=[attendance.id])
 
-#     url = reverse("function-detail", args=[99])
-#     response = client.delete(path=url)
+        response = client.patch(path=url, data=attendance_data)
 
-#     # não deve ter permissão para acessar
-#     self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # deve ser atualizado no banco
+        self.assertEqual(Attendance.objects.get(pk=attendance.id).attendants.all().first(), new_attendant)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("attendance_reason"))
+        self.assertIsNotNone(response.data.get("attendance_severity"))
+        self.assertIsNotNone(response.data.get("student"))
+        self.assertIsNotNone(response.data.get("status"))
+        self.assertIsNot(response.data.get("attendants", False), False)
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("opened_at"))
+        self.assertIsNone(response.data.get("closed_at"))
+
+    def test_partial_update_with_more_than_one_attendant_with_permission(self):
+        # cria um atendimento para conseguir atualiza-lo
+        attendance = baker.make(Attendance)
+
+        new_attendants = baker.make("account.Account", _quantity=2)
+
+        attendance_data = {
+            "attendants": [new_attendants[0].id, new_attendants[1].id],
+        }
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_attendance"])
+        url = reverse("attendance-detail", args=[attendance.id])
+
+        response = client.patch(path=url, data=attendance_data)
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # deve ser atualizado no banco
+        self.assertEqual(list(Attendance.objects.get(pk=attendance.id).attendants.all()), new_attendants)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("attendance_reason"))
+        self.assertIsNotNone(response.data.get("attendance_severity"))
+        self.assertIsNotNone(response.data.get("student"))
+        self.assertIsNotNone(response.data.get("status"))
+        self.assertIsNot(response.data.get("attendants", False), False)
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("opened_at"))
+        self.assertIsNone(response.data.get("closed_at"))
+
+    def test_destroy_with_permission(self):
+        # cria um atendimento no banco para conseguir mascara-lo
+        attendance = baker.make(Attendance)
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.delete_attendance"])
+        url = reverse("attendance-detail", args=[attendance.id])
+
+        response = client.delete(path=url)
+
+        self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
+
+        # deve ser mascarado
+        self.assertEqual(Attendance.objects.count(), 0)
+
+        # mas deve ser mantido no banco de dados
+        self.assertEqual(Attendance.all_objects.count(), 1)
+
+    def test_list_without_permission(self):
+        client = create_account_with_permissions_and_do_authentication()
+
+        url = reverse("attendance-list")
+        response = client.get(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
+    def test_retrieve_without_permission(self):
+        client = create_account_with_permissions_and_do_authentication()
+
+        url = reverse("attendance-detail", args=[99])
+        response = client.get(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
+    def test_create_without_permission(self):
+        client = create_account_with_permissions_and_do_authentication()
+
+        url = reverse("attendance-list")
+        response = client.post(path=url, data={})
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
+    def test_partial_update_without_permission(self):
+        client = create_account_with_permissions_and_do_authentication()
+
+        url = reverse("attendance-detail", args=[99])
+        response = client.patch(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
+    def test_destroy_without_permission(self):
+        client = create_account_with_permissions_and_do_authentication()
+
+        url = reverse("attendance-detail", args=[99])
+        response = client.delete(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)

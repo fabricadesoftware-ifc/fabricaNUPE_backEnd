@@ -95,7 +95,9 @@ class StudentCreateSerializer(ModelSerializer):
         ingress_date: data de ingresso no curso
     """
 
-    responsibles = PrimaryKeyRelatedField(source="responsibles_persons", many=True, queryset=Person.objects.all())
+    responsibles = PrimaryKeyRelatedField(
+        source="responsibles_persons", queryset=Person.objects.all(), many=True, required=False
+    )
 
     class Meta:
         model = Student

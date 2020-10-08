@@ -58,12 +58,12 @@ class CourseAPITestCase(APITestCase):
 
     def test_create_with_permission(self):
         # curso com informações válidas para conseguir criar
-        course = {"name": COURSE_NAME}
+        course_data = {"name": COURSE_NAME}
 
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_course"])
         url = reverse("course-list")
 
-        response = client.post(path=url, data=course)
+        response = client.post(path=url, data=course_data)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
@@ -88,11 +88,11 @@ class CourseAPITestCase(APITestCase):
         url = reverse("course-detail", args=[course.id])
 
         new_name = "name updated"
-        course_update = {
+        course_update_data = {
             "name": new_name,
         }
 
-        response = client.patch(path=url, data=course_update)
+        response = client.patch(path=url, data=course_update_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
@@ -221,12 +221,12 @@ class GradeAPITestCase(APITestCase):
 
     def test_create_with_permission(self):
         # grau com informações válidas para conseguir criar
-        grade = {"name": GRADE_NAME}
+        grade_data = {"name": GRADE_NAME}
 
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_grade"])
         url = reverse("grade-list")
 
-        response = client.post(path=url, data=grade)
+        response = client.post(path=url, data=grade_data)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
@@ -251,11 +251,11 @@ class GradeAPITestCase(APITestCase):
         url = reverse("grade-detail", args=[grade.id])
 
         new_name = "name updated"
-        grade_update = {
+        grade_update_data = {
             "name": new_name,
         }
 
-        response = client.patch(path=url, data=grade_update)
+        response = client.patch(path=url, data=grade_update_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 

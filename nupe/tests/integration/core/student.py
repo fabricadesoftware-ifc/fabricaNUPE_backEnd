@@ -85,13 +85,53 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
-    def test_create_with_permission(self):
-        under_age_person = baker.make("Person")
+    def test_create_without_responsibles_with_permission(self):
         older_person = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE)
         academic_education_institution_campus = baker.make("AcademicEducationInstitutionCampus")
 
+        student_data = {
+            "registration": REGISTRATION,
+            "person": older_person.id,
+            "academic_education_institution_campus": academic_education_institution_campus.id,
+            "ingress_date": INGRESS_DATE,
+        }
+
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
+
+        response = client.post(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_201_CREATED)
+
+        # o estudante deve ser criado no banco de dados
+        student = Student.objects.all().first()
+        self.assertEqual(Student.objects.count(), 1)
+        self.assertEqual(student.registration, REGISTRATION)
+        self.assertEqual(student.person, older_person)
+        self.assertEqual(student.academic_education_institution_campus, academic_education_institution_campus)
+        self.assertEqual(student.ingress_date, INGRESS_DATE)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("registration"))
+        self.assertIsNotNone(response.data.get("person"))
+        self.assertIsNotNone(response.data.get("academic_education_institution_campus"))
+        self.assertIsNotNone(response.data.get("responsibles"))
+        self.assertIsNotNone(response.data.get("ingress_date"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("_academic_education_institution_campus_deleted_id"))
+        self.assertIsNone(response.data.get("responsibles_persons"))
+        self.assertIsNone(response.data.get("graduated"))
+        self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("age"))
+        self.assertIsNone(response.data.get("academic_education"))
+
+    def test_create_with_one_responsible_with_permission(self):
+        under_age_person = baker.make("Person")
+        older_person = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE)
+        academic_education_institution_campus = baker.make("AcademicEducationInstitutionCampus")
 
         student_data = {
             "registration": REGISTRATION,
@@ -100,6 +140,9 @@ class StudentAPITestCase(APITestCase):
             "responsibles": [older_person.id],
             "ingress_date": INGRESS_DATE,
         }
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
+        url = reverse("student-list")
 
         response = client.post(path=url, data=student_data)
 
@@ -131,23 +174,141 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
-    def test_partial_update_with_permission(self):
+    def test_create_with_more_than_one_responsible_with_permission(self):
+        under_age_person = baker.make("Person")
+        older_persons = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE, _quantity=2)
+        academic_education_institution_campus = baker.make("AcademicEducationInstitutionCampus")
+
+        student_data = {
+            "registration": REGISTRATION,
+            "person": under_age_person.id,
+            "academic_education_institution_campus": academic_education_institution_campus.id,
+            "responsibles": [older_persons[0].id, older_persons[1].id],
+            "ingress_date": INGRESS_DATE,
+        }
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
+        url = reverse("student-list")
+
+        response = client.post(path=url, data=student_data)
+
+        self.assertEqual(response.status_code, HTTP_201_CREATED)
+
+        # o estudante deve ser criado no banco de dados
+        student = Student.objects.all().first()
+        self.assertEqual(Student.objects.count(), 1)
+        self.assertEqual(student.registration, REGISTRATION)
+        self.assertEqual(student.person, under_age_person)
+        self.assertEqual(student.academic_education_institution_campus, academic_education_institution_campus)
+        self.assertEqual(list(student.responsibles_persons.all()), older_persons)
+        self.assertEqual(student.ingress_date, INGRESS_DATE)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("registration"))
+        self.assertIsNotNone(response.data.get("person"))
+        self.assertIsNotNone(response.data.get("academic_education_institution_campus"))
+        self.assertIsNotNone(response.data.get("responsibles"))
+        self.assertIsNotNone(response.data.get("ingress_date"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("_academic_education_institution_campus_deleted_id"))
+        self.assertIsNone(response.data.get("responsibles_persons"))
+        self.assertIsNone(response.data.get("graduated"))
+        self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("age"))
+        self.assertIsNone(response.data.get("academic_education"))
+
+    def test_partial_update_without_responsibles_with_permission(self):
         # cria um estudante no banco para conseguir atualiza-lo
         student = baker.make(Student, person__birthday_date=OLDER_BIRTHDAY_DATE)
+
+        # somente um campo e com informação válida para conseguir atualizar
+        new_registration = REGISTRATION + "99"
+        student_update_data = {"registration": new_registration}
 
         client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
 
-        # somente um campo e com informação válida para conseguir atualizar
-        new_registration = REGISTRATION + "99"
-        student_data = {"registration": new_registration}
-
-        response = client.patch(path=url, data=student_data)
+        response = client.patch(path=url, data=student_update_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve ser atualizado no banco
         self.assertEqual(Student.objects.get(pk=student.id).registration, new_registration)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("registration"))
+        self.assertIsNotNone(response.data.get("person"))
+        self.assertIsNot(response.data.get("academic_education_institution_campus", False), False)
+        self.assertIsNotNone(response.data.get("responsibles"))
+        self.assertIsNotNone(response.data.get("ingress_date"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("_academic_education_institution_campus_deleted_id"))
+        self.assertIsNone(response.data.get("responsibles_persons"))
+        self.assertIsNone(response.data.get("graduated"))
+        self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("age"))
+        self.assertIsNone(response.data.get("academic_education"))
+
+    def test_partial_update_with_one_responsible_with_permission(self):
+        # cria um estudante no banco para conseguir atualiza-lo
+        student = baker.make(Student, person__birthday_date=OLDER_BIRTHDAY_DATE)
+
+        new_older_person = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE)
+
+        # somente um campo e com informação válida para conseguir atualizar
+        student_update_data = {"responsibles": [new_older_person.id]}
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
+        url = reverse("student-detail", args=[student.registration])
+
+        response = client.patch(path=url, data=student_update_data)
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # deve ser atualizado no banco
+        self.assertEqual(Student.objects.get(pk=student.id).responsibles_persons.all().first(), new_older_person)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("registration"))
+        self.assertIsNotNone(response.data.get("person"))
+        self.assertIsNot(response.data.get("academic_education_institution_campus", False), False)
+        self.assertIsNotNone(response.data.get("responsibles"))
+        self.assertIsNotNone(response.data.get("ingress_date"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("_academic_education_institution_campus_deleted_id"))
+        self.assertIsNone(response.data.get("responsibles_persons"))
+        self.assertIsNone(response.data.get("graduated"))
+        self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("age"))
+        self.assertIsNone(response.data.get("academic_education"))
+
+    def test_partial_update_with_more_than_one_responsibles_with_permission(self):
+        # cria um estudante no banco para conseguir atualiza-lo
+        student = baker.make(Student, person__birthday_date=OLDER_BIRTHDAY_DATE)
+
+        new_older_persons = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE, _quantity=2)
+
+        # somente um campo e com informação válida para conseguir atualizar
+        student_update_data = {"responsibles": [new_older_persons[0].id, new_older_persons[1].id]}
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
+        url = reverse("student-detail", args=[student.registration])
+
+        response = client.patch(path=url, data=student_update_data)
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # deve ser atualizado no banco
+        self.assertEqual(list(Student.objects.get(pk=student.id).responsibles_persons.all()), new_older_persons)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
@@ -191,7 +352,7 @@ class StudentAPITestCase(APITestCase):
         url = reverse("student-list")
 
         invalid_registration = "teste"
-        student = {
+        student_data = {
             "registration": invalid_registration,
             "person": older_person.id,
             "academic_education_institution_campus": academic_education_institution_campus.id,
@@ -199,7 +360,7 @@ class StudentAPITestCase(APITestCase):
             "ingress_date": INGRESS_DATE,
         }
 
-        response = client.post(path=url, data=student)
+        response = client.post(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
@@ -227,7 +388,7 @@ class StudentAPITestCase(APITestCase):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
 
-        student = {
+        student_data = {
             "registration": REGISTRATION,
             "person": under_age_person.id,
             "academic_education_institution_campus": academic_education_institution_campus.id,
@@ -235,7 +396,7 @@ class StudentAPITestCase(APITestCase):
             "ingress_date": INGRESS_DATE,
         }
 
-        response = client.post(path=url, data=student)
+        response = client.post(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
@@ -264,7 +425,7 @@ class StudentAPITestCase(APITestCase):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
 
-        student = {
+        student_data = {
             "registration": REGISTRATION,
             "person": older_person.id,
             "academic_education_institution_campus": academic_education_institution_campus.id,
@@ -272,7 +433,7 @@ class StudentAPITestCase(APITestCase):
             "ingress_date": INGRESS_DATE,
         }
 
-        response = client.post(path=url, data=student)
+        response = client.post(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
@@ -300,7 +461,7 @@ class StudentAPITestCase(APITestCase):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_student"])
         url = reverse("student-list")
 
-        student = {
+        student_data = {
             "registration": REGISTRATION,
             "person": under_age_person.id,
             "academic_education_institution_campus": academic_education_institution_campus.id,
@@ -308,7 +469,7 @@ class StudentAPITestCase(APITestCase):
             "ingress_date": INGRESS_DATE,
         }
 
-        response = client.post(path=url, data=student)
+        response = client.post(path=url, data=student_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
@@ -336,11 +497,11 @@ class StudentAPITestCase(APITestCase):
         url = reverse("student-detail", args=[student.registration])
 
         invalid_registration = "invalid_registration"
-        student_data = {
+        student_update_data = {
             "registration": invalid_registration,
         }
 
-        response = client.patch(path=url, data=student_data)
+        response = client.patch(path=url, data=student_update_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
@@ -367,11 +528,11 @@ class StudentAPITestCase(APITestCase):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
 
-        student_data = {
+        student_update_data = {
             "responsibles": [],
         }
 
-        response = client.patch(path=url, data=student_data)
+        response = client.patch(path=url, data=student_update_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
@@ -399,11 +560,11 @@ class StudentAPITestCase(APITestCase):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
 
-        student_data = {
+        student_update_data = {
             "responsibles": [under_age_person.id],
         }
 
-        response = client.patch(path=url, data=student_data)
+        response = client.patch(path=url, data=student_update_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
@@ -430,11 +591,11 @@ class StudentAPITestCase(APITestCase):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.change_student"])
         url = reverse("student-detail", args=[student.registration])
 
-        student_data = {
+        student_update_data = {
             "responsibles": [student.person.id],
         }
 
-        response = client.patch(path=url, data=student_data)
+        response = client.patch(path=url, data=student_update_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 

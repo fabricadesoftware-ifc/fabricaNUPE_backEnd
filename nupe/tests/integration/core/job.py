@@ -58,14 +58,14 @@ class FuctionAPITestCase(APITestCase):
     def test_create_with_permission(self):
         # função/cargo com informações válidas para conseguir criar
         function_name = "somefunction"
-        function = {
+        function_data = {
             "name": function_name,
         }
 
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_function"])
         url = reverse("function-list")
 
-        response = client.post(path=url, data=function)
+        response = client.post(path=url, data=function_data)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
@@ -94,9 +94,9 @@ class FuctionAPITestCase(APITestCase):
 
         # somente um campo e com informação válida para conseguir atualizar
         new_name = "nameupdated"
-        function_data = {"name": new_name}
+        function_update_data = {"name": new_name}
 
-        response = client.patch(path=url, data=function_data)
+        response = client.patch(path=url, data=function_update_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
@@ -227,14 +227,14 @@ class SectorAPITestCase(APITestCase):
     def test_create_with_permission(self):
         # setor com informações válidas para conseguir criar
         sector_name = "somesector"
-        sector = {
+        sector_data = {
             "name": sector_name,
         }
 
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_sector"])
         url = reverse("sector-list")
 
-        response = client.post(path=url, data=sector)
+        response = client.post(path=url, data=sector_data)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
@@ -263,9 +263,9 @@ class SectorAPITestCase(APITestCase):
 
         # somente um campo e com informação válida para conseguir atualizar
         new_name = "nameupdated"
-        sector_data = {"name": new_name}
+        sector_update_data = {"name": new_name}
 
-        response = client.patch(path=url, data=sector_data)
+        response = client.patch(path=url, data=sector_update_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 

@@ -93,7 +93,7 @@ class PersonAPITestCase(APITestCase):
         mocked_image = mock_profile_image()
 
         # pessoa com informações válidas para conseguir criar
-        person = {
+        person_data = {
             "first_name": FIRST_NAME,
             "last_name": LAST_NAME,
             "cpf": CPF,
@@ -105,7 +105,7 @@ class PersonAPITestCase(APITestCase):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_person"])
         url = reverse("person-list")
 
-        response = client.post(path=url, data=person)
+        response = client.post(path=url, data=person_data)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
@@ -150,11 +150,11 @@ class PersonAPITestCase(APITestCase):
         url = reverse("person-detail", args=[person.cpf])
 
         new_first_name = "first name updated"
-        person_update = {
+        person_update_data = {
             "first_name": new_first_name,
         }
 
-        response = client.patch(path=url, data=person_update)
+        response = client.patch(path=url, data=person_update_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
@@ -189,11 +189,11 @@ class PersonAPITestCase(APITestCase):
         url = reverse("person-detail", args=[person.cpf])
 
         new_mocked_image = mock_profile_image()
-        person_update = {
+        person_update_data = {
             "profile_image": new_mocked_image.attachment_id,
         }
 
-        response = client.patch(path=url, data=person_update)
+        response = client.patch(path=url, data=person_update_data)
 
         self.assertEqual(response.status_code, HTTP_200_OK)
 
@@ -324,11 +324,11 @@ class PersonAPITestCase(APITestCase):
         url = reverse("person-detail", args=[person.cpf])
 
         invalid_cpf = "12345678910"
-        person_data = {
+        person_update_data = {
             "cpf": invalid_cpf,
         }
 
-        response = client.patch(path=url, data=person_data)
+        response = client.patch(path=url, data=person_update_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
@@ -358,11 +358,11 @@ class PersonAPITestCase(APITestCase):
         url = reverse("person-detail", args=[person.cpf])
 
         invalid_contact = "999999999"
-        person_data = {
+        person_update_data = {
             "contact": invalid_contact,
         }
 
-        response = client.patch(path=url, data=person_data)
+        response = client.patch(path=url, data=person_update_data)
 
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
 
