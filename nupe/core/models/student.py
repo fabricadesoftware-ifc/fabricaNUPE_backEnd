@@ -38,6 +38,8 @@ class Student(SafeDeleteModel):
         responsibles: relação inversa para a model Responsible
 
     Propriedades:
+        full_name: nome completo do estudante
+
         age: idade do estudante
 
         academic_education: nome do curso que o estudante participa
@@ -72,6 +74,10 @@ class Student(SafeDeleteModel):
 
     def __str__(self) -> str:
         return f"{self.person} - {self.registration}"
+
+    @property
+    def full_name(self):
+        return self.person.full_name
 
     @property
     def age(self):

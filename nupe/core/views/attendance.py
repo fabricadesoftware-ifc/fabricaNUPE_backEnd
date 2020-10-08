@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 
+from nupe.core.filters import AttendanceFilter
 from nupe.core.models import Attendance
 from nupe.core.serializers import AttendanceCreateSerializer, AttendanceDetailSerializer, AttendanceListSerializer
 
@@ -18,6 +19,16 @@ class AttendanceViewSet(ModelViewSet):
     """
 
     queryset = Attendance.objects.all()
+    filterset_class = AttendanceFilter
+    search_fields = ["student__full_name", "attendants__full_name"]
+    ordering_fields = [
+        "student__person__full_name",
+        "attendants__full_name",
+        "attendance_severity",
+        "status",
+        "opened_at",
+        "closed_at",
+    ]
     ordering = "attendance_severity"
 
     per_action_serializer = {"list": AttendanceListSerializer, "retrieve": AttendanceDetailSerializer}
