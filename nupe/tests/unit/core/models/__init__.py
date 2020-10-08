@@ -1,3 +1,4 @@
+from nupe.tests.unit.core.models.attendance import AttendanceTestCase
 from nupe.tests.unit.core.models.course import AcademicEducationTestCase, CourseTestCase, GradeTestCase
 from nupe.tests.unit.core.models.institution import (
     AcademicEducationInstitutionCampusTestCase,

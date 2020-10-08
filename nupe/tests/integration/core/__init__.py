@@ -1,3 +1,4 @@
+from nupe.tests.integration.core.attendance import AttendanceAPITestCase
 from nupe.tests.integration.core.course import AcademicEducationAPITestCase, CourseAPITestCase, GradeAPITestCase
 from nupe.tests.integration.core.custom_handler_404 import CustomHandler404APITestCase
 from nupe.tests.integration.core.institution import CampusAPITestCase, InstitutionAPITestCase

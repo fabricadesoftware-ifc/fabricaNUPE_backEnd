@@ -89,7 +89,11 @@ class Command(BaseCommand):
 
         try:
             Account.objects.create_superuser(
-                email=email, password=password, function=baker.make("core.Function"), sector=baker.make("core.Sector")
+                email=email,
+                password=password,
+                person=baker.make("core.Person"),
+                function=baker.make("core.Function"),
+                sector=baker.make("core.Sector"),
             )
         except IntegrityError:
             message = f"Super Usuário já criado!\nEmail: {email}\nSenha: {password}"

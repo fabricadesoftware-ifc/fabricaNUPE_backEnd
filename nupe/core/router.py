@@ -3,6 +3,7 @@ from rest_framework.routers import SimpleRouter
 from nupe.core.views import (
     AcademicEducationViewSet,
     AttendanceReasonViewSet,
+    AttendanceViewSet,
     CampusViewSet,
     CityViewSet,
     CourseViewSet,
@@ -22,6 +23,7 @@ from nupe.core.views import (
 router = SimpleRouter()
 
 router.register("academic_education", AcademicEducationViewSet, basename="academic_education")
+router.register("attendance", AttendanceViewSet, basename="attendance")
 router.register("attendance_reason", AttendanceReasonViewSet, basename="attendance_reason")
 router.register("campus", CampusViewSet, basename="campus")
 router.register("city", CityViewSet, basename="city")

@@ -1,3 +1,4 @@
+from nupe.core.models.attendance import AccountAttendance, Attendance
 from nupe.core.models.course import AcademicEducation, Course, Grade
 from nupe.core.models.institution import AcademicEducationInstitutionCampus, Campus, Institution, InstitutionCampus
 from nupe.core.models.job import Function, Sector
