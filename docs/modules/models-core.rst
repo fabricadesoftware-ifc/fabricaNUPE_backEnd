@@ -98,21 +98,6 @@ Setor
 Módulo de Motivo
 ----------------
 
-Tipo de Necessidade Especial
-++++++++++++++++++++++++++++
-
-.. autoclass:: nupe.core.models.reason.SpecialNeedType
-
-Tipo de Crise
-+++++++++++++
-
-.. autoclass:: nupe.core.models.reason.CrisisType
-
-Tipo de Droga
-+++++++++++++
-
-.. autoclass:: nupe.core.models.reason.DrugType
-
 Motivo do Atendimento
 +++++++++++++++++++++
 

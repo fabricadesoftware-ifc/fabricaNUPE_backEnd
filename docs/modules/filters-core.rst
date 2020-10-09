@@ -66,3 +66,11 @@ Filtros para o Endpoint de Formação Acadêmica
 +++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.filters.course.AcademicEducationFilter
+
+Módulo de Motivo
+----------------
+
+Filtros para o Endpoint de Motivo de Atendimento
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.filters.reason.AttendanceReasonFilter

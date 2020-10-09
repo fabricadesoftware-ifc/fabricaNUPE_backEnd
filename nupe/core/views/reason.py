@@ -1,72 +1,29 @@
 from rest_framework.viewsets import ModelViewSet
 
-from nupe.core.models import AttendanceReason, CrisisType, DrugType, SpecialNeedType
-from nupe.core.serializers import (
-    AttendanceCreateReasonSerializer,
-    AttendanceReasonSerializer,
-    CrisisTypeSerializer,
-    DrugTypeSerializer,
-    SpecialNeedTypeSerializer,
-)
-
-
-class SpecialNeedTypeViewSet(ModelViewSet):
-    queryset = SpecialNeedType.objects.all()
-    serializer_class = SpecialNeedTypeSerializer
-    search_fields = ["name"]
-    ordering_fields = ["name"]
-    ordering = "name"
-
-    http_method_names = ["get", "post", "patch", "delete"]
-
-    perms_map_action = {
-        "list": ["core.view_specialneedtype"],
-        "retrieve": ["core.view_specialneedtype"],
-        "create": ["core.add_specialneedtype"],
-        "partial_update": ["core.change_specialneedtype"],
-        "destroy": ["core.delete_specialneedtype"],
-    }
-
-
-class CrisisTypeViewSet(ModelViewSet):
-    queryset = CrisisType.objects.all()
-    serializer_class = CrisisTypeSerializer
-    search_fields = ["name"]
-    ordering_fields = ["name"]
-    ordering = "name"
-
-    http_method_names = ["get", "post", "patch", "delete"]
-
-    perms_map_action = {
-        "list": ["core.view_crisistype"],
-        "retrieve": ["core.view_crisistype"],
-        "create": ["core.add_crisistype"],
-        "partial_update": ["core.change_crisistype"],
-        "destroy": ["core.delete_crisistype"],
-    }
-
-
-class DrugTypeViewSet(ModelViewSet):
-    queryset = DrugType.objects.all()
-    serializer_class = DrugTypeSerializer
-    search_fields = ["name"]
-    ordering_fields = ["name"]
-    ordering = "name"
-
-    http_method_names = ["get", "post", "patch", "delete"]
-
-    perms_map_action = {
-        "list": ["core.view_drugtype"],
-        "retrieve": ["core.view_drugtype"],
-        "create": ["core.add_drugtype"],
-        "partial_update": ["core.change_drugtype"],
-        "destroy": ["core.delete_drugtype"],
-    }
+from nupe.core.filters import AttendanceReasonFilter
+from nupe.core.models import AttendanceReason
+from nupe.core.serializers import AttendanceReasonSerializer
 
 
 class AttendanceReasonViewSet(ModelViewSet):
+    """
+    list: retorna todos os motivos de atendimento pai do banco de dados
+
+    retrieve: retorna um motivo de atendimento especifico do banco de dados
+
+    create: cadastra um motivo de atendimento no banco de dados
+
+    destroy: exclui um motivo de atendimento do banco de dados
+
+    partial_update: atualiza um ou mais atributos de um motivo de atendimento
+    """
+
     queryset = AttendanceReason.objects.all()
     serializer_class = AttendanceReasonSerializer
+    filterset_class = AttendanceReasonFilter
+    search_fields = ["name"]
+    ordering_fields = ["name"]
+    ordering = ["name"]
 
     http_method_names = ["get", "post", "patch", "delete"]
 
@@ -78,8 +35,9 @@ class AttendanceReasonViewSet(ModelViewSet):
         "destroy": ["core.delete_attendancereason"],
     }
 
-    def get_serializer_class(self):
-        if self.action in ["create", "partial_update"]:
-            return AttendanceCreateReasonSerializer
+    per_action_queryset = {
+        "list": AttendanceReason.only_father.all(),
+    }
 
-        return self.serializer_class
+    def get_queryset(self):
+        return self.per_action_queryset.get(self.action, self.queryset)

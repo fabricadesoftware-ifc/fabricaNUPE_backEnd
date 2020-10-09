@@ -27,7 +27,9 @@ class AttendanceTestCase(TestCase):
 class AccountAttendanceTestCase(TestCase):
     def test_has_all_attributes(self):
         self.assertIs(hasattr(AccountAttendance, "_safedelete_policy"), True)
-        self.assertIs(hasattr(AccountAttendance, "annotation"), True)
+        self.assertIs(hasattr(AccountAttendance, "public_annotation"), True)
+        self.assertIs(hasattr(AccountAttendance, "private_annotation"), True)
+        self.assertIs(hasattr(AccountAttendance, "group_annotation"), True)
         self.assertIs(hasattr(AccountAttendance, "attendance"), True)
         self.assertIs(hasattr(AccountAttendance, "account"), True)
         self.assertIs(hasattr(AccountAttendance, "attendance_at"), True)
@@ -36,5 +38,5 @@ class AccountAttendanceTestCase(TestCase):
     def test_return_str(self):
         account_attendance = baker.prepare(AccountAttendance)
 
-        str_expected = f"{account_attendance.account.full_name} - {account_attendance.annotation}"
+        str_expected = f"{account_attendance.account.full_name} - {account_attendance.public_annotation}"
         self.assertEqual(str(account_attendance), str_expected)

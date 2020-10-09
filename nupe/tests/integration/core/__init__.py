@@ -5,10 +5,5 @@ from nupe.tests.integration.core.institution import CampusAPITestCase, Instituti
 from nupe.tests.integration.core.job import FuctionAPITestCase, SectorAPITestCase
 from nupe.tests.integration.core.location import CityAPITestCase, LocationAPITestCase, StateAPITestCase
 from nupe.tests.integration.core.person import PersonAPITestCase
-from nupe.tests.integration.core.reason import (
-    AttendanceReasonAPITestCase,
-    CrisisTypeAPITestCase,
-    DrugTypeAPITestCase,
-    SpecialNeedTypeAPITestCase,
-)
+from nupe.tests.integration.core.reason import AttendanceReasonAPITestCase
 from nupe.tests.integration.core.student import StudentAPITestCase

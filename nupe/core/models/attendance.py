@@ -107,7 +107,11 @@ class AccountAttendance(SafeDeleteModel):
     Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
-        annotation: anotação do atendimento
+        public_annotation: anotação pública do atendimento
+
+        private_annotation: anotação privada do atendimento
+
+        group_annotation: anotação de grupo do atendimento
 
         attendance: atendimento realizado
 
@@ -120,7 +124,9 @@ class AccountAttendance(SafeDeleteModel):
 
     _safedelete_policy = SOFT_DELETE_CASCADE
 
-    annotation = models.TextField(max_length="255")
+    public_annotation = models.TextField(max_length="255")
+    private_annotation = models.TextField(max_length="255")
+    group_annotation = models.TextField(max_length="255")
     attendance = models.ForeignKey(
         "core.Attendance",
         related_name="account_attendances",
@@ -137,4 +143,4 @@ class AccountAttendance(SafeDeleteModel):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.account.full_name} - {self.annotation}"
+        return f"{self.account.full_name} - {self.public_annotation}"
