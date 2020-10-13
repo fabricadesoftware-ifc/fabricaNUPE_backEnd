@@ -187,7 +187,7 @@ class AttendanceReasonAPITestCase(APITestCase):
         fathers = baker.make(AttendanceReason, _quantity=5)
 
         # cria 3 motivos de atendimento filho no banco para retornar no list
-        baker.make(AttendanceReason, father_reason=fathers[0], _quantity=3)
+        sons = baker.make(AttendanceReason, father_reason=fathers[0], _quantity=3)
 
         client = create_account_with_permissions_and_do_authentication(permissions=["core.view_attendancereason"])
         url = reverse("attendance_reason-list") + f"?father_reason={fathers[0].id}"
@@ -198,3 +198,8 @@ class AttendanceReasonAPITestCase(APITestCase):
 
         # deve retornar todos os motivos de atendimento filho não mascarados do banco de dados
         self.assertEqual(response.data.get("count"), 3)
+
+        attendance_reasons_ids = [result.get("id") for result in response.data.get("results")]
+        self.assertIn(sons[0].id, attendance_reasons_ids)
+        self.assertIn(sons[1].id, attendance_reasons_ids)
+        self.assertIn(sons[2].id, attendance_reasons_ids)
