@@ -1,9 +1,8 @@
 from nupe.tests.unit.core.models.attendance import AccountAttendanceTestCase, AttendanceTestCase
 from nupe.tests.unit.core.models.course import AcademicEducationTestCase, CourseTestCase, GradeTestCase
 from nupe.tests.unit.core.models.institution import (
-    AcademicEducationInstitutionCampusTestCase,
+    AcademicEducationCampusTestCase,
     CampusTestCase,
-    InstitutionCampusTestCase,
     InstitutionTestCase,
 )
 from nupe.tests.unit.core.models.job import FunctionTestCase, SectorTestCase

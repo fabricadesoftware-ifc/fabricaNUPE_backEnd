@@ -19,7 +19,7 @@ class StudentFilter(FilterSet):
 
         ingress_date_after: maior a data fornecida (yyyy-mm-dd)
 
-        course_id: igual ao inteiro fornecido
+        academic_education: igual ao inteiro fornecido
 
         campus_name: igual a string fornecida (case insensitive)
 
@@ -27,11 +27,9 @@ class StudentFilter(FilterSet):
     """
 
     ingress_date = DateFromToRangeFilter()
-    course_id = NumberFilter(field_name="academic_education_institution_campus__academic_education")
-    campus_name = CharFilter(
-        field_name="academic_education_institution_campus__institution_campus__campus__name", lookup_expr="iexact"
-    )
+    academic_education = NumberFilter(field_name="academic_education_campus__academic_education")
+    campus_name = CharFilter(field_name="academic_education_campus__campus__name", lookup_expr="iexact")
 
     class Meta:
         model = Student
-        fields = ["graduated", "ingress_date", "course_id", "campus_name"]
+        fields = ["graduated", "ingress_date", "academic_education", "campus_name"]

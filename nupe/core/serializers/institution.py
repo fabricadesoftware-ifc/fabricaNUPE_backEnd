@@ -1,6 +1,8 @@
-from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField, StringRelatedField
+from rest_framework.serializers import CharField, ModelSerializer, ValidationError
+from validate_docbr.CNPJ import CNPJ
 
 from nupe.core.models import Campus, Institution
+from nupe.resources.messages.institution import CAMPUS_INVALID_CNPJ_MESSAGE
 
 
 class InstitutionSerializer(ModelSerializer):
@@ -19,42 +21,72 @@ class InstitutionSerializer(ModelSerializer):
         fields = ["id", "name"]
 
 
-class CampusSerializer(ModelSerializer):
+class CampusCreateSerializer(ModelSerializer):
     """
-    Recebe e valida informações para então cadastrar ou atualizar um campus, e também
-    detalha informações sobre um campus específico
-
-    Campos:
-        id: identificador (somente leitura)
-
-        name: nome
-
-        location: identificador da localização, 'Cidade - Estado'
-
-        institutions: identificadores das instituições desse campus
+    Recebe e valida informações para então cadastrar ou atualizar um campus
     """
-
-    institutions = PrimaryKeyRelatedField(queryset=Institution.objects.all(), many=True, required=False)
 
     class Meta:
         model = Campus
-        fields = ["id", "name", "location", "institutions"]
+        fields = [
+            "id",
+            "name",
+            "cnpj",
+            "address",
+            "number",
+            "website",
+            "location",
+            "institution",
+        ]
+
+    def validate_cnpj(self, cnpj):
+        """
+        Verifica se o cnpj é válido
+
+        Argumentos:
+            cnpj (str): atributo do serializer data
+
+        Raises:
+            ValidationError: caso o cnpj seja inválido
+
+        Retorna:
+            str: retorna o cnpj somente se for válido
+        """
+        if not CNPJ().validate(cnpj):
+            raise ValidationError(CAMPUS_INVALID_CNPJ_MESSAGE)
+
+        return cnpj
 
 
 class CampusListSerializer(ModelSerializer):
     """
-    Retorna uma lista de campus cadastrados no banco de dados
-
-    Campos:
-        id: identificador (somente leitura)
-
-        name: nome
-
-        location: identificador da localização, 'Cidade - Estado'
+    Retorna uma lista de campis cadastrados no banco de dados
     """
 
-    location = StringRelatedField()
+    institution = CharField()
 
     class Meta:
         model = Campus
-        fields = ["id", "name", "location"]
+        fields = ["id", "name", "institution", "address", "number"]
+
+
+class CampusDetailSerializer(ModelSerializer):
+    """
+    Retorna os detalhes de um campus específico
+    """
+
+    location = CharField()
+    institution = CharField()
+
+    class Meta:
+        model = Campus
+        fields = [
+            "id",
+            "name",
+            "cnpj",
+            "address",
+            "number",
+            "website",
+            "location",
+            "institution",
+        ]

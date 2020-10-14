@@ -1,7 +1,7 @@
 from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField, ValidationError
 
 from nupe.core.models import Person, Student
-from nupe.core.models.student import RESPONSIBLE_MIN_AGE
+from nupe.core.models.student import Responsible
 from nupe.core.serializers import PersonDetailSerializer, PersonListSerializer
 from nupe.resources.messages.person import (
     SELF_RESPONSIBLE_MESSAGE,
@@ -48,7 +48,7 @@ class StudentDetailSerializer(ModelSerializer):
 
         institution: 'Instituição - Campus' onde estuda
 
-        academic_education_institution_campus: identificador do objeto da model AcademicEducationInstitutionCampus
+        academic_education_campus: identificador do objeto da model AcademicEducationCampus
 
         responsibles: responsáveis do estudante
 
@@ -58,8 +58,8 @@ class StudentDetailSerializer(ModelSerializer):
     """
 
     personal_info = PersonDetailSerializer(source="person")
-    course = CharField(source="academic_education_institution_campus.academic_education")
-    institution = CharField(source="academic_education_institution_campus.institution_campus")
+    course = CharField(source="academic_education_campus.academic_education")
+    campus = CharField(source="academic_education_campus.campus")
     responsibles = PersonListSerializer(source="responsibles_persons", many=True)
 
     class Meta:
@@ -69,8 +69,8 @@ class StudentDetailSerializer(ModelSerializer):
             "registration",
             "personal_info",
             "course",
-            "institution",
-            "academic_education_institution_campus",
+            "campus",
+            "academic_education_campus",
             "responsibles",
             "ingress_date",
             "graduated",
@@ -88,7 +88,7 @@ class StudentCreateSerializer(ModelSerializer):
 
         person: identificador do objeto da model Person
 
-        academic_education_institution_campus: identificador do objeto da model AcademicEducationInstitutionCampus
+        academic_education_campus: identificador do objeto da model AcademicEducationCampus
 
         responsibles: lista de id das pessoas responsáveis
 
@@ -105,7 +105,7 @@ class StudentCreateSerializer(ModelSerializer):
             "id",
             "registration",
             "person",
-            "academic_education_institution_campus",
+            "academic_education_campus",
             "responsibles",
             "ingress_date",
         ]
@@ -151,14 +151,14 @@ class StudentCreateSerializer(ModelSerializer):
             ValidationError 2: caso o estudante seja menor de idade, ele não deve ser o responsável de sí
             ValidationError 3: caso o estudante seja menor de idade, não deve conter nenhum responsável menor de idade
         """
-        student_is_under_age = person.age < RESPONSIBLE_MIN_AGE
+        student_is_under_age = person.age < Responsible.MINIMUM_AGE
 
         # ValidationError 1
         if student_is_under_age and not responsibles:
             raise ValidationError({"responsibles": UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE})
 
         for responsible in responsibles:
-            responsible_is_under_age = responsible.age < RESPONSIBLE_MIN_AGE
+            responsible_is_under_age = responsible.age < Responsible.MINIMUM_AGE
             student_is_self_responsible = responsible.id == person.id
 
             # ValidationError 2

@@ -7,13 +7,12 @@ from model_bakery import baker
 from nupe.account.models import Account
 from nupe.core.models import (
     AcademicEducation,
-    AcademicEducationInstitutionCampus,
+    AcademicEducationCampus,
     Campus,
     City,
     Course,
     Grade,
     Institution,
-    InstitutionCampus,
     Location,
     State,
 )
@@ -72,11 +71,9 @@ class Command(BaseCommand):
                 (
                     academic_education_institution_campus_object_model,
                     _,
-                ) = AcademicEducationInstitutionCampus.objects.get_or_create(
+                ) = AcademicEducationCampus.objects.get_or_create(
                     academic_education=academic_education_object_model,
-                    institution_campus=InstitutionCampus.objects.get(
-                        campus__name=academic_education.get("campus_name")
-                    ),
+                    institution_campus=Campus.objects.get(campus__name=academic_education.get("campus_name")),
                 )
             except Campus.DoesNotExist:
                 message = "Campus não encontrado. Por favor, informe na lista para população."

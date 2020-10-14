@@ -20,7 +20,7 @@ class InstitutionFilter(FilterSet):
         campus_name: igual a string fornecida (case insensitive)
     """
 
-    name = CharFilter(field_name="name", lookup_expr="iexact")
+    name = CharFilter(lookup_expr="iexact")
     campus_name = CharFilter(field_name="campus__name", lookup_expr="iexact")
 
     class Meta:
@@ -29,22 +29,9 @@ class InstitutionFilter(FilterSet):
 
 
 class CampusFilter(FilterSet):
-    """
-    Filtros para se utilizar nas requisições do endpoint de Campus
-
-    Exemplo:
-        /api/v1/campus?foo=xyz
-
-        ou
-
-        /api/v1/campus?foo=xyz&bar=abc
-
-    Parâmetros:
-        name: igual a string fornecida (case insensitive)
-    """
-
-    name = CharFilter(field_name="name", lookup_expr="iexact")
+    address = CharFilter(lookup_expr="iexact")
+    number = CharFilter(lookup_expr="iexact")
 
     class Meta:
         model = Campus
-        fields = ["name"]
+        fields = ["address", "number"]

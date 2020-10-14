@@ -1,10 +1,16 @@
 from django.urls import reverse
 from model_bakery import baker
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
+    HTTP_403_FORBIDDEN,
+)
 from rest_framework.test import APITestCase
 
 from nupe.core.models import Campus, Institution
-from nupe.resources.datas.core.institution import CAMPUS_NAME, INSTITUTION_NAME
+from nupe.resources.datas.core.institution import CAMPUS_NAME, INSTITUTION_NAME, VALID_CNPJ
 from nupe.tests.integration.account.setup.account import create_account_with_permissions_and_do_authentication
 
 
@@ -32,7 +38,6 @@ class InstitutionAPITestCase(APITestCase):
         # campos que não devem ser retornados
         self.assertIsNone(data.get("_safedelete_policy"))
         self.assertIsNone(data.get("campus"))
-        self.assertIsNone(data.get("institutions_campus"))
 
     def test_retrieve_with_permission(self):
         # cria uma instituição no banco para detalhar suas informações
@@ -54,7 +59,6 @@ class InstitutionAPITestCase(APITestCase):
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
         self.assertIsNone(response.data.get("campus"))
-        self.assertIsNone(response.data.get("institutions_campus"))
 
     def test_create_with_permission(self):
         # instituição com informações válidas para conseguir criar
@@ -78,7 +82,6 @@ class InstitutionAPITestCase(APITestCase):
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
         self.assertIsNone(response.data.get("campus"))
-        self.assertIsNone(response.data.get("institutions_campus"))
 
     def test_partial_update_with_permission(self):
         # cria uma instituição no banco para conseguir atualizar suas informações
@@ -106,7 +109,6 @@ class InstitutionAPITestCase(APITestCase):
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
         self.assertIsNone(response.data.get("campus"))
-        self.assertIsNone(response.data.get("institutions_campus"))
 
     def test_destroy_with_permission(self):
         # cria uma instituição no banco para conseguir excluir
@@ -188,12 +190,17 @@ class CampusAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("name"))
-        self.assertIsNotNone(data.get("location"))
+        self.assertIsNotNone(data.get("institution"))
+        self.assertIsNotNone(data.get("address"))
+        self.assertIsNotNone(data.get("number"))
 
         # campos que não devem ser retornados
         self.assertIsNone(data.get("_safedelete_policy"))
-        self.assertIsNone(data.get("institutions"))
-        self.assertIsNone(data.get("institutions_campus"))
+        self.assertIsNone(data.get("cnpj"))
+        self.assertIsNone(data.get("website"))
+        self.assertIsNone(data.get("location"))
+        self.assertIsNone(data.get("academic_education_campus"))
+        self.assertIsNone(data.get("workers"))
 
     def test_retrieve_with_permission(self):
         # cria um campus no banco para detalhar suas informações
@@ -212,45 +219,63 @@ class CampusAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
+        self.assertIsNotNone(response.data.get("cnpj"))
+        self.assertIsNotNone(response.data.get("address"))
+        self.assertIsNotNone(response.data.get("number"))
+        self.assertIsNot(response.data.get("website", False), False)
         self.assertIsNotNone(response.data.get("location"))
-        self.assertIsNotNone(response.data.get("institutions"))
+        self.assertIsNotNone(response.data.get("institution"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
-        self.assertIsNone(response.data.get("institutions_campus"))
+        self.assertIsNone(response.data.get("academic_education_campus"))
+        self.assertIsNone(response.data.get("workers"))
 
     def test_create_with_permission(self):
-        location = baker.make("core.Location")
-
         # campus com informações válidas para conseguir criar
-        campus = {
+        campus_location = baker.make("core.Location")
+        campus_institution = baker.make("core.Institution")
+
+        campus_data = {
             "name": CAMPUS_NAME,
-            "location": location.id,
+            "cnpj": VALID_CNPJ,
+            "address": "someaddress",
+            "number": "number11",
+            "location": campus_location.id,
+            "institution": campus_institution.id,
         }
 
         client = create_account_with_permissions_and_do_authentication(permissions=["core.add_campus"])
         url = reverse("campus-list")
 
-        response = client.post(path=url, data=campus)
+        response = client.post(path=url, data=campus_data)
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
 
         # deve ser criado no banco de dados
-        self.assertEqual(Campus.objects.count(), 1)
-
         campus = Campus.objects.all().first()
+        self.assertEqual(Campus.objects.count(), 1)
         self.assertEqual(campus.name, CAMPUS_NAME)
-        self.assertEqual(campus.location, location)
+        self.assertEqual(campus.cnpj, VALID_CNPJ)
+        self.assertEqual(campus.address, "someaddress")
+        self.assertEqual(campus.number, "number11")
+        self.assertEqual(campus.location, campus_location)
+        self.assertEqual(campus.institution, campus_institution)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
+        self.assertIsNotNone(response.data.get("cnpj"))
+        self.assertIsNotNone(response.data.get("address"))
+        self.assertIsNotNone(response.data.get("number"))
+        self.assertIsNot(response.data.get("website", False), False)
         self.assertIsNotNone(response.data.get("location"))
-        self.assertIsNotNone(response.data.get("institutions"))
+        self.assertIsNotNone(response.data.get("institution"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
-        self.assertIsNone(response.data.get("institutions_campus"))
+        self.assertIsNone(response.data.get("academic_education_campus"))
+        self.assertIsNone(response.data.get("workers"))
 
     def test_partial_update_with_permission(self):
         # cria um campus no banco para conseguir atualizar suas informações
@@ -274,12 +299,17 @@ class CampusAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
+        self.assertIsNotNone(response.data.get("cnpj"))
+        self.assertIsNotNone(response.data.get("address"))
+        self.assertIsNotNone(response.data.get("number"))
+        self.assertIsNot(response.data.get("website", False), False)
         self.assertIsNotNone(response.data.get("location"))
-        self.assertIsNotNone(response.data.get("institutions"))
+        self.assertIsNotNone(response.data.get("institution"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
-        self.assertIsNone(response.data.get("institutions_campus"))
+        self.assertIsNone(response.data.get("academic_education_campus"))
+        self.assertIsNone(response.data.get("workers"))
 
     def test_destroy_with_permission(self):
         # cria um campus no banco para conseguir excluir
@@ -294,6 +324,80 @@ class CampusAPITestCase(APITestCase):
 
         # o dado não deve ser removido nem mascarado
         self.assertEqual(Campus.objects.count(), 1)
+
+    def test_create_invalid_cnpj_with_permission(self):
+        # campus com informações válidas para conseguir criar
+        campus_location = baker.make("core.Location")
+        campus_institution = baker.make("core.Institution")
+
+        invalid_cnpj = "75775752000124"
+        campus_data = {
+            "name": CAMPUS_NAME,
+            "cnpj": invalid_cnpj,
+            "address": "someaddress",
+            "number": "number11",
+            "location": campus_location.id,
+            "institution": campus_institution.id,
+        }
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_campus"])
+        url = reverse("campus-list")
+
+        response = client.post(path=url, data=campus_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+
+        # não deve ser criado no banco de dados
+        self.assertEqual(Campus.objects.count(), 0)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("cnpj"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("id"))
+        self.assertIsNone(response.data.get("name"))
+        self.assertIsNone(response.data.get("address"))
+        self.assertIsNone(response.data.get("number"))
+        self.assertIsNone(response.data.get("website"))
+        self.assertIsNone(response.data.get("location"))
+        self.assertIsNone(response.data.get("institution"))
+        self.assertIsNone(response.data.get("academic_education_campus"))
+        self.assertIsNone(response.data.get("workers"))
+
+    def test_partial_update_invalid_cnpj_with_permission(self):
+        # cria um campus no banco para conseguir atualizar suas informações
+        campus = baker.make(Campus)
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_campus"])
+        url = reverse("campus-detail", args=[campus.id])
+
+        invalid_cnpj = "75775752000124"
+        campus_update_data = {
+            "cnpj": invalid_cnpj,
+        }
+
+        response = client.patch(path=url, data=campus_update_data)
+
+        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
+
+        # não deve ser atualizado no banco de dados
+        self.assertNotEqual(Campus.objects.get(pk=campus.id).cnpj, invalid_cnpj)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("cnpj"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("id"))
+        self.assertIsNone(response.data.get("name"))
+        self.assertIsNone(response.data.get("address"))
+        self.assertIsNone(response.data.get("number"))
+        self.assertIsNone(response.data.get("website"))
+        self.assertIsNone(response.data.get("location"))
+        self.assertIsNone(response.data.get("institution"))
+        self.assertIsNone(response.data.get("academic_education_campus"))
+        self.assertIsNone(response.data.get("workers"))
 
     def test_list_without_permission(self):
         client = create_account_with_permissions_and_do_authentication()

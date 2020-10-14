@@ -94,7 +94,7 @@ class PersonCreateSerializer(ModelSerializer):
 
     def validate_cpf(self, cpf):
         """
-        Verifica se o cpf é válido com base no digito verificador
+        Verifica se o cpf é válido
 
         Argumentos:
             cpf (str): atributo do serializer data

@@ -3,9 +3,6 @@ from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
 from nupe.core.utils.regex import ONLY_NUMBERS
 
-STUDENT_REGISTRATION_MAX_LENGTH = 35
-RESPONSIBLE_MIN_AGE = 18
-
 
 class Student(SafeDeleteModel):
     """
@@ -17,14 +14,14 @@ class Student(SafeDeleteModel):
     Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
-        _academic_education_institution_campus_deleted_id: identificador para restaurar a remoção de um objeto
+        _academic_education_campus_deleted_id: identificador para restaurar a remoção de um objeto
         do tipo model 'AcademicEducationInstitutionCampus'
 
         registration: número de matrícula do estudante
 
         person: objeto do tipo model 'Person' com as informações pessoais do estudante (o2m)
 
-        academic_education_institution_campus: objeto do tipo model 'AcademicEducationInstitutionCampus'
+        academic_education_campus: objeto do tipo model 'AcademicEducationCampus'
         do estudante (o2m)
 
         responsibles_persons: pessoas responsáveis pelo estudante (m2m)
@@ -46,17 +43,17 @@ class Student(SafeDeleteModel):
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
-    _academic_education_institution_campus_deleted_id = models.IntegerField(default=None, null=True, blank=True)
+    _academic_education_campus_deleted_id = models.IntegerField(default=None, null=True, blank=True)
 
-    registration = models.CharField(max_length=STUDENT_REGISTRATION_MAX_LENGTH, validators=[ONLY_NUMBERS], unique=True)
+    registration = models.CharField(max_length=35, validators=[ONLY_NUMBERS], unique=True)
     person = models.ForeignKey(
         "Person",
         related_name="student_registrations",
         related_query_name="student_registration",
         on_delete=models.CASCADE,
     )
-    academic_education_institution_campus = models.ForeignKey(
-        "AcademicEducationInstitutionCampus",
+    academic_education_campus = models.ForeignKey(
+        "AcademicEducationCampus",
         related_name="students",
         related_query_name="student",
         on_delete=models.SET_NULL,
@@ -70,7 +67,7 @@ class Student(SafeDeleteModel):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ["person", "academic_education_institution_campus"]
+        unique_together = ["person", "academic_education_campus"]
 
     def __str__(self) -> str:
         return f"{self.person} - {self.registration}"
@@ -85,7 +82,7 @@ class Student(SafeDeleteModel):
 
     @property
     def academic_education(self):
-        return str(self.academic_education_institution_campus.academic_education)
+        return str(self.academic_education_campus.academic_education)
 
 
 class Responsible(SafeDeleteModel):
@@ -102,6 +99,8 @@ class Responsible(SafeDeleteModel):
 
         person: objeto do tipo model 'Person'
     """
+
+    MINIMUM_AGE = 18
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 

@@ -1,9 +1,6 @@
 from django.db import models
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
-COURSE_MAX_LENGTH = 50
-GRADE_MAX_LENGTH = 50
-
 
 class Course(SafeDeleteModel):
     """
@@ -24,7 +21,7 @@ class Course(SafeDeleteModel):
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
-    name = models.CharField(max_length=COURSE_MAX_LENGTH, unique=True)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self) -> str:
         return self.name
@@ -49,7 +46,7 @@ class Grade(SafeDeleteModel):
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
-    name = models.CharField(max_length=GRADE_MAX_LENGTH, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     courses = models.ManyToManyField(
         "Course", related_name="grades", related_query_name="grade", through="AcademicEducation"
     )
@@ -72,7 +69,7 @@ class AcademicEducation(SafeDeleteModel):
 
         grade: objeto do tipo model 'Grade' (o2m)
 
-        institutions_campus: relação inversa para a model AcademicEducationInstitutionCampus
+        academic_education_campus: relação inversa para a model AcademicEducationCampus
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados

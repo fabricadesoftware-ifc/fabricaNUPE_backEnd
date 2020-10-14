@@ -1,9 +1,6 @@
 from django.db import models
 from safedelete.models import NO_DELETE, SOFT_DELETE_CASCADE, SafeDeleteModel
 
-INSTITUTION_MAX_LENGTH = 50
-CAMPUS_MAX_LENGTH = 50
-
 
 class Institution(SafeDeleteModel):
     """
@@ -18,13 +15,11 @@ class Institution(SafeDeleteModel):
         name: nome
 
         campus: relação inversa para a model Campus
-
-        institutions_campus: relação inversa para a model InstitutionCampus
     """
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
 
-    name = models.CharField(max_length=INSTITUTION_MAX_LENGTH, unique=True)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self) -> str:
         return self.name
@@ -32,36 +27,7 @@ class Institution(SafeDeleteModel):
 
 class Campus(SafeDeleteModel):
     """
-    Define o nome de um campus para ser atribuído a uma instituição
-
-    Exemplo:
-        'Araquari'
-
-    Atributos:
-        _safedelete_policy: NO_DELETE
-
-        name: nome
-
-        location: localização (o2m)
-
-        institutions: instituições localizadas nesse campus (m2m)
-
-        institutions_campus: relação inversa para a model InstitutionCampus
-    """
-
-    _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
-
-    name = models.CharField(max_length=CAMPUS_MAX_LENGTH, unique=True)
-    location = models.ForeignKey("Location", related_name="campus", on_delete=models.PROTECT)
-    institutions = models.ManyToManyField("Institution", related_name="campus", through="InstitutionCampus")
-
-    def __str__(self) -> str:
-        return self.name
-
-
-class InstitutionCampus(SafeDeleteModel):
-    """
-    Define uma instituição pertencente à um campus. É uma associativa entre a model de Institution e Campus
+    Define informações de um campus
 
     Exemplo:
         'Instituto Federal Catarinense - Campus Araquari'
@@ -69,41 +35,43 @@ class InstitutionCampus(SafeDeleteModel):
     Atributos:
         _safedelete_policy: NO_DELETE
 
+        name: nome do campus
+
+        cnpj: cnpj do campus
+
+        address: endereço de localização do campus
+
+        number: número de identificação do imóvel
+
+        website: site do campus
+
+        location: objeto do tipo model Location (o2m)
+
         institution: objeto do tipo model Institution (o2m)
 
-        campus: objeto do tipo model Campus (o2m)
-
-        academic_education: relação inversa para a model AcademicEducationInstitutionCampus
+        academic_education_campus: relação inversa para a model AcademicEducationCampus
 
         workers: relação inversa para a model Account
     """
 
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
 
-    institution = models.ForeignKey(
-        "Institution",
-        related_name="institutions_campus",
-        related_query_name="institution_campus",
-        on_delete=models.PROTECT,
-    )
-    campus = models.ForeignKey(
-        "Campus",
-        related_name="institutions_campus",
-        related_query_name="institution_campus",
-        on_delete=models.PROTECT,
-    )
-
-    class Meta:
-        unique_together = ["institution", "campus"]
+    name = models.CharField(max_length=50)
+    cnpj = models.CharField(max_length=14, unique=True)
+    address = models.CharField(max_length=75)
+    number = models.CharField(max_length=10)
+    website = models.CharField(max_length=50, null=True, blank=True)
+    location = models.ForeignKey("Location", related_name="campus", on_delete=models.PROTECT,)
+    institution = models.ForeignKey("Institution", related_name="campus", on_delete=models.PROTECT,)
 
     def __str__(self) -> str:
-        return f"{self.institution} - {self.campus}"
+        return f"{self.institution} - {self.name}"
 
 
-class AcademicEducationInstitutionCampus(SafeDeleteModel):
+class AcademicEducationCampus(SafeDeleteModel):
     """
-    Define uma formação acadêmica que pertence à uma instituição de um campus. É uma associativa entre a model de
-    AcademicEducation e InstitutionCampus
+    Define uma formação acadêmica que pertence à um campus. É uma associativa entre a model de
+    AcademicEducation e Campus
 
     Exemplo:
         'Sistemas de Informação - IFC Araquari'
@@ -113,7 +81,7 @@ class AcademicEducationInstitutionCampus(SafeDeleteModel):
 
         academic_education: objeto do tipo model 'AcademicEducation' (o2m)
 
-        institution_campus: objeto do tipo model 'InstitutionCampus' (o2m)
+        campus: objeto do tipo model 'Campus' (o2m)
 
         students: relação inversa para a model Student
     """
@@ -121,17 +89,12 @@ class AcademicEducationInstitutionCampus(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
     academic_education = models.ForeignKey(
-        "AcademicEducation",
-        related_name="institutions_campus",
-        related_query_name="institution_campus",
-        on_delete=models.CASCADE,
+        "AcademicEducation", related_name="academic_education_campus", on_delete=models.CASCADE,
     )
-    institution_campus = models.ForeignKey(
-        "InstitutionCampus", related_name="academic_education", on_delete=models.PROTECT,
-    )
+    campus = models.ForeignKey("Campus", related_name="academic_education_campus", on_delete=models.PROTECT,)
 
     class Meta:
-        unique_together = ["institution_campus", "academic_education"]
+        unique_together = ["academic_education", "campus"]
 
     def __str__(self) -> str:
-        return f"{self.academic_education} - {self.institution_campus}"
+        return f"{self.academic_education} - {self.campus}"

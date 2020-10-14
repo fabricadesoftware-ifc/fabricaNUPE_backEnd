@@ -18,7 +18,7 @@ class CourseFilter(FilterSet):
         name: igual a string fornecida (case insensitive)
     """
 
-    name = CharFilter(field_name="name", lookup_expr="iexact")
+    name = CharFilter(lookup_expr="iexact")
 
     class Meta:
         model = Course
@@ -42,7 +42,7 @@ class GradeFilter(FilterSet):
         course_name = igual a string fornecida (case insensitive)
     """
 
-    name = CharFilter(field_name="name", lookup_expr="iexact")
+    name = CharFilter(lookup_expr="iexact")
     course_name = CharFilter(field_name="courses__name", lookup_expr="iexact")
 
     class Meta:
@@ -67,8 +67,8 @@ class AcademicEducationFilter(FilterSet):
         grade_name = igual a string fornecida (case insensitive)
     """
 
-    course_name = CharFilter(field_name="course__name", lookup_expr="iexact")
-    grade_name = CharFilter(field_name="grade__name", lookup_expr="iexact")
+    course_name = CharFilter(lookup_expr="iexact")
+    grade_name = CharFilter(lookup_expr="iexact")
 
     class Meta:
         model = AcademicEducation

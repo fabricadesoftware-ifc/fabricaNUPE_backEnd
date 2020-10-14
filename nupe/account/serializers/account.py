@@ -15,7 +15,7 @@ class AccountSerializer(ModelSerializer):
 
         person: identificador para a model Person com informações pessoais do usuário
 
-        local_job: identificador para a model InstitutionCampus com o local onde trabalha
+        local_job: identificador para a model Campus com o local onde trabalha
 
         function: identificador para a model Function com o cargo que ocupa
 
@@ -101,7 +101,7 @@ class CurrentAccountSerializer(ModelSerializer):
 
         person: informações pessoais do usuário
 
-        local_job: instituição/campus onde trabalha
+        local_job: campus onde trabalha
 
         function: cargo que ocupa
 

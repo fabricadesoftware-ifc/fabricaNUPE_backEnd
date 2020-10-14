@@ -5,15 +5,6 @@ from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 from nupe.core.utils.properties import calculate_age
 from nupe.core.utils.regex import ONLY_NUMBERS
 
-PERSON_FIRST_NAME_MAX_LENGTH = 50
-PERSON_LAST_NAME_MAX_LENGTH = 100
-
-PERSON_CPF_MIN_LENGTH = PERSON_CPF_MAX_LENGTH = 11
-
-PERSON_GENDER_MAX_LENGTH = 1
-PERSON_CONTACT_MIN_LENGTH = 11
-PERSON_CONTACT_MAX_LENGTH = 12
-
 
 class Person(SafeDeleteModel):
     """
@@ -68,14 +59,14 @@ class Person(SafeDeleteModel):
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
-    first_name = models.CharField(max_length=PERSON_FIRST_NAME_MAX_LENGTH)
-    last_name = models.CharField(max_length=PERSON_LAST_NAME_MAX_LENGTH)
-    cpf = models.CharField(max_length=PERSON_CPF_MAX_LENGTH, unique=True, help_text="Somente números",)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=100)
+    cpf = models.CharField(max_length=11, unique=True, help_text="Somente números",)
     birthday_date = models.DateField()
-    gender = models.CharField(max_length=PERSON_GENDER_MAX_LENGTH, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     contact = models.CharField(
-        max_length=PERSON_CONTACT_MAX_LENGTH,
-        validators=[ONLY_NUMBERS, MinLengthValidator(PERSON_CONTACT_MIN_LENGTH)],
+        max_length=12,
+        validators=[ONLY_NUMBERS, MinLengthValidator(11)],
         null=True,
         blank=True,
         help_text="DDD+Número",

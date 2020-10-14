@@ -75,7 +75,7 @@ class AccountAPITestCase(APITestCase):
 
     def test_create_with_permission(self):
         person = baker.make("core.Person")
-        local_job = baker.make("core.InstitutionCampus")
+        local_job = baker.make("core.Campus")
         function = baker.make("core.Function")
         sector = baker.make("core.Sector")
 

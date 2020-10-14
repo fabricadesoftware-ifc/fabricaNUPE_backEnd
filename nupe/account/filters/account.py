@@ -24,7 +24,7 @@ class AccountFilter(FilterSet):
         sector: igual a string fornecida (case insensitive)
     """
 
-    campus_name = CharFilter(field_name="local_job__campus__name", lookup_expr="iexact")
+    campus_name = CharFilter(field_name="local_job__name", lookup_expr="iexact")
     institution_name = CharFilter(field_name="local_job__institution__name", lookup_expr="iexact")
     function = CharFilter(field_name="function__name", lookup_expr="iexact")
     sector = CharFilter(field_name="sector__name", lookup_expr="iexact")

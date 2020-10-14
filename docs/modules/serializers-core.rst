@@ -46,15 +46,20 @@ Serializer para Listar, Detalhar, Cadastrar ou Atualizar uma Instituição
 
 .. autoclass:: nupe.core.serializers.institution.InstitutionSerializer
 
-Serializer para Detalhar, Cadastrar ou Atualizar um Campus
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Serializer para Cadastrar ou Atualizar um Campus
+++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: nupe.core.serializers.institution.CampusSerializer
+.. autoclass:: nupe.core.serializers.institution.CampusCreateSerializer
 
 Serializer para Listar um Campus
 ++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.institution.CampusListSerializer
+
+Serializer para Detalhar um Campus
+++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.institution.CampusDetailSerializer
 
 Módulo de Localização
 ---------------------

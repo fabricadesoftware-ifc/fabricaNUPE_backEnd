@@ -9,10 +9,6 @@ variables:
     DOCS_URL: http://nupe-documentation.surge.sh
     DIST_PATH: nupe_frontend/dist
     DIST_URL: http://nupe-frontend.surge.sh
-    #db
-    POSTGRES_DB: nupe
-    POSTGRES_USER: nupe
-    POSTGRES_PASSWORD: anypasswordtotest
 
 dev_backend_image push to container_registry:
     image:
@@ -82,6 +78,9 @@ dev_backend test:
     services:
         - postgres:13.0-alpine
     variables:
+        POSTGRES_DB: nupe
+        POSTGRES_USER: nupe
+        POSTGRES_PASSWORD: anypasswordtotest
         DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB
     stage: test
     script:

@@ -359,8 +359,7 @@ class AcademicEducationAPITestCase(APITestCase):
         self.assertIsNone(data.get("_safedelete_policy"))
         self.assertIsNone(data.get("course"))
         self.assertIsNone(data.get("grade"))
-        self.assertIsNone(data.get("campus"))
-        self.assertIsNone(data.get("courses_campus"))
+        self.assertIsNone(data.get("academic_education_campus"))
 
     def test_retrieve_with_permission(self):
         # cria uma formação acadêmica no banco para detalhar suas informações
@@ -383,8 +382,7 @@ class AcademicEducationAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("_safedelete_policy"))
         self.assertIsNone(response.data.get("course"))
         self.assertIsNone(response.data.get("grade"))
-        self.assertIsNone(response.data.get("campus"))
-        self.assertIsNone(response.data.get("courses_campus"))
+        self.assertIsNone(response.data.get("academic_education_campus"))
 
     def test_list_without_permission(self):
         client = create_account_with_permissions_and_do_authentication()

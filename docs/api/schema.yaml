@@ -274,6 +274,36 @@ paths:
       operationId: attendance_list
       description: retorna todas os atendimentos do banco de dados
       parameters:
+        - name: student_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: student_last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: attendant_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: attendant_last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: status
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: severity
+          in: query
+          description: ''
+          required: false
+          type: string
         - name: search
           in: query
           description: A search term.
@@ -377,8 +407,13 @@ paths:
   /attendance_reason/:
     get:
       operationId: attendance_reason_list
-      description: ''
+      description: retorna todos os motivos de atendimento pai do banco de dados
       parameters:
+        - name: father_reason
+          in: query
+          description: ''
+          required: false
+          type: number
         - name: search
           in: query
           description: A search term.
@@ -421,25 +456,25 @@ paths:
         - attendance_reason
     post:
       operationId: attendance_reason_create
-      description: ''
+      description: cadastra um motivo de atendimento no banco de dados
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/AttendanceCreateReason'
+            $ref: '#/definitions/AttendanceReason'
       responses:
         '201':
           description: ''
           schema:
-            $ref: '#/definitions/AttendanceCreateReason'
+            $ref: '#/definitions/AttendanceReason'
       tags:
         - attendance_reason
     parameters: []
   /attendance_reason/{id}/:
     get:
       operationId: attendance_reason_read
-      description: ''
+      description: retorna um motivo de atendimento especifico do banco de dados
       parameters: []
       responses:
         '200':
@@ -450,23 +485,23 @@ paths:
         - attendance_reason
     patch:
       operationId: attendance_reason_partial_update
-      description: ''
+      description: atualiza um ou mais atributos de um motivo de atendimento
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/AttendanceCreateReason'
+            $ref: '#/definitions/AttendanceReason'
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/AttendanceCreateReason'
+            $ref: '#/definitions/AttendanceReason'
       tags:
         - attendance_reason
     delete:
       operationId: attendance_reason_delete
-      description: ''
+      description: exclui um motivo de atendimento do banco de dados
       parameters: []
       responses:
         '204':
@@ -482,9 +517,14 @@ paths:
   /campus/:
     get:
       operationId: campus_list
-      description: retorna todos os campus do banco de dados
+      description: retorna todas os campis do banco de dados
       parameters:
-        - name: name
+        - name: address
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: number
           in: query
           description: ''
           required: false
@@ -531,18 +571,18 @@ paths:
         - campus
     post:
       operationId: campus_create
-      description: cadastrar um campus no banco de dados
+      description: cadastra um campus no banco de dados
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Campus'
+            $ref: '#/definitions/CampusCreate'
       responses:
         '201':
           description: ''
           schema:
-            $ref: '#/definitions/Campus'
+            $ref: '#/definitions/CampusCreate'
       tags:
         - campus
     parameters: []
@@ -555,7 +595,7 @@ paths:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/Campus'
+            $ref: '#/definitions/CampusDetail'
       tags:
         - campus
     patch:
@@ -566,12 +606,12 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Campus'
+            $ref: '#/definitions/CampusCreate'
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/Campus'
+            $ref: '#/definitions/CampusCreate'
       tags:
         - campus
     delete:
@@ -766,216 +806,6 @@ paths:
       - name: id
         in: path
         description: A unique integer value identifying this course.
-        required: true
-        type: integer
-  /crisis_type/:
-    get:
-      operationId: crisis_type_list
-      description: ''
-      parameters:
-        - name: search
-          in: query
-          description: A search term.
-          required: false
-          type: string
-        - name: ordering
-          in: query
-          description: Which field to use when ordering the results.
-          required: false
-          type: string
-        - name: page
-          in: query
-          description: A page number within the paginated result set.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/CrisisType'
-      tags:
-        - crisis_type
-    post:
-      operationId: crisis_type_create
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/CrisisType'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/CrisisType'
-      tags:
-        - crisis_type
-    parameters: []
-  /crisis_type/{id}/:
-    get:
-      operationId: crisis_type_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/CrisisType'
-      tags:
-        - crisis_type
-    patch:
-      operationId: crisis_type_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/CrisisType'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/CrisisType'
-      tags:
-        - crisis_type
-    delete:
-      operationId: crisis_type_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-        - crisis_type
-    parameters:
-      - name: id
-        in: path
-        description: A unique integer value identifying this crisis type.
-        required: true
-        type: integer
-  /drug_type/:
-    get:
-      operationId: drug_type_list
-      description: ''
-      parameters:
-        - name: search
-          in: query
-          description: A search term.
-          required: false
-          type: string
-        - name: ordering
-          in: query
-          description: Which field to use when ordering the results.
-          required: false
-          type: string
-        - name: page
-          in: query
-          description: A page number within the paginated result set.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/DrugType'
-      tags:
-        - drug_type
-    post:
-      operationId: drug_type_create
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/DrugType'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/DrugType'
-      tags:
-        - drug_type
-    parameters: []
-  /drug_type/{id}/:
-    get:
-      operationId: drug_type_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/DrugType'
-      tags:
-        - drug_type
-    patch:
-      operationId: drug_type_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/DrugType'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/DrugType'
-      tags:
-        - drug_type
-    delete:
-      operationId: drug_type_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-        - drug_type
-    parameters:
-      - name: id
-        in: path
-        description: A unique integer value identifying this drug type.
         required: true
         type: integer
   /function/:
@@ -1645,111 +1475,6 @@ paths:
         description: A unique integer value identifying this sector.
         required: true
         type: integer
-  /special_need_type/:
-    get:
-      operationId: special_need_type_list
-      description: ''
-      parameters:
-        - name: search
-          in: query
-          description: A search term.
-          required: false
-          type: string
-        - name: ordering
-          in: query
-          description: Which field to use when ordering the results.
-          required: false
-          type: string
-        - name: page
-          in: query
-          description: A page number within the paginated result set.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/SpecialNeedType'
-      tags:
-        - special_need_type
-    post:
-      operationId: special_need_type_create
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/SpecialNeedType'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/SpecialNeedType'
-      tags:
-        - special_need_type
-    parameters: []
-  /special_need_type/{id}/:
-    get:
-      operationId: special_need_type_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/SpecialNeedType'
-      tags:
-        - special_need_type
-    patch:
-      operationId: special_need_type_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/SpecialNeedType'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/SpecialNeedType'
-      tags:
-        - special_need_type
-    delete:
-      operationId: special_need_type_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-        - special_need_type
-    parameters:
-      - name: id
-        in: path
-        description: A unique integer value identifying this special need type.
-        required: true
-        type: integer
   /state/:
     get:
       operationId: state_list
@@ -1834,7 +1559,7 @@ paths:
           description: ''
           required: false
           type: string
-        - name: course_id
+        - name: academic_education
           in: query
           description: ''
           required: false
@@ -2270,35 +1995,7 @@ definitions:
         x-nullable: true
   AttendanceReason:
     required:
-      - description
-      - special_need
-      - crisis
-      - drug
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      description:
-        title: Description
-        type: string
-        maxLength: 255
-        minLength: 1
-      special_need:
-        title: Special need
-        type: string
-        minLength: 1
-      crisis:
-        title: Crisis
-        type: string
-        minLength: 1
-      drug:
-        title: Drug
-        type: string
-        minLength: 1
-  AttendanceCreateReason:
-    required:
+      - name
       - description
     type: object
     properties:
@@ -2306,32 +2003,26 @@ definitions:
         title: ID
         type: integer
         readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
       description:
         title: Description
         type: string
         maxLength: 255
         minLength: 1
-      special_need:
-        type: array
-        items:
-          type: integer
-        readOnly: true
-        uniqueItems: true
-      crisis:
-        type: array
-        items:
-          type: integer
-        readOnly: true
-        uniqueItems: true
-      drug:
-        type: array
-        items:
-          type: integer
-        readOnly: true
-        uniqueItems: true
+      father_reason:
+        title: Father reason
+        type: integer
+        x-nullable: true
   CampusList:
     required:
       - name
+      - institution
+      - address
+      - number
     type: object
     properties:
       id:
@@ -2343,14 +2034,28 @@ definitions:
         type: string
         maxLength: 50
         minLength: 1
-      location:
-        title: Location
+      institution:
+        title: Institution
         type: string
-        readOnly: true
-  Campus:
+        minLength: 1
+      address:
+        title: Address
+        type: string
+        maxLength: 75
+        minLength: 1
+      number:
+        title: Number
+        type: string
+        maxLength: 10
+        minLength: 1
+  CampusCreate:
     required:
       - name
+      - cnpj
+      - address
+      - number
       - location
+      - institution
     type: object
     properties:
       id:
@@ -2362,14 +2067,79 @@ definitions:
         type: string
         maxLength: 50
         minLength: 1
+      cnpj:
+        title: Cnpj
+        type: string
+        maxLength: 14
+        minLength: 1
+      address:
+        title: Address
+        type: string
+        maxLength: 75
+        minLength: 1
+      number:
+        title: Number
+        type: string
+        maxLength: 10
+        minLength: 1
+      website:
+        title: Website
+        type: string
+        maxLength: 50
+        x-nullable: true
       location:
         title: Location
         type: integer
-      institutions:
-        type: array
-        items:
-          type: integer
-        uniqueItems: true
+      institution:
+        title: Institution
+        type: integer
+  CampusDetail:
+    required:
+      - name
+      - cnpj
+      - address
+      - number
+      - location
+      - institution
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      cnpj:
+        title: Cnpj
+        type: string
+        maxLength: 14
+        minLength: 1
+      address:
+        title: Address
+        type: string
+        maxLength: 75
+        minLength: 1
+      number:
+        title: Number
+        type: string
+        maxLength: 10
+        minLength: 1
+      website:
+        title: Website
+        type: string
+        maxLength: 50
+        x-nullable: true
+      location:
+        title: Location
+        type: string
+        minLength: 1
+      institution:
+        title: Institution
+        type: string
+        minLength: 1
   City:
     required:
       - name
@@ -2398,44 +2168,6 @@ definitions:
         type: string
         maxLength: 50
         minLength: 1
-  CrisisType:
-    required:
-      - name
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 50
-        minLength: 1
-      description:
-        title: Description
-        type: string
-        maxLength: 150
-        x-nullable: true
-  DrugType:
-    required:
-      - name
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 50
-        minLength: 1
-      description:
-        title: Description
-        type: string
-        maxLength: 150
-        x-nullable: true
   Function:
     required:
       - name
@@ -2620,25 +2352,6 @@ definitions:
         type: string
         maxLength: 150
         x-nullable: true
-  SpecialNeedType:
-    required:
-      - name
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 50
-        minLength: 1
-      description:
-        title: Description
-        type: string
-        maxLength: 150
-        x-nullable: true
   State:
     required:
       - name
@@ -2691,7 +2404,7 @@ definitions:
     required:
       - registration
       - person
-      - academic_education_institution_campus
+      - academic_education_campus
       - ingress_date
     type: object
     properties:
@@ -2708,8 +2421,8 @@ definitions:
       person:
         title: Person
         type: integer
-      academic_education_institution_campus:
-        title: Academic education institution campus
+      academic_education_campus:
+        title: Academic education campus
         type: integer
       responsibles:
         type: array
@@ -2725,7 +2438,7 @@ definitions:
       - registration
       - personal_info
       - course
-      - institution
+      - campus
       - responsibles
       - ingress_date
     type: object
@@ -2746,12 +2459,12 @@ definitions:
         title: Course
         type: string
         minLength: 1
-      institution:
-        title: Institution
+      campus:
+        title: Campus
         type: string
         minLength: 1
-      academic_education_institution_campus:
-        title: Academic education institution campus
+      academic_education_campus:
+        title: Academic education campus
         type: integer
         x-nullable: true
       responsibles:

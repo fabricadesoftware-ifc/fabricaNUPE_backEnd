@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.DO_NOTHING,
                         related_name="workers",
                         related_query_name="worker",
-                        to="core.InstitutionCampus",
+                        to="core.Campus",
                     ),
                 ),
                 (

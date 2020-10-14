@@ -43,7 +43,7 @@ class CityFilter(FilterSet):
         name: igual a string fornecida (case insensitive)
     """
 
-    name = CharFilter(field_name="name", lookup_expr="iexact")
+    name = CharFilter(lookup_expr="iexact")
 
     class Meta:
         model = City
@@ -65,7 +65,7 @@ class StateFilter(FilterSet):
         initials: igual a string fornecida (case insensitive)
     """
 
-    initials = CharFilter(field_name="initials", lookup_expr="iexact")
+    initials = CharFilter(lookup_expr="iexact")
 
     class Meta:
         model = State

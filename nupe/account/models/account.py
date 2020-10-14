@@ -47,7 +47,7 @@ class Account(AbstractBaseUser, PermissionsMixin, SafeDeleteModel):
 
         person: identificador para o objeto da model Person com as informações pessoais
 
-        local_job: identificador para o objeto da model InstitutionCampus com o local de trabalho
+        local_job: identificador para o objeto da model Campus com o local de trabalho
 
         function: identificador para o objeto da model Function com a função do funcionário
 
@@ -74,11 +74,7 @@ class Account(AbstractBaseUser, PermissionsMixin, SafeDeleteModel):
     email = models.EmailField(unique=True)
     person = models.OneToOneField("core.Person", related_name="account", on_delete=models.CASCADE)
     local_job = models.ForeignKey(
-        "core.InstitutionCampus",
-        related_name="workers",
-        related_query_name="worker",
-        on_delete=models.DO_NOTHING,
-        null=True,
+        "core.Campus", related_name="workers", related_query_name="worker", on_delete=models.DO_NOTHING, null=True,
     )
     function = models.ForeignKey(
         "core.Function", related_name="workers", related_query_name="worker", on_delete=models.CASCADE
@@ -94,7 +90,7 @@ class Account(AbstractBaseUser, PermissionsMixin, SafeDeleteModel):
     objects = AccountManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["person", "function", "sector"]
 
     def __str__(self):
         return self.email

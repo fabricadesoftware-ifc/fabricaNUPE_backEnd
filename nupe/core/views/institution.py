@@ -2,7 +2,12 @@ from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.filters import CampusFilter, InstitutionFilter
 from nupe.core.models import Campus, Institution
-from nupe.core.serializers import CampusListSerializer, CampusSerializer, InstitutionSerializer
+from nupe.core.serializers import (
+    CampusCreateSerializer,
+    CampusDetailSerializer,
+    CampusListSerializer,
+    InstitutionSerializer,
+)
 
 
 class InstitutionViewSet(ModelViewSet):
@@ -21,6 +26,8 @@ class InstitutionViewSet(ModelViewSet):
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
     filterset_class = InstitutionFilter
+    search_fields = ["name"]
+    ordering_fields = ["name"]
     ordering = "name"
 
     http_method_names = ["get", "post", "patch", "delete"]
@@ -36,11 +43,11 @@ class InstitutionViewSet(ModelViewSet):
 
 class CampusViewSet(ModelViewSet):
     """
-    list: retorna todos os campus do banco de dados
+    list: retorna todas os campis do banco de dados
 
     retrieve: retorna um campus especifico do banco de dados
 
-    create: cadastrar um campus no banco de dados
+    create: cadastra um campus no banco de dados
 
     destroy: exclui um campus do banco de dados
 
@@ -49,10 +56,15 @@ class CampusViewSet(ModelViewSet):
 
     queryset = Campus.objects.all()
     filterset_class = CampusFilter
+    search_fields = ["name"]
+    ordering_fields = ["name"]
     ordering = "name"
 
     per_action_serializer = {
         "list": CampusListSerializer,
+        "retrieve": CampusDetailSerializer,
+        "create": CampusCreateSerializer,
+        "partial_update": CampusCreateSerializer,
     }
 
     http_method_names = ["get", "post", "patch", "delete"]
@@ -66,4 +78,4 @@ class CampusViewSet(ModelViewSet):
     }
 
     def get_serializer_class(self):
-        return self.per_action_serializer.get(self.action, CampusSerializer)
+        return self.per_action_serializer.get(self.action)
