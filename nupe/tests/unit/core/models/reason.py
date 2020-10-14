@@ -16,4 +16,5 @@ class AttendanceReasonTestCase(TestCase):
     def test_return_str(self):
         attendance_reason = baker.prepare(AttendanceReason)
 
-        self.assertEqual(str(attendance_reason), attendance_reason.description)
+        str_expected = f"{attendance_reason.name} - {attendance_reason.description}"
+        self.assertEqual(str(attendance_reason), str_expected)

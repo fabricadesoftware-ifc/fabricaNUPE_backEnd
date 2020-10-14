@@ -43,7 +43,7 @@ class InstitutionViewSet(ModelViewSet):
 
 class CampusViewSet(ModelViewSet):
     """
-    list: retorna todas os campis do banco de dados
+    list: retorna todos os campi do banco de dados
 
     retrieve: retorna um campus especifico do banco de dados
 

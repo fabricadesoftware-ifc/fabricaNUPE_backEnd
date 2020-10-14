@@ -40,4 +40,4 @@ class AttendanceReason(SafeDeleteModel):
     only_father = AttendanceReasonManager()
 
     def __str__(self) -> str:
-        return self.description
+        return f"{self.name} - {self.description}"

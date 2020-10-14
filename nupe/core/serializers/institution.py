@@ -60,7 +60,7 @@ class CampusCreateSerializer(ModelSerializer):
 
 class CampusListSerializer(ModelSerializer):
     """
-    Retorna uma lista de campis cadastrados no banco de dados
+    Retorna uma lista de campi cadastrados no banco de dados
     """
 
     institution = CharField()

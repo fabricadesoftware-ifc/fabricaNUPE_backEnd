@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("name", models.CharField(max_length=50)),
-                ("cnpj", models.CharField(max_length=14, unique=True)),
+                ("cnpj", models.CharField(max_length=18, unique=True)),
                 ("address", models.CharField(max_length=75)),
                 ("number", models.CharField(max_length=10)),
                 ("website", models.CharField(max_length=50, null=True, blank=True)),

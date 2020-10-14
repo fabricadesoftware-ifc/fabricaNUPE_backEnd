@@ -41,7 +41,7 @@ class Sector(SafeDeleteModel):
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=150, null=True, blank=True)
 
     def __str__(self) -> str:

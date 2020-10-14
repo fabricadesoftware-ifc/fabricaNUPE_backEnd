@@ -57,7 +57,7 @@ class Campus(SafeDeleteModel):
     _safedelete_policy = NO_DELETE  # não remove e nem mascara o objeto
 
     name = models.CharField(max_length=50)
-    cnpj = models.CharField(max_length=14, unique=True)
+    cnpj = models.CharField(max_length=18, unique=True)
     address = models.CharField(max_length=75)
     number = models.CharField(max_length=10)
     website = models.CharField(max_length=50, null=True, blank=True)

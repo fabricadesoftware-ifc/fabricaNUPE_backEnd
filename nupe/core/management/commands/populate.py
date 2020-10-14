@@ -1,5 +1,4 @@
-import os
-
+import environ
 from django.core.management.base import BaseCommand, CommandError
 from django.db.utils import IntegrityError
 from model_bakery import baker
@@ -8,16 +7,30 @@ from nupe.account.models import Account
 from nupe.core.models import (
     AcademicEducation,
     AcademicEducationCampus,
+    AttendanceReason,
     Campus,
     City,
     Course,
+    Function,
     Grade,
     Institution,
     Location,
+    Sector,
     State,
 )
 from nupe.resources.datas.account.account import EMAIL, PASSWORD
-from nupe.resources.datas.core.populate import academic_educations, campi, cities, institutions, states
+from nupe.resources.datas.core.populate import (
+    academic_educations,
+    attendance_reasons,
+    campi,
+    cities,
+    functions,
+    institutions,
+    sectors,
+    states,
+)
+
+env = environ.Env()
 
 
 class Command(BaseCommand):
@@ -35,6 +48,9 @@ class Command(BaseCommand):
             self.populate_locations()
             self.populate_institutions()
             self.populate_academic_education()
+            self.populate_sectors()
+            self.populate_functions()
+            self.populate_attendance_reasons()
             self.populate_superuser()
 
             self.stdout.write(self.style.SUCCESS("Tudo populado com sucesso! :D"))
@@ -53,61 +69,84 @@ class Command(BaseCommand):
         """
         Popula o banco de dados com base em uma lista pré-definida de campi e instituições
         """
-        self.__campus_register()
         self.__institution_register()
+        self.__campus_register()
 
     def populate_academic_education(self):
         """
         Popula o banco de dados com base em uma lista pré-definida com nome, grau e qual campus oferece
         """
-        for academic_education in academic_educations:
-            course_object_model, _ = Course.objects.get_or_create(name=academic_education.get("course"))
-            grade_object_model, _ = Grade.objects.get_or_create(name=academic_education.get("grade"))
+        for academic_education_data in academic_educations:
+            course, _ = Course.objects.get_or_create(name=academic_education_data.get("course"))
+            grade, _ = Grade.objects.get_or_create(name=academic_education_data.get("grade"))
 
-            academic_education_object_model, _ = AcademicEducation.objects.get_or_create(
-                course=course_object_model, grade=grade_object_model
-            )
+            academic_education, _ = AcademicEducation.objects.get_or_create(course=course, grade=grade)
             try:
-                (
-                    academic_education_institution_campus_object_model,
-                    _,
-                ) = AcademicEducationCampus.objects.get_or_create(
-                    academic_education=academic_education_object_model,
-                    institution_campus=Campus.objects.get(campus__name=academic_education.get("campus_name")),
+                AcademicEducationCampus.objects.get_or_create(
+                    academic_education=academic_education,
+                    campus=Campus.objects.get(name=academic_education_data.get("campus_name")),
                 )
             except Campus.DoesNotExist:
                 message = "Campus não encontrado. Por favor, informe na lista para população."
 
                 raise ValueError(message)
 
+    def populate_sectors(self):
+        """
+        Popula o banco de dados com base em uma lista pré-definida de setores
+        """
+        for sector in sectors:
+            Sector.objects.get_or_create(**sector)
+
+    def populate_functions(self):
+        """
+        Popula o banco de dados com base em uma lista pré-definida de funções dos funcionários
+        """
+        for function in functions:
+            Function.objects.get_or_create(**function)
+
+    def populate_attendance_reasons(self):
+        """
+        Popula o banco de dados com base em uma lista pré-definida de motivos de atendimento
+        """
+        for attendance_reason_data in attendance_reasons:
+            attendance_reason, _ = AttendanceReason.objects.get_or_create(name=attendance_reason_data.get("name"))
+
+            for son_attendance_reason_data in attendance_reason_data.get("sons"):
+                AttendanceReason.objects.get_or_create(
+                    name=son_attendance_reason_data.get("name"), father_reason=attendance_reason
+                )
+
     def populate_superuser(self):
-        email = os.getenv(key="DJANGO_SUPERUSER_EMAIL", default=EMAIL)
-        password = os.getenv(key="DJANGO_SUPERUSER_PASSWORD", default=PASSWORD)
+        """
+        Popula o banco de dados com um usuário comum padrão. Consulte o usuário e senha na documentação da API
+        """
+        email = env("DJANGO_SUPERUSER_EMAIL", default=EMAIL)
+        password = env("DJANGO_SUPERUSER_PASSWORD", default=PASSWORD)
 
         try:
-            Account.objects.create_superuser(
-                email=email,
-                password=password,
-                person=baker.make("core.Person"),
-                function=baker.make("core.Function"),
-                sector=baker.make("core.Sector"),
+            function, _ = Function.objects.get_or_create(name="Psicóloga(o)")
+            sector, _ = Sector.objects.get_or_create(name="Coordenadoria-Geral de Assistência Estudantil")
+
+            Account.objects.create_user(
+                email=email, password=password, person=baker.make("core.Person"), function=function, sector=sector,
             )
         except IntegrityError:
-            message = f"Super Usuário já criado!\nEmail: {email}\nSenha: {password}"
+            message = f"Super Usuário já criado!\nEmail: {email}\nSenha: {password}\n"
 
-            raise ValueError(message)
+            self.stdout.write(self.style.WARNING(message))
 
     def __campus_register(self):
         for campus in campi:
             try:
-                campus_object_model, _ = Campus.objects.get_or_create(
-                    name=campus.get("name"), location=Location.objects.get(city__name=campus.get("location_city"))
-                )
+                city_name, state_initials = campus.pop("location").split("-")
 
-                institution_object_model, _ = Institution.objects.get_or_create(name=campus.get("institution_name"))
-                campus_object_model.institutions.add(institution_object_model)
+                location = Location.objects.get(city__name=city_name.strip(), state__initials=state_initials.strip())
+                institution = Institution.objects.get(name=campus.pop("institution"))
 
-            except Location.DoesNotExist:
+                campus = Campus.objects.get_or_create(**campus, location=location, institution=institution)
+
+            except Location.DoesNotExist or Institution.DoesNotExist:
                 message = "Localização não encontrada. Por favor, informe na lista para população."
 
                 raise ValueError(message)

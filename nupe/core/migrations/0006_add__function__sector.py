@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("deleted", models.DateTimeField(editable=False, null=True)),
-                ("name", models.CharField(max_length=50, unique=True)),
+                ("name", models.CharField(max_length=100, unique=True)),
                 ("description", models.TextField(max_length=150, null=True, blank=True)),
             ],
             options={"abstract": False,},
