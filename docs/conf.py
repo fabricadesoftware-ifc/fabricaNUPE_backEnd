@@ -28,7 +28,7 @@ copyright = "2020, Luis Guerreiro"
 author = "Luis Guerreiro"
 
 # The full version, including alpha/beta/rc tags
-release = "v0.1.0"
+release = "v1.0.0"
 
 
 # -- General configuration ---------------------------------------------------
