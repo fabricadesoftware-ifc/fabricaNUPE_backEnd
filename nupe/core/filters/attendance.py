@@ -36,4 +36,13 @@ class AttendanceFilter(FilterSet):
 
     class Meta:
         model = Attendance
-        fields = ["student_name", "student_last_name", "attendant_name", "attendant_last_name", "status", "severity"]
+        fields = [
+            "student",
+            "student_name",
+            "student_last_name",
+            "attendants",
+            "attendant_name",
+            "attendant_last_name",
+            "status",
+            "severity",
+        ]
