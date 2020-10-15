@@ -41,7 +41,7 @@ class AcademicEducationCampusTestCase(TestCase):
     def test_return_str(self):
         academic_education_campus = baker.prepare(AcademicEducationCampus)
 
-        str_expected = f"""{academic_education_campus.academic_education} - {
+        str_expected = f"""{academic_education_campus.academic_education}, {
             academic_education_campus.campus
             }"""
         self.assertEqual(str(academic_education_campus), str_expected)

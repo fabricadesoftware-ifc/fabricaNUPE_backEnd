@@ -18,9 +18,11 @@ class AttendanceTestCase(TestCase):
     def test_return_str(self):
         attendance = baker.prepare(Attendance)
 
-        str_expected = (
-            f"{attendance.student} - {attendance.attendance_severity} - {attendance.attendance_reason.description}"
-        )
+        str_expected = f"""
+        {attendance.student},
+        Gravidade: {attendance.attendance_severity},
+        Descrição: {attendance.attendance_reason.description or 'Nenhuma'}
+        """
         self.assertEqual(str(attendance), str_expected)
 
 
@@ -38,5 +40,7 @@ class AccountAttendanceTestCase(TestCase):
     def test_return_str(self):
         account_attendance = baker.prepare(AccountAttendance)
 
-        str_expected = f"{account_attendance.account.full_name} - {account_attendance.public_annotation}"
+        str_expected = (
+            f"Atendente: {account_attendance.account.full_name}, Anotação: {account_attendance.public_annotation}"
+        )
         self.assertEqual(str(account_attendance), str_expected)

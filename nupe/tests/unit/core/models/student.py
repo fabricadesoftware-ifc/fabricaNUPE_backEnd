@@ -22,7 +22,7 @@ class StudentTestCase(TestCase):
     def test_return_str(self):
         student = baker.prepare(Student)
 
-        str_expected = f"{student.person} - {student.registration}"
+        str_expected = f"Estudante: {student.person}, Matrícula: {student.registration}"
         self.assertEqual(str(student), str_expected)
 
     def test_return_properties(self):
