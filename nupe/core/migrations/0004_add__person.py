@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("file", "0001_add__profile_image"),
-        ("core", "0003_add__academic_education_campus__institution__campus"),
+        ("core", "0003_add__academic_education__grade__academic_education_campus"),
     ]
 
     operations = [

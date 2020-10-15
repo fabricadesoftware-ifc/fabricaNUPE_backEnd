@@ -52,11 +52,6 @@ Filtros para o Endpoint de Estado
 Módulo de Curso
 ---------------
 
-Filtros para o Endpoint de Curso
-++++++++++++++++++++++++++++++++
-
-.. autoclass:: nupe.core.filters.course.CourseFilter
-
 Filtros para o Endpoint de Grau
 +++++++++++++++++++++++++++++++
 

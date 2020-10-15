@@ -82,20 +82,20 @@ Serializer para Listar e Detalhar um Estado
 Módulo de Curso
 ---------------
 
-Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Curso
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. autoclass:: nupe.core.serializers.course.CourseSerializer
-
 Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Grau
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.course.GradeSerializer
 
-Serializer para Listar ou Detalhar uma Formação Acadêmica
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Serializer para Listar, Cadastrar ou Atualizar uma Formação Acadêmica
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.course.AcademicEducationSerializer
+
+Serializer para Detalhar uma Formação Acadêmica
++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.course.AcademicEducationDetailSerializer
 
 Módulo de Trabalho
 ------------------

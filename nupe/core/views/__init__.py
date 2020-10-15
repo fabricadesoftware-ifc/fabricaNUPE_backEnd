@@ -1,5 +1,5 @@
 from nupe.core.views.attendance import AttendanceViewSet
-from nupe.core.views.course import AcademicEducationViewSet, CourseViewSet, GradeViewSet
+from nupe.core.views.course import AcademicEducationViewSet, GradeViewSet
 from nupe.core.views.custom_handler_404 import custom_handler_404
 from nupe.core.views.institution import CampusViewSet, InstitutionViewSet
 from nupe.core.views.job import FunctionViewSet, SectorViewSet

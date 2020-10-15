@@ -1,38 +1,8 @@
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
-from nupe.core.filters import AcademicEducationFilter, CourseFilter, GradeFilter
-from nupe.core.models import AcademicEducation, Course, Grade
-from nupe.core.serializers import AcademicEducationSerializer, CourseSerializer, GradeSerializer
-
-
-class CourseViewSet(ModelViewSet):
-    """
-    list: retorna todos os cursos do banco de dados
-
-    retrieve: retorna um curso especifico do banco de dados
-
-    create: cadastra um curso no banco de dados
-
-    destroy: exclui um curso do banco de dados
-
-    partial_update: atualiza um ou mais atributos de um curso
-    """
-
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    filterset_class = CourseFilter
-    ordering = "name"
-
-    http_method_names = ["get", "post", "patch", "delete"]
-
-    perms_map_action = {
-        "list": ["core.view_course"],
-        "retrieve": ["core.view_course"],
-        "create": ["core.add_course"],
-        "partial_update": ["core.change_course"],
-        "destroy": ["core.delete_course"],
-    }
+from nupe.core.filters import AcademicEducationFilter, GradeFilter
+from nupe.core.models import AcademicEducation, Grade
+from nupe.core.serializers import AcademicEducationDetailSerializer, AcademicEducationSerializer, GradeSerializer
 
 
 class GradeViewSet(ModelViewSet):
@@ -51,6 +21,8 @@ class GradeViewSet(ModelViewSet):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
     filterset_class = GradeFilter
+    search_fields = ["name"]
+    ordering_fields = ["name"]
     ordering = "name"
 
     http_method_names = ["get", "post", "patch", "delete"]
@@ -64,19 +36,37 @@ class GradeViewSet(ModelViewSet):
     }
 
 
-class AcademicEducationViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+class AcademicEducationViewSet(ModelViewSet):
     """
     list: retorna todas as formações acadêmicas do banco de dados
 
     retrieve: retorna uma formação acadêmica específica do banco de dados
+
+    create: cadastra uma formação acadêmica no banco de dados
+
+    destroy: exclui uma formação acadêmica do banco de dados
+
+    partial_update: atualiza um ou mais atributos de uma formação acadêmica
     """
 
     queryset = AcademicEducation.objects.all()
     serializer_class = AcademicEducationSerializer
     filterset_class = AcademicEducationFilter
-    ordering = ["grade__name", "course__name"]
+    search_fields = ["grade__name", "name"]
+    ordering_fields = ["grade__name", "name"]
+    ordering = ["grade__name", "name"]
+
+    per_action_serializer = {"retrieve": AcademicEducationDetailSerializer}
+
+    http_method_names = ["get", "post", "patch", "delete"]
 
     perms_map_action = {
         "list": ["core.view_academiceducation"],
         "retrieve": ["core.view_academiceducation"],
+        "create": ["core.add_academiceducation"],
+        "partial_update": ["core.change_academiceducation"],
+        "destroy": ["core.delete_academiceducation"],
     }
+
+    def get_serializer_class(self):
+        return self.per_action_serializer.get(self.action, self.serializer_class)

@@ -1,22 +1,6 @@
-from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField
+from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField, StringRelatedField
 
-from nupe.core.models import AcademicEducation, Course, Grade
-
-
-class CourseSerializer(ModelSerializer):
-    """
-    Recebe e valida informações para então cadastrar ou atualizar um curso, e também
-    detalha ou lista informações sobre um ou mais cursos
-
-    Campos:
-        id: identificador (somente leitura)
-
-        name: nome
-    """
-
-    class Meta:
-        model = Course
-        fields = ["id", "name"]
+from nupe.core.models import AcademicEducation, Campus, Grade
 
 
 class GradeSerializer(ModelSerializer):
@@ -28,29 +12,52 @@ class GradeSerializer(ModelSerializer):
         id: identificador (somente leitura)
 
         name: nome
-
-        courses: identificadores dos cursos desse grau
     """
-
-    courses = PrimaryKeyRelatedField(queryset=Course.objects.all(), many=True, required=False)
 
     class Meta:
         model = Grade
-        fields = ["id", "name", "courses"]
+        fields = ["id", "name"]
 
 
 class AcademicEducationSerializer(ModelSerializer):
     """
-    Detalha ou lista informações sobre uma ou mais formação acadêmica
+    Recebe e valida informações para então cadastrar ou atualizar uma formação acadêmica, e também
+    lista informações sobre formações acadêmicas
 
     Campos:
         id: identificador (somente leitura)
 
         name: nome
+
+        grade: identificador do objeto da model Grade
+
+        campi: lista de id dos campi
     """
 
-    name = CharField(source="__str__")
+    campi = PrimaryKeyRelatedField(queryset=Campus.objects.all(), many=True)
 
     class Meta:
         model = AcademicEducation
-        fields = ["id", "name"]
+        fields = ["id", "name", "grade", "campi"]
+
+
+class AcademicEducationDetailSerializer(ModelSerializer):
+    """
+    Detalha informações sobre uma formação acadêmica específica
+
+    Campos:
+        id: identificador
+
+        name: nome
+
+        grade: identificador do grau
+
+        campi: identificadores dos campi
+    """
+
+    grade = CharField()
+    campi = StringRelatedField(many=True)
+
+    class Meta:
+        model = AcademicEducation
+        fields = ["id", "name", "grade", "campi"]

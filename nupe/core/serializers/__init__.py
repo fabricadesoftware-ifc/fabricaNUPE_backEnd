@@ -3,7 +3,11 @@ from nupe.core.serializers.attendance import (
     AttendanceDetailSerializer,
     AttendanceListSerializer,
 )
-from nupe.core.serializers.course import AcademicEducationSerializer, CourseSerializer, GradeSerializer
+from nupe.core.serializers.course import (
+    AcademicEducationDetailSerializer,
+    AcademicEducationSerializer,
+    GradeSerializer,
+)
 from nupe.core.serializers.institution import (
     CampusCreateSerializer,
     CampusDetailSerializer,

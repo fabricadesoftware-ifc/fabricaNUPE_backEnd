@@ -6,7 +6,6 @@ from nupe.core.views import (
     AttendanceViewSet,
     CampusViewSet,
     CityViewSet,
-    CourseViewSet,
     FunctionViewSet,
     GradeViewSet,
     InstitutionViewSet,
@@ -24,7 +23,6 @@ router.register("attendance", AttendanceViewSet, basename="attendance")
 router.register("attendance_reason", AttendanceReasonViewSet, basename="attendance_reason")
 router.register("campus", CampusViewSet, basename="campus")
 router.register("city", CityViewSet, basename="city")
-router.register("course", CourseViewSet, basename="course")
 router.register("function", FunctionViewSet, basename="function")
 router.register("grade", GradeViewSet, basename="grade")
 router.register("institution", InstitutionViewSet, basename="institution")

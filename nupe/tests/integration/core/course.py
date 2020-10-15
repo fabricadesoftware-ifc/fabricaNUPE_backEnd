@@ -3,172 +3,9 @@ from model_bakery import baker
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN
 from rest_framework.test import APITestCase
 
-from nupe.core.models import AcademicEducation, Course, Grade
-from nupe.resources.datas.core.course import COURSE_NAME, GRADE_NAME
+from nupe.core.models import AcademicEducation, Grade
+from nupe.resources.datas.core.course import ACADEMIC_EDUCATION_NAME, GRADE_NAME
 from nupe.tests.integration.account.setup.account import create_account_with_permissions_and_do_authentication
-
-
-class CourseAPITestCase(APITestCase):
-    def test_list_with_permission(self):
-        # cria um curso no banco para retornar no list
-        baker.make(Course)
-
-        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_course"])
-        url = reverse("course-list")
-
-        response = client.get(path=url)
-
-        self.assertEqual(response.status_code, HTTP_200_OK)
-
-        # deve retornar todos os dados não mascarados do banco de dados
-        self.assertEqual(response.data.get("count"), Course.objects.count())
-
-        data = response.data.get("results")[0]
-
-        # campos que devem ser retornados
-        self.assertIsNotNone(data.get("id"))
-        self.assertIsNotNone(data.get("name"))
-
-        # campos que não devem ser retornados
-        self.assertIsNone(data.get("_safedelete_policy"))
-        self.assertIsNone(data.get("grades"))
-        self.assertIsNone(data.get("academic_education"))
-
-    def test_retrieve_with_permission(self):
-        # cria um curso no banco para detalhar suas informações
-        course = baker.make(Course)
-
-        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_course"])
-        url = reverse("course-detail", args=[course.id])
-
-        response = client.get(path=url)
-
-        self.assertEqual(response.status_code, HTTP_200_OK)
-
-        # deve retornar as informações do curso fornecido
-        self.assertEqual(response.data.get("name"), course.name)
-
-        # campos que devem ser retornados
-        self.assertIsNotNone(response.data.get("id"))
-
-        # campos que não devem ser retornados
-        self.assertIsNone(response.data.get("_safedelete_policy"))
-        self.assertIsNone(response.data.get("grades"))
-        self.assertIsNone(response.data.get("academic_education"))
-
-    def test_create_with_permission(self):
-        # curso com informações válidas para conseguir criar
-        course_data = {"name": COURSE_NAME}
-
-        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_course"])
-        url = reverse("course-list")
-
-        response = client.post(path=url, data=course_data)
-
-        self.assertEqual(response.status_code, HTTP_201_CREATED)
-
-        # deve ser criado no banco de dados
-        self.assertEqual(Course.objects.count(), 1)
-        self.assertEqual(Course.objects.all().first().name, COURSE_NAME)
-
-        # campos que devem ser retornados
-        self.assertIsNotNone(response.data.get("id"))
-        self.assertIsNotNone(response.data.get("name"))
-
-        # campos que não devem ser retornados
-        self.assertIsNone(response.get("_safedelete_policy"))
-        self.assertIsNone(response.data.get("grades"))
-        self.assertIsNone(response.data.get("academic_education"))
-
-    def test_partial_update_with_permission(self):
-        # cria um curso no banco para conseguir atualizar suas informações
-        course = baker.make(Course)
-
-        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_course"])
-        url = reverse("course-detail", args=[course.id])
-
-        new_name = "name updated"
-        course_update_data = {
-            "name": new_name,
-        }
-
-        response = client.patch(path=url, data=course_update_data)
-
-        self.assertEqual(response.status_code, HTTP_200_OK)
-
-        # deve ser atualizado no banco
-        self.assertEqual(Course.objects.get(pk=course.id).name, new_name)
-
-        # campos que devem ser retornados
-        self.assertIsNotNone(response.data.get("id"))
-        self.assertIsNotNone(response.data.get("name"))
-
-        # campos que não devem ser retornados
-        self.assertIsNone(response.get("_safedelete_policy"))
-        self.assertIsNone(response.data.get("grades"))
-        self.assertIsNone(response.data.get("academic_education"))
-
-    def test_destroy_with_permission(self):
-        # cria um curso no banco para conseguir excluir
-        course = baker.make(Course)
-
-        client = create_account_with_permissions_and_do_authentication(permissions=["core.delete_course"])
-        url = reverse("course-detail", args=[course.id])
-
-        response = client.delete(path=url)
-
-        self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
-
-        # o dado deve ser mascarado
-        self.assertEqual(Course.objects.count(), 0)
-
-        # mas deve ser mantido no banco
-        self.assertEqual(Course.all_objects.count(), 1)
-
-    def test_list_without_permission(self):
-        client = create_account_with_permissions_and_do_authentication()
-
-        url = reverse("course-list")
-        response = client.get(path=url)
-
-        # não deve ter permissão para acessar
-        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
-
-    def test_retrieve_without_permission(self):
-        client = create_account_with_permissions_and_do_authentication()
-
-        url = reverse("course-detail", args=[99])
-        response = client.get(path=url)
-
-        # não deve ter permissão para acessar
-        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
-
-    def test_create_without_permission(self):
-        client = create_account_with_permissions_and_do_authentication()
-
-        url = reverse("course-list")
-        response = client.post(path=url)
-
-        # não deve ter permissão para acessar
-        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
-
-    def test_partial_update_without_permission(self):
-        client = create_account_with_permissions_and_do_authentication()
-
-        url = reverse("course-detail", args=[99])
-        response = client.patch(path=url)
-
-        # não deve ter permissão para acessar
-        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
-
-    def test_destroy_without_permission(self):
-        client = create_account_with_permissions_and_do_authentication()
-
-        url = reverse("course-detail", args=[99])
-        response = client.delete(path=url)
-
-        # não deve ter permissão para acessar
-        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
 
 
 class GradeAPITestCase(APITestCase):
@@ -191,7 +28,6 @@ class GradeAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("name"))
-        self.assertIsNotNone(data.get("courses"))
 
         # campos que não devem ser retornados
         self.assertIsNone(data.get("_safedelete_policy"))
@@ -213,7 +49,6 @@ class GradeAPITestCase(APITestCase):
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
-        self.assertIsNotNone(response.data.get("courses"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
@@ -237,7 +72,6 @@ class GradeAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
-        self.assertIsNotNone(response.data.get("courses"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
@@ -265,7 +99,6 @@ class GradeAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("name"))
-        self.assertIsNotNone(response.data.get("courses"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
@@ -354,11 +187,11 @@ class AcademicEducationAPITestCase(APITestCase):
         # campos que devem ser retornados
         self.assertIsNotNone(data.get("id"))
         self.assertIsNotNone(data.get("name"))
+        self.assertIsNotNone(data.get("grade"))
+        self.assertIsNotNone(data.get("campi"))
 
         # campos que não devem ser retornados
         self.assertIsNone(data.get("_safedelete_policy"))
-        self.assertIsNone(data.get("course"))
-        self.assertIsNone(data.get("grade"))
         self.assertIsNone(data.get("academic_education_campus"))
 
     def test_retrieve_with_permission(self):
@@ -373,16 +206,91 @@ class AcademicEducationAPITestCase(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
 
         # deve retornar as informações da formação acadêmica fornecida
-        self.assertEqual(response.data.get("name"), str(academic_education))
+        self.assertEqual(response.data.get("name"), academic_education.name)
 
         # campos que devem ser retornados
         self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("grade"))
+        self.assertIsNotNone(response.data.get("campi"))
 
         # campos que não devem ser retornados
         self.assertIsNone(response.data.get("_safedelete_policy"))
-        self.assertIsNone(response.data.get("course"))
-        self.assertIsNone(response.data.get("grade"))
         self.assertIsNone(response.data.get("academic_education_campus"))
+
+    def test_create_with_permission(self):
+        # formação acadêmica com informações válidas para conseguir criar
+        grade = baker.make("core.Grade")
+        campus = baker.make("core.Campus")
+
+        academic_education_data = {
+            "name": ACADEMIC_EDUCATION_NAME,
+            "grade": grade.id,
+            "campi": [campus.id],
+        }
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.add_academiceducation"])
+        url = reverse("academic_education-list")
+
+        response = client.post(path=url, data=academic_education_data)
+
+        self.assertEqual(response.status_code, HTTP_201_CREATED)
+
+        # deve ser criado no banco de dados
+        self.assertEqual(AcademicEducation.objects.count(), 1)
+        self.assertEqual(AcademicEducation.objects.all().first().name, ACADEMIC_EDUCATION_NAME)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("name"))
+        self.assertIsNotNone(response.data.get("grade"))
+        self.assertIsNotNone(response.data.get("campi"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("academic_education_campus"))
+
+    def test_partial_update_with_permission(self):
+        # cria uma formação acadêmica no banco para conseguir atualizar suas informações
+        academic_education = baker.make(AcademicEducation)
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.change_academiceducation"])
+        url = reverse("academic_education-detail", args=[academic_education.id])
+
+        new_name = "name updated"
+        academic_education_data = {
+            "name": new_name,
+        }
+
+        response = client.patch(path=url, data=academic_education_data)
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # deve ser atualizado no banco
+        self.assertEqual(AcademicEducation.objects.get(pk=academic_education.id).name, new_name)
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(response.data.get("id"))
+        self.assertIsNotNone(response.data.get("name"))
+        self.assertIsNotNone(response.data.get("grade"))
+        self.assertIsNotNone(response.data.get("campi"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(response.data.get("_safedelete_policy"))
+        self.assertIsNone(response.data.get("academic_education_campus"))
+
+    def test_destroy_with_permission(self):
+        # cria uma formação acadêmica no banco para conseguir excluir
+        academic_education = baker.make(AcademicEducation)
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.delete_academiceducation"])
+        url = reverse("academic_education-detail", args=[academic_education.id])
+
+        response = client.delete(path=url)
+
+        self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
+
+        # o dado deve ser mascarado
+        self.assertEqual(AcademicEducation.objects.count(), 0)
 
     def test_list_without_permission(self):
         client = create_account_with_permissions_and_do_authentication()
@@ -398,6 +306,33 @@ class AcademicEducationAPITestCase(APITestCase):
 
         url = reverse("academic_education-detail", args=[99])
         response = client.get(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
+    def test_create_without_permission(self):
+        client = create_account_with_permissions_and_do_authentication()
+
+        url = reverse("academic_education-list")
+        response = client.post(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
+    def test_partial_update_without_permission(self):
+        client = create_account_with_permissions_and_do_authentication()
+
+        url = reverse("academic_education-detail", args=[99])
+        response = client.patch(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
+    def test_destroy_without_permission(self):
+        client = create_account_with_permissions_and_do_authentication()
+
+        url = reverse("academic_education-detail", args=[99])
+        response = client.delete(path=url)
 
         # não deve ter permissão para acessar
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)

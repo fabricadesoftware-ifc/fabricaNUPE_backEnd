@@ -1,5 +1,5 @@
 from django.db import models
-from safedelete.models import NO_DELETE, SOFT_DELETE_CASCADE, SafeDeleteModel
+from safedelete.models import NO_DELETE, SafeDeleteModel
 
 
 class Institution(SafeDeleteModel):
@@ -66,35 +66,3 @@ class Campus(SafeDeleteModel):
 
     def __str__(self) -> str:
         return f"{self.institution} - {self.name}"
-
-
-class AcademicEducationCampus(SafeDeleteModel):
-    """
-    Define uma formação acadêmica que pertence à um campus. É uma associativa entre a model de
-    AcademicEducation e Campus
-
-    Exemplo:
-        'Sistemas de Informação - IFC Araquari'
-
-    Atributos:
-        _safedelete_policy: SOFT_DELETE_CASCADE
-
-        academic_education: objeto do tipo model 'AcademicEducation' (o2m)
-
-        campus: objeto do tipo model 'Campus' (o2m)
-
-        students: relação inversa para a model Student
-    """
-
-    _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
-
-    academic_education = models.ForeignKey(
-        "AcademicEducation", related_name="academic_education_campus", on_delete=models.CASCADE,
-    )
-    campus = models.ForeignKey("Campus", related_name="academic_education_campus", on_delete=models.PROTECT,)
-
-    class Meta:
-        unique_together = ["academic_education", "campus"]
-
-    def __str__(self) -> str:
-        return f"{self.academic_education} - {self.campus}"

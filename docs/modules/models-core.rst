@@ -5,11 +5,6 @@ Modelos
 Módulo de Curso
 ---------------
 
-Curso
-+++++
-
-.. autoclass:: nupe.core.models.course.Course
-
 Grau do Curso
 +++++++++++++
 
@@ -19,6 +14,11 @@ Formação Acadêmica
 ++++++++++++++++++
 
 .. autoclass:: nupe.core.models.course.AcademicEducation
+
+Formação Acadêmica do Campus
+++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.models.course.AcademicEducationCampus
 
 Módulo de Instituição
 ---------------------
@@ -32,11 +32,6 @@ Campus
 ++++++
 
 .. autoclass:: nupe.core.models.institution.Campus
-
-Formação Acadêmica do Campus
-++++++++++++++++++++++++++++
-
-.. autoclass:: nupe.core.models.institution.AcademicEducationCampus
 
 Módulo de Localização
 ---------------------

@@ -69,7 +69,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNotNone(response.data.get("id"))
         self.assertIsNotNone(response.data.get("registration"))
         self.assertIsNotNone(response.data.get("personal_info"))
-        self.assertIsNotNone(response.data.get("course"))
+        self.assertIsNotNone(response.data.get("academic_education"))
         self.assertIsNotNone(response.data.get("campus"))
         self.assertIsNotNone(response.data.get("academic_education_campus"))
         self.assertIsNotNone(response.data.get("responsibles"))
@@ -82,8 +82,8 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("person"))
         self.assertIsNone(response.data.get("responsibles_persons"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
-        self.assertIsNone(response.data.get("academic_education"))
 
     def test_create_without_responsibles_with_permission(self):
         older_person = baker.make("Person", birthday_date=OLDER_BIRTHDAY_DATE)
@@ -125,6 +125,8 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("responsibles_persons"))
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -171,6 +173,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("responsibles_persons"))
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -217,6 +220,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("responsibles_persons"))
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -252,6 +256,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("responsibles_persons"))
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -288,6 +293,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("responsibles_persons"))
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -324,6 +330,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("responsibles_persons"))
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -377,6 +384,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("ingress_date"))
         self.assertIsNone(response.data.get("updated_at"))
         self.assertIsNone(response.data.get("responsibles"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -413,6 +421,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("ingress_date"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -450,6 +459,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("ingress_date"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -486,6 +496,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("ingress_date"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -518,6 +529,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("ingress_date"))
         self.assertIsNone(response.data.get("updated_at"))
         self.assertIsNone(response.data.get("responsibles"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -549,6 +561,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("ingress_date"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -581,6 +594,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("ingress_date"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 
@@ -612,6 +626,7 @@ class StudentAPITestCase(APITestCase):
         self.assertIsNone(response.data.get("graduated"))
         self.assertIsNone(response.data.get("ingress_date"))
         self.assertIsNone(response.data.get("updated_at"))
+        self.assertIsNone(response.data.get("full_name"))
         self.assertIsNone(response.data.get("age"))
         self.assertIsNone(response.data.get("academic_education"))
 

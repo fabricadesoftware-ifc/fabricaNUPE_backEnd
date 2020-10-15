@@ -2,31 +2,6 @@ from django.db import models
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
 
-class Course(SafeDeleteModel):
-    """
-    Define o nome de um curso da instituição
-
-    Exemplo:
-        'Sistemas de Informação'
-
-    Atributos:
-        _safedelete_policy: SOFT_DELETE_CASCADE
-
-        name: nome
-
-        grades: relação inversa para a model Grade
-
-        academic_education: relação inversa para a model AcademicEducation
-    """
-
-    _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
-
-    name = models.CharField(max_length=50, unique=True)
-
-    def __str__(self) -> str:
-        return self.name
-
-
 class Grade(SafeDeleteModel):
     """
     Define o nível/grau de um curso
@@ -39,17 +14,12 @@ class Grade(SafeDeleteModel):
 
         name: nomenclatura
 
-        courses: cursos que pertencem a esse grau (m2m)
-
         academic_education: relação inversa para a model AcademicEducation
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
     name = models.CharField(max_length=50, unique=True)
-    courses = models.ManyToManyField(
-        "Course", related_name="grades", related_query_name="grade", through="AcademicEducation"
-    )
 
     def __str__(self) -> str:
         return self.name
@@ -57,7 +27,7 @@ class Grade(SafeDeleteModel):
 
 class AcademicEducation(SafeDeleteModel):
     """
-    Define uma formação acadêmica. É uma associativa entre a model de Course e Grade
+    Define o nome de uma formação acadêmica
 
     Exemplo:
         'Bacharelado em Sistemas de Informação'
@@ -65,20 +35,52 @@ class AcademicEducation(SafeDeleteModel):
     Atributos:
         _safedelete_policy: SOFT_DELETE_CASCADE
 
-        course: objeto do tipo model 'Course' (o2m)
+        name: nome do curso
 
-        grade: objeto do tipo model 'Grade' (o2m)
+        grade: grau do curso
+
+        campi: campi onde oferecem a formação
 
         academic_education_campus: relação inversa para a model AcademicEducationCampus
     """
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
-    course = models.ForeignKey("Course", related_name="academic_education", on_delete=models.CASCADE,)
-    grade = models.ForeignKey("Grade", related_name="academic_education", on_delete=models.CASCADE,)
-
-    class Meta:
-        unique_together = ["grade", "course"]
+    name = models.CharField(max_length=50, unique=True)
+    grade = models.ForeignKey("Grade", related_name="academic_education", on_delete=models.CASCADE)
+    campi = models.ManyToManyField("Campus", related_name="academic_education", through="AcademicEducationCampus",)
 
     def __str__(self) -> str:
-        return f"{self.grade} em {self.course}"
+        return f"{self.grade} em {self.name}"
+
+
+class AcademicEducationCampus(SafeDeleteModel):
+    """
+    Define uma formação acadêmica que pertence à um campus. É uma associativa entre a model de
+    AcademicEducation e Campus
+
+    Exemplo:
+        'Bacharelado em Sistemas de Informação - IFC - Araquari'
+
+    Atributos:
+        _safedelete_policy: SOFT_DELETE_CASCADE
+
+        academic_education: objeto do tipo model 'AcademicEducation' (o2m)
+
+        campus: objeto do tipo model 'Campus' (o2m)
+
+        students: relação inversa para a model Student
+    """
+
+    _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
+
+    academic_education = models.ForeignKey(
+        "AcademicEducation", related_name="academic_education_campus", on_delete=models.CASCADE,
+    )
+    campus = models.ForeignKey("Campus", related_name="academic_education_campus", on_delete=models.PROTECT,)
+
+    class Meta:
+        unique_together = ["academic_education", "campus"]
+
+    def __str__(self) -> str:
+        return f"{self.academic_education} - {self.campus}"

@@ -1,2 +1,2 @@
-COURSE_NAME = "Informática"
+ACADEMIC_EDUCATION_NAME = "Informática"
 GRADE_NAME = "Técnico"

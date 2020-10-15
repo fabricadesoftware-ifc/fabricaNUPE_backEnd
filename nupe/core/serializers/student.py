@@ -21,9 +21,9 @@ class StudentListSerializer(ModelSerializer):
 
         full_name: nome completo
 
-        ingress_date: data de ingresso no curso
+        ingress_date: data de ingresso na formação acadêmica
 
-        graduated: status do curso, se já se formou ou não
+        graduated: status da formação acadêmica, se já se formou ou não
     """
 
     full_name = CharField(source="person.full_name")
@@ -44,7 +44,7 @@ class StudentDetailSerializer(ModelSerializer):
 
         personal_info: informações pessoais, as mesmas informações de PersonDetailSerializer
 
-        course: nome do curso que está cursando
+        academic_education: nome da formação acadêmica que está cursando
 
         institution: 'Instituição - Campus' onde estuda
 
@@ -52,13 +52,12 @@ class StudentDetailSerializer(ModelSerializer):
 
         responsibles: responsáveis do estudante
 
-        ingress_date: data de ingresso no curso
+        ingress_date: data de ingresso na formação acadêmica
 
-        graduated: status do curso, se já se formou ou não
+        graduated: status da formação acadêmica, se já se formou ou não
     """
 
     personal_info = PersonDetailSerializer(source="person")
-    course = CharField(source="academic_education_campus.academic_education")
     campus = CharField(source="academic_education_campus.campus")
     responsibles = PersonListSerializer(source="responsibles_persons", many=True)
 
@@ -68,7 +67,7 @@ class StudentDetailSerializer(ModelSerializer):
             "id",
             "registration",
             "personal_info",
-            "course",
+            "academic_education",
             "campus",
             "academic_education_campus",
             "responsibles",
@@ -92,7 +91,7 @@ class StudentCreateSerializer(ModelSerializer):
 
         responsibles: lista de id das pessoas responsáveis
 
-        ingress_date: data de ingresso no curso
+        ingress_date: data de ingresso na formação acadêmica
     """
 
     responsibles = PrimaryKeyRelatedField(
