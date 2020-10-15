@@ -1,33 +1,35 @@
+from datetime import date
+
 academic_educations = [
     # EJA
     {
-        "course": "Auxiliar Administrativo",
+        "name": "Auxiliar Administrativo",
         "grade": "Educação de Jovens e Adultos",
         "campus_name": "São Francisco do Sul",
     },
     # Técnico
-    {"course": "Agrimensura", "grade": "Técnico", "campus_name": "Araquari"},
-    {"course": "Agropecuária", "grade": "Técnico", "campus_name": "Araquari"},
-    {"course": "Informática", "grade": "Técnico", "campus_name": "Araquari"},
-    {"course": "Química", "grade": "Técnico", "campus_name": "Araquari"},
-    {"course": "Administração", "grade": "Técnico", "campus_name": "São Francisco do Sul"},
-    {"course": "Automação Industrial", "grade": "Técnico", "campus_name": "São Francisco do Sul"},
-    {"course": "Guia de Turismo", "grade": "Técnico", "campus_name": "São Francisco do Sul"},
+    {"name": "Agrimensura", "grade": "Técnico", "campus_name": "Araquari"},
+    {"name": "Agropecuária", "grade": "Técnico", "campus_name": "Araquari"},
+    {"name": "Informática", "grade": "Técnico", "campus_name": "Araquari"},
+    {"name": "Química", "grade": "Técnico", "campus_name": "Araquari"},
+    {"name": "Administração", "grade": "Técnico", "campus_name": "São Francisco do Sul"},
+    {"name": "Automação Industrial", "grade": "Técnico", "campus_name": "São Francisco do Sul"},
+    {"name": "Guia de Turismo", "grade": "Técnico", "campus_name": "São Francisco do Sul"},
     # Ensino Superior
-    {"course": "Agronomia", "grade": "Bacharelado", "campus_name": "Araquari"},
-    {"course": "Medicina Veterinária", "grade": "Bacharelado", "campus_name": "Araquari"},
-    {"course": "Sistemas de Informação", "grade": "Bacharelado", "campus_name": "Araquari"},
-    {"course": "Engenharia Elétrica", "grade": "Bacharelado", "campus_name": "São Francisco do Sul"},
-    {"course": "Ciências Agrícolas", "grade": "Licenciatura", "campus_name": "Araquari"},
-    {"course": "Química", "grade": "Licenciatura", "campus_name": "Araquari"},
-    {"course": "Redes de Computadores", "grade": "Tecnologia", "campus_name": "Araquari"},
-    {"course": "Logística", "grade": "Tecnologia", "campus_name": "São Francisco do Sul"},
-    {"course": "Redes de Computadores", "grade": "Tecnologia", "campus_name": "São Francisco do Sul"},
+    {"name": "Agronomia", "grade": "Bacharelado", "campus_name": "Araquari"},
+    {"name": "Medicina Veterinária", "grade": "Bacharelado", "campus_name": "Araquari"},
+    {"name": "Sistemas de Informação", "grade": "Bacharelado", "campus_name": "Araquari"},
+    {"name": "Engenharia Elétrica", "grade": "Bacharelado", "campus_name": "São Francisco do Sul"},
+    {"name": "Ciências Agrícolas", "grade": "Licenciatura", "campus_name": "Araquari"},
+    {"name": "Química", "grade": "Licenciatura", "campus_name": "Araquari"},
+    {"name": "Redes de Computadores", "grade": "Tecnologia", "campus_name": "Araquari"},
+    {"name": "Logística", "grade": "Tecnologia", "campus_name": "São Francisco do Sul"},
+    {"name": "Redes de Computadores", "grade": "Tecnologia", "campus_name": "São Francisco do Sul"},
     # Pós Graduação
-    {"course": "Aquicultura", "grade": "Especialização", "campus_name": "Araquari"},
-    {"course": "Educação Matemática", "grade": "Especialização", "campus_name": "Araquari"},
-    {"course": "Produção e Sanidade Animal", "grade": "Mestrado", "campus_name": "Araquari"},
-    {"course": "Tecnologia e Ambiente", "grade": "Mestrado", "campus_name": "Araquari"},
+    {"name": "Aquicultura", "grade": "Especialização", "campus_name": "Araquari"},
+    {"name": "Educação Matemática", "grade": "Especialização", "campus_name": "Araquari"},
+    {"name": "Produção e Sanidade Animal", "grade": "Mestrado", "campus_name": "Araquari"},
+    {"name": "Tecnologia e Ambiente", "grade": "Mestrado", "campus_name": "Araquari"},
 ]
 
 cities = [
@@ -151,4 +153,69 @@ attendance_reasons = [
             {"name": "Excesso de Faltas"},
         ],
     },
+]
+
+persons = [
+    {
+        "first_name": "Luis Fernando",
+        "last_name": "Carvalho",
+        "cpf": "385.301.570-01",
+        "birthday_date": date(year=1999, month=2, day=14),
+        "gender": "M",
+    },
+    {
+        "first_name": "Antonio",
+        "last_name": "Fernandes",
+        "cpf": "203.299.980-30",
+        "birthday_date": date(year=1999, month=1, day=21),
+        "gender": "M",
+    },
+    {
+        "first_name": "Vitor Leonardo",
+        "last_name": "Esser",
+        "cpf": "921.549.040-09",
+        "birthday_date": date(year=1999, month=9, day=28),
+        "gender": "M",
+    },
+    {
+        "first_name": "Fernanda",
+        "last_name": "Strebe",
+        "cpf": "271.603.800-70",
+        "birthday_date": date(year=2000, month=4, day=8),
+        "gender": "F",
+    },
+]
+
+students = [
+    {
+        "registration": "2018014476",
+        "cpf": "385.301.570-01",
+        "academic_education_campus": "Sistemas de Informação - Araquari",
+        "ingress_date": date(year=2018, month=2, day=27),
+    },
+    {
+        "registration": "2018003436",
+        "cpf": "203.299.980-30",
+        "academic_education_campus": "Sistemas de Informação - Araquari",
+        "ingress_date": date(year=2018, month=2, day=27),
+    },
+    {
+        "registration": "2018014583",
+        "cpf": "921.549.040-09",
+        "academic_education_campus": "Sistemas de Informação - Araquari",
+        "ingress_date": date(year=2018, month=2, day=27),
+    },
+    {
+        "registration": "2018014387",
+        "cpf": "271.603.800-70",
+        "academic_education_campus": "Sistemas de Informação - Araquari",
+        "ingress_date": date(year=2018, month=2, day=27),
+    },
+]
+
+attendances = [
+    {"attendance_reason": "TDAH", "attendance_severity": "M", "registration": "2018014476"},
+    {"attendance_reason": "Excesso de Faltas", "attendance_severity": "H", "registration": "2018003436"},
+    {"attendance_reason": "Maconha", "attendance_severity": "M", "registration": "2018014583"},
+    {"attendance_reason": "Ansiedade", "attendance_severity": "L", "registration": "2018014387"},
 ]

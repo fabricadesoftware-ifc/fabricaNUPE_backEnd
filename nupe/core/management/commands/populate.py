@@ -7,27 +7,32 @@ from nupe.account.models import Account
 from nupe.core.models import (
     AcademicEducation,
     AcademicEducationCampus,
+    Attendance,
     AttendanceReason,
     Campus,
     City,
-    Course,
     Function,
     Grade,
     Institution,
     Location,
+    Person,
     Sector,
     State,
+    Student,
 )
 from nupe.resources.datas.account.account import EMAIL, PASSWORD
 from nupe.resources.datas.core.populate import (
     academic_educations,
     attendance_reasons,
+    attendances,
     campi,
     cities,
     functions,
     institutions,
+    persons,
     sectors,
     states,
+    students,
 )
 
 env = environ.Env()
@@ -51,6 +56,9 @@ class Command(BaseCommand):
             self.populate_sectors()
             self.populate_functions()
             self.populate_attendance_reasons()
+            self.populate_persons()
+            self.populate_students()
+            self.populate_attendances()
             self.populate_superuser()
 
             self.stdout.write(self.style.SUCCESS("Tudo populado com sucesso! :D"))
@@ -77,15 +85,17 @@ class Command(BaseCommand):
         Popula o banco de dados com base em uma lista pré-definida com nome, grau e qual campus oferece
         """
         for academic_education_data in academic_educations:
-            course, _ = Course.objects.get_or_create(name=academic_education_data.get("course"))
             grade, _ = Grade.objects.get_or_create(name=academic_education_data.get("grade"))
 
-            academic_education, _ = AcademicEducation.objects.get_or_create(course=course, grade=grade)
+            academic_education, _ = AcademicEducation.objects.get_or_create(
+                name=academic_education_data.get("name"), grade=grade
+            )
             try:
                 AcademicEducationCampus.objects.get_or_create(
                     academic_education=academic_education,
                     campus=Campus.objects.get(name=academic_education_data.get("campus_name")),
                 )
+
             except Campus.DoesNotExist:
                 message = "Campus não encontrado. Por favor, informe na lista para população."
 
@@ -117,6 +127,47 @@ class Command(BaseCommand):
                     name=son_attendance_reason_data.get("name"), father_reason=attendance_reason
                 )
 
+    def populate_persons(self):
+        for person in persons:
+            Person.objects.get_or_create(**person)
+
+    def populate_students(self):
+        for student in students:
+            academic_education, campus_name = student.pop("academic_education_campus").split("-")
+
+            try:
+                person = Person.objects.get(cpf=student.pop("cpf"))
+
+                academic_education_campus = AcademicEducationCampus.objects.get(
+                    academic_education__name=academic_education.strip(), campus__name=campus_name.strip()
+                )
+
+                Student.objects.get_or_create(
+                    **student, person=person, academic_education_campus=academic_education_campus
+                )
+
+            except Person.DoesNotExist or AcademicEducationCampus.DoesNotExist:
+                message = """Pessoa ou Formação Acadêmica do Campus não encontrado.
+                Por favor, informe na lista para população."""
+
+                raise ValueError(message)
+
+    def populate_attendances(self):
+        for attendance in attendances:
+            try:
+                attendance_reason = AttendanceReason.objects.get(name=attendance.pop("attendance_reason"))
+
+                student = Student.objects.get(registration=attendance.pop("registration"))
+
+                Attendance.objects.get_or_create(**attendance, attendance_reason=attendance_reason, student=student)
+
+            except AttendanceReason.DoesNotExist or Student.DoesNotExist:
+                message = (
+                    "Motivo de Atendimento ou Estudante não encontrado. Por favor, informe na lista para população."
+                )
+
+                raise ValueError(message)
+
     def populate_superuser(self):
         """
         Popula o banco de dados com um usuário comum padrão. Consulte o usuário e senha na documentação da API
@@ -128,9 +179,10 @@ class Command(BaseCommand):
             function, _ = Function.objects.get_or_create(name="Psicóloga(o)")
             sector, _ = Sector.objects.get_or_create(name="Coordenadoria-Geral de Assistência Estudantil")
 
-            Account.objects.create_user(
+            Account.objects.create_superuser(
                 email=email, password=password, person=baker.make("core.Person"), function=function, sector=sector,
             )
+
         except IntegrityError:
             message = f"Super Usuário já criado!\nEmail: {email}\nSenha: {password}\n"
 
@@ -153,19 +205,20 @@ class Command(BaseCommand):
 
     def __institution_register(self):
         for institution in institutions:
-            institution_object_model, _ = Institution.objects.get_or_create(name=institution.get("name"))
+            Institution.objects.get_or_create(**institution)
 
     def __state_register(self):
         for state in states:
-            state_object_model, _ = State.objects.get_or_create(name=state.get("name"), initials=state.get("initials"))
+            State.objects.get_or_create(**state)
 
     def __city_register(self):
-        for city in cities:
-            city_object_model, _ = City.objects.get_or_create(name=city.get("name"))
+        for city_data in cities:
+            city, _ = City.objects.get_or_create(name=city_data.get("name"))
 
             try:
-                state_object_model = State.objects.get(initials=city.get("state_initials"))
-                state_object_model.cities.add(city_object_model)
+                state = State.objects.get(initials=city_data.get("state_initials"))
+                state.cities.add(city)
+
             except State.DoesNotExist:
                 message = "Estado não cadastrado. Por favor, informe-o na lista para população."
 

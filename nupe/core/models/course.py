@@ -46,9 +46,12 @@ class AcademicEducation(SafeDeleteModel):
 
     _safedelete_policy = SOFT_DELETE_CASCADE  # mascara os objetos relacionados
 
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     grade = models.ForeignKey("Grade", related_name="academic_education", on_delete=models.CASCADE)
     campi = models.ManyToManyField("Campus", related_name="academic_education", through="AcademicEducationCampus",)
+
+    class Meta:
+        unique_together = ["name", "grade"]
 
     def __str__(self) -> str:
         return f"{self.grade} em {self.name}"
@@ -83,4 +86,4 @@ class AcademicEducationCampus(SafeDeleteModel):
         unique_together = ["academic_education", "campus"]
 
     def __str__(self) -> str:
-        return f"{self.academic_education} - {self.campus}"
+        return f"{self.academic_education}, {self.campus}"

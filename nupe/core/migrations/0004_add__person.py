@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ("deleted", models.DateTimeField(editable=False, null=True)),
                 ("first_name", models.CharField(max_length=50,),),
                 ("last_name", models.CharField(max_length=100,),),
-                ("cpf", models.CharField(max_length=11, unique=True, help_text="Somente números",),),
+                ("cpf", models.CharField(max_length=14, unique=True, help_text="Somente números",),),
                 ("birthday_date", models.DateField()),
                 ("gender", models.CharField(choices=[("F", "Feminino"), ("M", "Masculino")], max_length=1)),
                 (

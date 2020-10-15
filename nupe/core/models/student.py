@@ -70,7 +70,7 @@ class Student(SafeDeleteModel):
         unique_together = ["person", "academic_education_campus"]
 
     def __str__(self) -> str:
-        return f"{self.person} - {self.registration}"
+        return f"Estudante: {self.person}, Matrícula: {self.registration}"
 
     @property
     def full_name(self):

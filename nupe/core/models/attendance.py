@@ -94,7 +94,11 @@ class Attendance(SafeDeleteModel):
     closed_at = models.DateTimeField(null=True, blank=True, default=None)
 
     def __str__(self) -> str:
-        return f"{self.student} - {self.attendance_severity} - {self.attendance_reason.description}"
+        return f"""
+        {self.student},
+        Gravidade: {self.attendance_severity},
+        Descrição: {self.attendance_reason.description or 'Nenhuma'}
+        """
 
 
 class AccountAttendance(SafeDeleteModel):
@@ -143,4 +147,4 @@ class AccountAttendance(SafeDeleteModel):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.account.full_name} - {self.public_annotation}"
+        return f"Atendente: {self.account.full_name}, Anotação: {self.public_annotation}"
