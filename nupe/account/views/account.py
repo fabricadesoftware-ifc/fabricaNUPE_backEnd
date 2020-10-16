@@ -16,15 +16,15 @@ from nupe.account.serializers import (
 
 class AccountViewSet(ModelViewSet):
     """
-    list: retorna todas as contas do banco de dados
+    list: retorna todas as contas do banco de dados. RF.SIS.005, RF.SIS.006, RF.SIS.007, RF.SIS.008
 
     retrieve: retorna uma conta especifica do banco de dados
 
-    create: cadastra uma conta no banco de dados
+    create: cadastra uma conta no banco de dados. RF.SIS.004
 
-    destroy: exclui uma conta do banco de dados
+    destroy: exclui uma conta do banco de dados. RF.SIS.010
 
-    partial_update: atualiza um ou mais atributos de uma conta
+    partial_update: atualiza um ou mais atributos de uma conta. RF.SIS.003, RF.SIS.009
 
     current: retorna informações sobre a conta logada atual
     """
@@ -32,8 +32,8 @@ class AccountViewSet(ModelViewSet):
     queryset = Account.objects.all()
 
     filterset_class = AccountFilter
-    search_fields = ["email", "person__first_name", "person__last_name"]
-    ordering_fields = ["email", "person__first_name", "person__last_name"]
+    search_fields = ["email", "person__first_name", "person__last_name"]  # RF.SIS.008
+    ordering_fields = ["email", "person__first_name", "person__last_name"]  # RF.SIS.007
     ordering = ["person__first_name", "person__last_name"]
 
     http_method_names = ["get", "post", "patch", "delete"]

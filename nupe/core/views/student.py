@@ -7,22 +7,22 @@ from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializ
 
 class StudentViewSet(ModelViewSet):
     """
-    list: retorna todos os estudantes do banco de dados
+    list: retorna todos os estudantes do banco de dados. RF.SIS.042, RF.SIS.043, RF.SIS.044, RF.SIS.045
 
-    retrieve: retorna um estudante especifico do banco de dados
+    retrieve: retorna um estudante especifico do banco de dados. RF.SIS.046, RF.SIS.047, RF.SIS.048
 
-    create: cadastra um estudante no banco de dados
+    create: cadastra um estudante no banco de dados. RF.SIS.041
 
-    destroy: exclui um estudante do banco de dados
+    destroy: exclui um estudante do banco de dados. RF.SIS.050
 
-    partial_update: atualiza um ou mais atributos de um estudante
+    partial_update: atualiza um ou mais atributos de um estudante. RF.SIS.049
     """
 
     queryset = Student.objects.all()
     lookup_field = "registration"
     filterset_class = StudentFilter
-    search_fields = ["person__first_name", "person__last_name"]
-    ordering_fields = ["registration", "person__first_name", "person__last_name"]
+    search_fields = ["person__first_name", "person__last_name"]  # RF.SIS.044
+    ordering_fields = ["registration", "person__first_name", "person__last_name"]  # RF.SIS.045
     ordering = ["person__first_name", "person__last_name"]
 
     per_action_serializer = {

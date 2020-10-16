@@ -21,6 +21,7 @@ core_router.registry.extend(account_router.registry)
 urlpatterns = [
     path("api/v1/", include(core_router.urls)),
     path("admin/", admin.site.urls),
+    # RF.SIS.001, RF.SIS.002
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -5,7 +5,7 @@ from nupe.core.models import Attendance
 
 class AttendanceFilter(FilterSet):
     """
-    Filtros para se utilizar nas requisições do endpoint de Attendance
+    Filtros para se utilizar nas requisições do endpoint de Attendance. RF.SIS.011, RF.SIS.012, RF.SIS.026
 
     Exemplo:
         /api/v1/attendance?foo=xyz

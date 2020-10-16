@@ -7,22 +7,22 @@ from nupe.core.serializers import AcademicEducationDetailSerializer, AcademicEdu
 
 class GradeViewSet(ModelViewSet):
     """
-    list: retorna todos os graus do banco de dados
+    list: retorna todos os graus do banco de dados. RF.SIS.035, RF.SIS.036, RF.SIS.037, RF.SIS.038
 
     retrieve: retorna um grau especifico do banco de dados
 
-    create: cadastra um grau no banco de dados
+    create: cadastra um grau no banco de dados. RF.SIS.034
 
-    destroy: exclui um grau do banco de dados
+    destroy: exclui um grau do banco de dados. RF.SIS.040
 
-    partial_update: atualiza um ou mais atributos de um grau
+    partial_update: atualiza um ou mais atributos de um grau. RF.SIS.039
     """
 
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
     filterset_class = GradeFilter
-    search_fields = ["name"]
-    ordering_fields = ["name"]
+    search_fields = ["name"]  # RF.SIS.037
+    ordering_fields = ["name"]  # RF.SIS.038
     ordering = "name"
 
     http_method_names = ["get", "post", "patch", "delete"]
@@ -38,22 +38,22 @@ class GradeViewSet(ModelViewSet):
 
 class AcademicEducationViewSet(ModelViewSet):
     """
-    list: retorna todas as formações acadêmicas do banco de dados
+    list: retorna todas as formações acadêmicas do banco de dados. RF.SIS.028, RF.SIS.029, RF.SIS.030, RF.SIS.031
 
     retrieve: retorna uma formação acadêmica específica do banco de dados
 
-    create: cadastra uma formação acadêmica no banco de dados
+    create: cadastra uma formação acadêmica no banco de dados. RF.SIS.027
 
-    destroy: exclui uma formação acadêmica do banco de dados
+    destroy: exclui uma formação acadêmica do banco de dados. RF.SIS.033
 
-    partial_update: atualiza um ou mais atributos de uma formação acadêmica
+    partial_update: atualiza um ou mais atributos de uma formação acadêmica. RF.SIS.032
     """
 
     queryset = AcademicEducation.objects.all()
     serializer_class = AcademicEducationSerializer
     filterset_class = AcademicEducationFilter
-    search_fields = ["grade__name", "name"]
-    ordering_fields = ["grade__name", "name"]
+    search_fields = ["grade__name", "name"]  # RF.SIS.030
+    ordering_fields = ["grade__name", "name"]  # RF.SIS.031
     ordering = ["grade__name", "name"]
 
     per_action_serializer = {"retrieve": AcademicEducationDetailSerializer}

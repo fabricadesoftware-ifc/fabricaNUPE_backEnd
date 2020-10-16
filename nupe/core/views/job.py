@@ -36,21 +36,21 @@ class FunctionViewSet(ModelViewSet):
 
 class SectorViewSet(ModelViewSet):
     """
-    list: retorna todos os setores do banco de dados
+    list: retorna todos os setores do banco de dados. RF.SIS.014, RF.SIS.015, RF.SIS.016, RF.SIS.019
 
     retrieve: retorna um setor especifico do banco de dados
 
-    create: cadastra um setor no banco de dados
+    create: cadastra um setor no banco de dados. RF.SIS.013
 
-    destroy: exclui um setor do banco de dados
+    destroy: exclui um setor do banco de dados. RF.SIS.018
 
-    partial_update: atualiza um ou mais atributos de um setor
+    partial_update: atualiza um ou mais atributos de um setor. RF.SIS.017
     """
 
     queryset = Sector.objects.all()
     serializer_class = SectorSerializer
-    search_fields = ["name"]
-    ordering_fields = ["name"]
+    search_fields = ["name"]  # RF.SIS.019
+    ordering_fields = ["name"]  # RF.SIS.016
     ordering = "name"
 
     http_method_names = ["get", "post", "patch", "delete"]
