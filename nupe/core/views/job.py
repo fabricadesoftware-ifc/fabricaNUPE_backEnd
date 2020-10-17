@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.models import Function, Sector
-from nupe.core.serializers import FunctionSerializer, SectorSerializer
+from nupe.core.serializers.job import FunctionSerializer, SectorSerializer
 
 
 class FunctionViewSet(ModelViewSet):

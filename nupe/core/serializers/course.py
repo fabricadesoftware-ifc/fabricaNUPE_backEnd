@@ -1,6 +1,7 @@
-from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField, StringRelatedField
+from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
 
 from nupe.core.models import AcademicEducation, Campus, Grade
+from nupe.core.serializers.institution import CampusDetailSerializer, CampusListSerializer
 
 
 class GradeSerializer(ModelSerializer):
@@ -19,10 +20,9 @@ class GradeSerializer(ModelSerializer):
         fields = ["id", "name"]
 
 
-class AcademicEducationSerializer(ModelSerializer):
+class AcademicEducationCreateSerializer(ModelSerializer):
     """
-    Recebe e valida informações para então cadastrar ou atualizar uma formação acadêmica, e também
-    lista informações sobre formações acadêmicas
+    Recebe e valida informações para então cadastrar ou atualizar uma formação acadêmica
 
     Campos:
         id: identificador (somente leitura)
@@ -41,6 +41,28 @@ class AcademicEducationSerializer(ModelSerializer):
         fields = ["id", "name", "grade", "campi"]
 
 
+class AcademicEducationListSerializer(ModelSerializer):
+    """
+    Retorna uma lista de informações sobre formações acadêmicas
+
+    Campos:
+        id: identificador
+
+        name: nome da formação acadêmica
+
+        grade: informações sobre o grau da formação acadêmica
+
+        campi: informações sobre os campi que oferecem a formação acadêmica
+    """
+
+    grade = GradeSerializer()
+    campi = CampusListSerializer(many=True)
+
+    class Meta:
+        model = AcademicEducation
+        fields = ["id", "name", "grade", "campi"]
+
+
 class AcademicEducationDetailSerializer(ModelSerializer):
     """
     Detalha informações sobre uma formação acadêmica específica
@@ -50,13 +72,13 @@ class AcademicEducationDetailSerializer(ModelSerializer):
 
         name: nome
 
-        grade: identificador do grau
+        grade: informações sobre o grau da formação acadêmica
 
-        campi: identificadores dos campi
+        campi: informações sobre os campi que oferecem a formação acadêmica
     """
 
-    grade = CharField()
-    campi = StringRelatedField(many=True)
+    grade = GradeSerializer()
+    campi = CampusDetailSerializer(many=True)
 
     class Meta:
         model = AcademicEducation

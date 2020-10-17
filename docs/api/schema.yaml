@@ -24,9 +24,10 @@ paths:
   /academic_education/:
     get:
       operationId: academic_education_list
-      description: "retorna todas as forma\xE7\xF5es acad\xEAmicas do banco de dados"
+      description: "retorna todas as forma\xE7\xF5es acad\xEAmicas do banco de dados.\
+        \ RF.SIS.028, RF.SIS.029, RF.SIS.030, RF.SIS.031"
       parameters:
-        - name: course_name
+        - name: name
           in: query
           description: ''
           required: false
@@ -73,7 +74,23 @@ paths:
               results:
                 type: array
                 items:
-                  $ref: '#/definitions/AcademicEducation'
+                  $ref: '#/definitions/AcademicEducationList'
+      tags:
+        - academic_education
+    post:
+      operationId: academic_education_create
+      description: "cadastra uma forma\xE7\xE3o acad\xEAmica no banco de dados. RF.SIS.027"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AcademicEducationCreate'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/AcademicEducationCreate'
       tags:
         - academic_education
     parameters: []
@@ -87,7 +104,33 @@ paths:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/AcademicEducation'
+            $ref: '#/definitions/AcademicEducationDetail'
+      tags:
+        - academic_education
+    patch:
+      operationId: academic_education_partial_update
+      description: "atualiza um ou mais atributos de uma forma\xE7\xE3o acad\xEAmica.\
+        \ RF.SIS.032"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AcademicEducationCreate'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AcademicEducationCreate'
+      tags:
+        - academic_education
+    delete:
+      operationId: academic_education_delete
+      description: "exclui uma forma\xE7\xE3o acad\xEAmica do banco de dados. RF.SIS.033"
+      parameters: []
+      responses:
+        '204':
+          description: ''
       tags:
         - academic_education
     parameters:
@@ -99,7 +142,8 @@ paths:
   /account/:
     get:
       operationId: account_list
-      description: retorna todas as contas do banco de dados
+      description: retorna todas as contas do banco de dados. RF.SIS.005, RF.SIS.006,
+        RF.SIS.007, RF.SIS.008
       parameters:
         - name: campus_name
           in: query
@@ -163,7 +207,7 @@ paths:
         - account
     post:
       operationId: account_create
-      description: cadastra uma conta no banco de dados
+      description: cadastra uma conta no banco de dados. RF.SIS.004
       parameters:
         - name: data
           in: body
@@ -240,7 +284,7 @@ paths:
         - account
     patch:
       operationId: account_partial_update
-      description: atualiza um ou mais atributos de uma conta
+      description: atualiza um ou mais atributos de uma conta. RF.SIS.003, RF.SIS.009
       parameters:
         - name: data
           in: body
@@ -256,7 +300,7 @@ paths:
         - account
     delete:
       operationId: account_delete
-      description: exclui uma conta do banco de dados
+      description: exclui uma conta do banco de dados. RF.SIS.010
       parameters: []
       responses:
         '204':
@@ -272,14 +316,26 @@ paths:
   /attendance/:
     get:
       operationId: attendance_list
-      description: retorna todas os atendimentos do banco de dados
+      description: |-
+        retorna todas os atendimentos do banco de dados. RF.SIS.021, RF.SIS.022, RF.SIS.023, RF.SIS.026, RF.SIS.011,
+        RF.SIS.012
       parameters:
+        - name: student
+          in: query
+          description: ''
+          required: false
+          type: string
         - name: student_name
           in: query
           description: ''
           required: false
           type: string
         - name: student_last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: attendants
           in: query
           description: ''
           required: false
@@ -346,7 +402,7 @@ paths:
         - attendance
     post:
       operationId: attendance_create
-      description: cadastra um atendimento no banco de dados
+      description: cadastra um atendimento no banco de dados. RF.SIS.020
       parameters:
         - name: data
           in: body
@@ -358,6 +414,142 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/AttendanceCreate'
+      tags:
+        - attendance
+    parameters: []
+  /attendance/my/:
+    get:
+      operationId: attendance_my
+      description: "retorna todos os atendimentos realizados pelo usu\xE1rio atual"
+      parameters:
+        - name: student
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: student_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: student_last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: attendants
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: attendant_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: attendant_last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: status
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: severity
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/MyAccountAttendance'
+      tags:
+        - attendance
+    parameters: []
+  /attendance/report/:
+    get:
+      operationId: attendance_report
+      description: "retorna um relat\xF3rio completo de todos os atendimentos"
+      parameters:
+        - name: student
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: student_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: student_last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: attendants
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: attendant_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: attendant_last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: status
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: severity
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: ordering
+          in: query
+          description: Which field to use when ordering the results.
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: A page number within the paginated result set.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AttendanceReport'
       tags:
         - attendance
     parameters: []
@@ -375,7 +567,7 @@ paths:
         - attendance
     patch:
       operationId: attendance_partial_update
-      description: atualiza um ou mais atributos de um atendimento
+      description: atualiza um ou mais atributos de um atendimento. RF.SIS.024
       parameters:
         - name: data
           in: body
@@ -391,7 +583,7 @@ paths:
         - attendance
     delete:
       operationId: attendance_delete
-      description: exclui um atendimento do banco de dados
+      description: exclui um atendimento do banco de dados. RF.SIS.025
       parameters: []
       responses:
         '204':
@@ -517,7 +709,7 @@ paths:
   /campus/:
     get:
       operationId: campus_list
-      description: retorna todas os campis do banco de dados
+      description: retorna todos os campi do banco de dados
       parameters:
         - name: address
           in: query
@@ -698,116 +890,6 @@ paths:
         description: A unique integer value identifying this city.
         required: true
         type: integer
-  /course/:
-    get:
-      operationId: course_list
-      description: retorna todos os cursos do banco de dados
-      parameters:
-        - name: name
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: search
-          in: query
-          description: A search term.
-          required: false
-          type: string
-        - name: ordering
-          in: query
-          description: Which field to use when ordering the results.
-          required: false
-          type: string
-        - name: page
-          in: query
-          description: A page number within the paginated result set.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/Course'
-      tags:
-        - course
-    post:
-      operationId: course_create
-      description: cadastra um curso no banco de dados
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Course'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Course'
-      tags:
-        - course
-    parameters: []
-  /course/{id}/:
-    get:
-      operationId: course_read
-      description: retorna um curso especifico do banco de dados
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Course'
-      tags:
-        - course
-    patch:
-      operationId: course_partial_update
-      description: atualiza um ou mais atributos de um curso
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Course'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Course'
-      tags:
-        - course
-    delete:
-      operationId: course_delete
-      description: exclui um curso do banco de dados
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-        - course
-    parameters:
-      - name: id
-        in: path
-        description: A unique integer value identifying this course.
-        required: true
-        type: integer
   /function/:
     get:
       operationId: function_list
@@ -916,14 +998,15 @@ paths:
   /grade/:
     get:
       operationId: grade_list
-      description: retorna todos os graus do banco de dados
+      description: retorna todos os graus do banco de dados. RF.SIS.035, RF.SIS.036,
+        RF.SIS.037, RF.SIS.038
       parameters:
         - name: name
           in: query
           description: ''
           required: false
           type: string
-        - name: course_name
+        - name: academic_education_name
           in: query
           description: ''
           required: false
@@ -970,7 +1053,7 @@ paths:
         - grade
     post:
       operationId: grade_create
-      description: cadastra um grau no banco de dados
+      description: cadastra um grau no banco de dados. RF.SIS.034
       parameters:
         - name: data
           in: body
@@ -999,7 +1082,7 @@ paths:
         - grade
     patch:
       operationId: grade_partial_update
-      description: atualiza um ou mais atributos de um grau
+      description: atualiza um ou mais atributos de um grau. RF.SIS.039
       parameters:
         - name: data
           in: body
@@ -1015,7 +1098,7 @@ paths:
         - grade
     delete:
       operationId: grade_delete
-      description: exclui um grau do banco de dados
+      description: exclui um grau do banco de dados. RF.SIS.040
       parameters: []
       responses:
         '204':
@@ -1373,7 +1456,8 @@ paths:
   /sector/:
     get:
       operationId: sector_list
-      description: retorna todos os setores do banco de dados
+      description: retorna todos os setores do banco de dados. RF.SIS.014, RF.SIS.015,
+        RF.SIS.016, RF.SIS.019
       parameters:
         - name: search
           in: query
@@ -1417,7 +1501,7 @@ paths:
         - sector
     post:
       operationId: sector_create
-      description: cadastra um setor no banco de dados
+      description: cadastra um setor no banco de dados. RF.SIS.013
       parameters:
         - name: data
           in: body
@@ -1446,7 +1530,7 @@ paths:
         - sector
     patch:
       operationId: sector_partial_update
-      description: atualiza um ou mais atributos de um setor
+      description: atualiza um ou mais atributos de um setor. RF.SIS.017
       parameters:
         - name: data
           in: body
@@ -1462,7 +1546,7 @@ paths:
         - sector
     delete:
       operationId: sector_delete
-      description: exclui um setor do banco de dados
+      description: exclui um setor do banco de dados. RF.SIS.018
       parameters: []
       responses:
         '204':
@@ -1547,7 +1631,8 @@ paths:
   /student/:
     get:
       operationId: student_list
-      description: retorna todos os estudantes do banco de dados
+      description: retorna todos os estudantes do banco de dados. RF.SIS.042, RF.SIS.043,
+        RF.SIS.044, RF.SIS.045
       parameters:
         - name: graduated
           in: query
@@ -1611,7 +1696,7 @@ paths:
         - student
     post:
       operationId: student_create
-      description: cadastra um estudante no banco de dados
+      description: cadastra um estudante no banco de dados. RF.SIS.041
       parameters:
         - name: data
           in: body
@@ -1629,7 +1714,8 @@ paths:
   /student/{registration}/:
     get:
       operationId: student_read
-      description: retorna um estudante especifico do banco de dados
+      description: retorna um estudante especifico do banco de dados. RF.SIS.046,
+        RF.SIS.047, RF.SIS.048
       parameters: []
       responses:
         '200':
@@ -1640,7 +1726,7 @@ paths:
         - student
     patch:
       operationId: student_partial_update
-      description: atualiza um ou mais atributos de um estudante
+      description: atualiza um ou mais atributos de um estudante. RF.SIS.049
       parameters:
         - name: data
           in: body
@@ -1656,7 +1742,7 @@ paths:
         - student
     delete:
       operationId: student_delete
-      description: exclui um estudante do banco de dados
+      description: exclui um estudante do banco de dados. RF.SIS.050
       parameters: []
       responses:
         '204':
@@ -1670,7 +1756,8 @@ paths:
         type: string
         pattern: ^[0-9]*$
 definitions:
-  AcademicEducation:
+  Grade:
+    title: Grade
     required:
       - name
     type: object
@@ -1682,7 +1769,176 @@ definitions:
       name:
         title: Name
         type: string
+        maxLength: 50
         minLength: 1
+  Institution:
+    title: Institution
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+  CampusList:
+    required:
+      - name
+      - institution
+      - address
+      - number
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      institution:
+        $ref: '#/definitions/Institution'
+      address:
+        title: Address
+        type: string
+        maxLength: 75
+        minLength: 1
+      number:
+        title: Number
+        type: string
+        maxLength: 10
+        minLength: 1
+  AcademicEducationList:
+    required:
+      - name
+      - grade
+      - campi
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      grade:
+        $ref: '#/definitions/Grade'
+      campi:
+        type: array
+        items:
+          $ref: '#/definitions/CampusList'
+  AcademicEducationCreate:
+    required:
+      - name
+      - grade
+      - campi
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      grade:
+        title: Grade
+        type: integer
+      campi:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+  Location:
+    title: Location
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        readOnly: true
+        minLength: 1
+  CampusDetail:
+    required:
+      - name
+      - cnpj
+      - address
+      - number
+      - location
+      - institution
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      cnpj:
+        title: Cnpj
+        type: string
+        maxLength: 18
+        minLength: 1
+      address:
+        title: Address
+        type: string
+        maxLength: 75
+        minLength: 1
+      number:
+        title: Number
+        type: string
+        maxLength: 10
+        minLength: 1
+      website:
+        title: Website
+        type: string
+        maxLength: 50
+        x-nullable: true
+      location:
+        $ref: '#/definitions/Location'
+      institution:
+        $ref: '#/definitions/Institution'
+  AcademicEducationDetail:
+    required:
+      - name
+      - grade
+      - campi
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 50
+        minLength: 1
+      grade:
+        $ref: '#/definitions/Grade'
+      campi:
+        type: array
+        items:
+          $ref: '#/definitions/CampusDetail'
   AccountList:
     required:
       - email
@@ -1766,7 +2022,7 @@ definitions:
         title: Cpf
         description: "Somente n\xFAmeros"
         type: string
-        maxLength: 11
+        maxLength: 14
         minLength: 1
       birthday_date:
         title: Birthday date
@@ -1872,6 +2128,35 @@ definitions:
         title: Sector
         type: string
         minLength: 1
+  StudentList:
+    title: Student
+    required:
+      - registration
+      - full_name
+      - ingress_date
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      registration:
+        title: Registration
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 35
+        minLength: 1
+      full_name:
+        title: Full name
+        type: string
+        minLength: 1
+      ingress_date:
+        title: Ingress date
+        type: string
+        format: date
+      graduated:
+        title: Graduated
+        type: boolean
   AttendanceList:
     required:
       - attendants
@@ -1885,12 +2170,9 @@ definitions:
       attendants:
         type: array
         items:
-          type: string
-        uniqueItems: true
+          $ref: '#/definitions/AccountList'
       student:
-        title: Student
-        type: string
-        minLength: 1
+        $ref: '#/definitions/StudentList'
       status:
         title: Status
         description: Aberto = O, Em Espero = OH, Em Andamento = IP, Fechado = C
@@ -1940,7 +2222,77 @@ definitions:
           - OH
           - IP
           - C
+  PersonList:
+    required:
+      - cpf
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      full_name:
+        title: Full name
+        type: string
+        readOnly: true
+      cpf:
+        title: Cpf
+        description: "Somente n\xFAmeros"
+        type: string
+        maxLength: 14
+        minLength: 1
+      contact:
+        title: Contact
+        description: "DDD+N\xFAmero"
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 12
+        minLength: 11
+        x-nullable: true
+  StudentDetail:
+    title: Student
+    required:
+      - registration
+      - personal_info
+      - responsibles
+      - ingress_date
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      registration:
+        title: Registration
+        type: string
+        pattern: ^[0-9]*$
+        maxLength: 35
+        minLength: 1
+      personal_info:
+        $ref: '#/definitions/PersonDetail'
+      academic_education:
+        title: Academic education
+        type: string
+        readOnly: true
+      campus:
+        $ref: '#/definitions/CampusDetail'
+      academic_education_campus:
+        title: Academic education campus
+        type: integer
+        x-nullable: true
+      responsibles:
+        type: array
+        items:
+          $ref: '#/definitions/PersonList'
+      ingress_date:
+        title: Ingress date
+        type: string
+        format: date
+      graduated:
+        title: Graduated
+        type: boolean
   AttendanceDetail:
+    title: Attendance
     required:
       - attendance_reason
       - attendance_severity
@@ -1968,12 +2320,136 @@ definitions:
       attendants:
         type: array
         items:
-          type: string
-        uniqueItems: true
+          $ref: '#/definitions/AccountDetail'
       student:
-        title: Student
+        $ref: '#/definitions/StudentDetail'
+      status:
+        title: Status
+        description: Aberto = O, Em Espero = OH, Em Andamento = IP, Fechado = C
+        type: string
+        enum:
+          - O
+          - OH
+          - IP
+          - C
+      opened_at:
+        title: Opened at
+        type: string
+        format: date-time
+        readOnly: true
+      closed_at:
+        title: Closed at
+        type: string
+        format: date-time
+        x-nullable: true
+  MyAccountAttendance:
+    required:
+      - attendance
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      public_annotation:
+        title: Public annotation
+        type: string
+        maxLength: '255'
+        x-nullable: true
+      private_annotation:
+        title: Private annotation
+        type: string
+        maxLength: '255'
+        x-nullable: true
+      group_annotation:
+        title: Group annotation
+        type: string
+        maxLength: '255'
+        x-nullable: true
+      attendance:
+        $ref: '#/definitions/AttendanceDetail'
+      attendance_at:
+        title: Attendance at
+        type: string
+        format: date-time
+        readOnly: true
+      updated_at:
+        title: Updated at
+        type: string
+        format: date-time
+        readOnly: true
+  AccountAttendance:
+    required:
+      - account
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      public_annotation:
+        title: Public annotation
+        type: string
+        maxLength: '255'
+        x-nullable: true
+      account:
+        $ref: '#/definitions/AccountDetail'
+      attendance_at:
+        title: Attendance at
+        type: string
+        format: date-time
+        readOnly: true
+      updated_at:
+        title: Updated at
+        type: string
+        format: date-time
+        readOnly: true
+  AttendanceReport:
+    required:
+      - attendance_reason
+      - attendance_severity
+      - attendants
+      - student
+      - student_profile_image
+      - student_age
+      - account_attendance
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      attendance_reason:
+        title: Attendance reason
         type: string
         minLength: 1
+      attendance_severity:
+        title: Attendance severity
+        description: "Baixa = L, M\xE9dia = M, Alta = H, Grave = S"
+        type: string
+        enum:
+          - L
+          - M
+          - H
+          - S
+      attendants:
+        type: array
+        items:
+          $ref: '#/definitions/AccountDetail'
+      student:
+        $ref: '#/definitions/StudentDetail'
+      student_profile_image:
+        title: Student profile image
+        type: string
+        minLength: 1
+      student_age:
+        title: Student age
+        type: string
+        minLength: 1
+      account_attendance:
+        type: array
+        items:
+          $ref: '#/definitions/AccountAttendance'
       status:
         title: Status
         description: Aberto = O, Em Espero = OH, Em Andamento = IP, Fechado = C
@@ -2017,37 +2493,6 @@ definitions:
         title: Father reason
         type: integer
         x-nullable: true
-  CampusList:
-    required:
-      - name
-      - institution
-      - address
-      - number
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 50
-        minLength: 1
-      institution:
-        title: Institution
-        type: string
-        minLength: 1
-      address:
-        title: Address
-        type: string
-        maxLength: 75
-        minLength: 1
-      number:
-        title: Number
-        type: string
-        maxLength: 10
-        minLength: 1
   CampusCreate:
     required:
       - name
@@ -2070,7 +2515,7 @@ definitions:
       cnpj:
         title: Cnpj
         type: string
-        maxLength: 14
+        maxLength: 18
         minLength: 1
       address:
         title: Address
@@ -2093,68 +2538,7 @@ definitions:
       institution:
         title: Institution
         type: integer
-  CampusDetail:
-    required:
-      - name
-      - cnpj
-      - address
-      - number
-      - location
-      - institution
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 50
-        minLength: 1
-      cnpj:
-        title: Cnpj
-        type: string
-        maxLength: 14
-        minLength: 1
-      address:
-        title: Address
-        type: string
-        maxLength: 75
-        minLength: 1
-      number:
-        title: Number
-        type: string
-        maxLength: 10
-        minLength: 1
-      website:
-        title: Website
-        type: string
-        maxLength: 50
-        x-nullable: true
-      location:
-        title: Location
-        type: string
-        minLength: 1
-      institution:
-        title: Institution
-        type: string
-        minLength: 1
   City:
-    required:
-      - name
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 50
-        minLength: 1
-  Course:
     required:
       - name
     type: object
@@ -2187,78 +2571,6 @@ definitions:
         type: string
         maxLength: 150
         x-nullable: true
-  Grade:
-    required:
-      - name
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 50
-        minLength: 1
-      courses:
-        type: array
-        items:
-          type: integer
-        uniqueItems: true
-  Institution:
-    required:
-      - name
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 50
-        minLength: 1
-  Location:
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        readOnly: true
-        minLength: 1
-  PersonList:
-    required:
-      - cpf
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      full_name:
-        title: Full name
-        type: string
-        readOnly: true
-      cpf:
-        title: Cpf
-        description: "Somente n\xFAmeros"
-        type: string
-        maxLength: 11
-        minLength: 1
-      contact:
-        title: Contact
-        description: "DDD+N\xFAmero"
-        type: string
-        pattern: ^[0-9]*$
-        maxLength: 12
-        minLength: 11
-        x-nullable: true
   PersonCreate:
     required:
       - first_name
@@ -2286,7 +2598,7 @@ definitions:
         title: Cpf
         description: "Somente n\xFAmeros"
         type: string
-        maxLength: 11
+        maxLength: 14
         minLength: 1
       birthday_date:
         title: Birthday date
@@ -2345,7 +2657,7 @@ definitions:
       name:
         title: Name
         type: string
-        maxLength: 50
+        maxLength: 100
         minLength: 1
       description:
         title: Description
@@ -2372,34 +2684,6 @@ definitions:
         type: string
         maxLength: 2
         minLength: 1
-  StudentList:
-    required:
-      - registration
-      - full_name
-      - ingress_date
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      registration:
-        title: Registration
-        type: string
-        pattern: ^[0-9]*$
-        maxLength: 35
-        minLength: 1
-      full_name:
-        title: Full name
-        type: string
-        minLength: 1
-      ingress_date:
-        title: Ingress date
-        type: string
-        format: date
-      graduated:
-        title: Graduated
-        type: boolean
   StudentCreate:
     required:
       - registration
@@ -2433,48 +2717,3 @@ definitions:
         title: Ingress date
         type: string
         format: date
-  StudentDetail:
-    required:
-      - registration
-      - personal_info
-      - course
-      - campus
-      - responsibles
-      - ingress_date
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      registration:
-        title: Registration
-        type: string
-        pattern: ^[0-9]*$
-        maxLength: 35
-        minLength: 1
-      personal_info:
-        $ref: '#/definitions/PersonDetail'
-      course:
-        title: Course
-        type: string
-        minLength: 1
-      campus:
-        title: Campus
-        type: string
-        minLength: 1
-      academic_education_campus:
-        title: Academic education campus
-        type: integer
-        x-nullable: true
-      responsibles:
-        type: array
-        items:
-          $ref: '#/definitions/PersonList'
-      ingress_date:
-        title: Ingress date
-        type: string
-        format: date
-      graduated:
-        title: Graduated
-        type: boolean

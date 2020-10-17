@@ -1,12 +1,12 @@
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import ModelViewSet
 
 from nupe.account.filters import AccountFilter
 from nupe.account.models import Account
-from nupe.account.serializers import (
+from nupe.account.serializers.account import (
     AccountDetailSerializer,
     AccountListSerializer,
     AccountSerializer,
@@ -56,10 +56,8 @@ class AccountViewSet(ModelViewSet):
     def get_serializer_class(self):
         return self.per_action_serializer.get(self.action)
 
-    @action(
-        detail=False, url_path="current",
-    )
-    @swagger_auto_schema(responses={status.HTTP_200_OK: CurrentAccountSerializer})
+    @action(detail=False)
+    @swagger_auto_schema(responses={HTTP_200_OK: CurrentAccountSerializer})
     def current(self, request):
         serializer = CurrentAccountSerializer(instance=self.request.user)
         data = {"user": serializer.data}

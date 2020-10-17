@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.filters import CampusFilter, InstitutionFilter
 from nupe.core.models import Campus, Institution
-from nupe.core.serializers import (
+from nupe.core.serializers.institution import (
     CampusCreateSerializer,
     CampusDetailSerializer,
     CampusListSerializer,

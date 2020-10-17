@@ -18,9 +18,9 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("deleted", models.DateTimeField(editable=False, null=True)),
-                ("public_annotation", models.TextField(max_length="255")),
-                ("private_annotation", models.TextField(max_length="255")),
-                ("group_annotation", models.TextField(max_length="255")),
+                ("public_annotation", models.TextField(max_length="255", null=True, blank=True)),
+                ("private_annotation", models.TextField(max_length="255", null=True, blank=True)),
+                ("group_annotation", models.TextField(max_length="255", null=True, blank=True)),
                 ("attendance_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (

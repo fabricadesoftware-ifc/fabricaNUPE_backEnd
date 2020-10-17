@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.filters import AttendanceReasonFilter
 from nupe.core.models import AttendanceReason
-from nupe.core.serializers import AttendanceReasonSerializer
+from nupe.core.serializers.reason import AttendanceReasonSerializer
 
 
 class AttendanceReasonViewSet(ModelViewSet):

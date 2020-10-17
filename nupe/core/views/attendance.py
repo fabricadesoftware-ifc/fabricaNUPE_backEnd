@@ -1,8 +1,17 @@
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import action
+from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.filters import AttendanceFilter
-from nupe.core.models import Attendance
-from nupe.core.serializers import AttendanceCreateSerializer, AttendanceDetailSerializer, AttendanceListSerializer
+from nupe.core.models import AccountAttendance, Attendance
+from nupe.core.serializers.attendance import (
+    AttendanceCreateSerializer,
+    AttendanceDetailSerializer,
+    AttendanceListSerializer,
+    AttendanceReportSerializer,
+    MyAccountAttendanceSerializer,
+)
 
 
 class AttendanceViewSet(ModelViewSet):
@@ -17,6 +26,10 @@ class AttendanceViewSet(ModelViewSet):
     destroy: exclui um atendimento do banco de dados. RF.SIS.025
 
     partial_update: atualiza um ou mais atributos de um atendimento. RF.SIS.024
+
+    report: retorna um relatório completo de todos os atendimentos
+
+    my: retorna todos os atendimentos realizados pelo usuário atual
     """
 
     queryset = Attendance.objects.all()
@@ -42,7 +55,24 @@ class AttendanceViewSet(ModelViewSet):
         "create": ["core.add_attendance"],
         "partial_update": ["core.change_attendance"],
         "destroy": ["core.delete_attendance"],
+        "report": ["core.view_attendance"],
     }
 
     def get_serializer_class(self):
         return self.per_action_serializer.get(self.action, AttendanceCreateSerializer)
+
+    @action(detail=False)
+    @swagger_auto_schema(responses={HTTP_200_OK: AttendanceReportSerializer})
+    def report(self, request):
+        serializer = AttendanceReportSerializer(instance=self.get_queryset(), many=True)
+
+        return self.get_paginated_response(data=self.paginate_queryset(queryset=serializer.data))
+
+    @action(detail=False)
+    @swagger_auto_schema(responses={HTTP_200_OK: MyAccountAttendanceSerializer})
+    def my(self, request):
+        serializer = MyAccountAttendanceSerializer(
+            instance=AccountAttendance.objects.filter(account=request.user), many=True
+        )
+
+        return self.get_paginated_response(data=self.paginate_queryset(queryset=serializer.data))

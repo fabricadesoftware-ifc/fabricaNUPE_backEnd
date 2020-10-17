@@ -3,7 +3,8 @@ from model_bakery import baker
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN
 from rest_framework.test import APITestCase
 
-from nupe.core.models import Attendance
+from nupe.account.models import Account
+from nupe.core.models import AccountAttendance, Attendance
 from nupe.tests.integration.account.setup.account import create_account_with_permissions_and_do_authentication
 
 
@@ -333,3 +334,63 @@ class AttendanceAPITestCase(APITestCase):
 
         # não deve ter permissão para acessar
         self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
+    def test_report_with_permission(self):
+        # cria um atendimento no banco para retornar no report
+        baker.make(Attendance)
+
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_attendance"])
+        url = reverse("attendance-report")
+
+        response = client.get(path=url)
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # deve retornar todos os dados não mascarados do banco de dados
+        self.assertEqual(response.data.get("count"), Attendance.objects.count())
+
+        data = response.data.get("results")[0]
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(data.get("id"))
+        self.assertIsNotNone(data.get("attendance_reason"))
+        self.assertIsNotNone(data.get("attendance_severity"))
+        self.assertIsNotNone(data.get("student"))
+        self.assertIsNotNone(data.get("account_attendance"))
+        self.assertIsNotNone(data.get("status"))
+        self.assertIsNotNone(data.get("opened_at"))
+        self.assertIsNot(data.get("closed_at", False), False)
+
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("attendants"))
+        self.assertIsNone(data.get("account_attendances"))
+
+    def test_my_attendances(self):
+        client = create_account_with_permissions_and_do_authentication(permissions=["core.view_attendance"])
+        url = reverse("attendance-my")
+
+        # cria um atendimento no banco para retornar no report
+        baker.make(AccountAttendance, account=Account.objects.all().first())
+
+        response = client.get(path=url)
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+        # deve retornar todos os dados não mascarados do banco de dados
+        self.assertEqual(response.data.get("count"), AccountAttendance.objects.count())
+
+        data = response.data.get("results")[0]
+
+        # campos que devem ser retornados
+        self.assertIsNotNone(data.get("id"))
+        self.assertIsNot(data.get("public_annotation", False), False)
+        self.assertIsNot(data.get("private_annotation", False), False)
+        self.assertIsNot(data.get("group_annotation", False), False)
+        self.assertIsNotNone(data.get("attendance"))
+        self.assertIsNotNone(data.get("attendance_at"))
+        self.assertIsNotNone(data.get("updated_at"))
+
+        # campos que não devem ser retornados
+        self.assertIsNone(data.get("_safedelete_policy"))
+        self.assertIsNone(data.get("account"))

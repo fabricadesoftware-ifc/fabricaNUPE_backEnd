@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.filters import StudentFilter
 from nupe.core.models import Student
-from nupe.core.serializers import StudentCreateSerializer, StudentDetailSerializer, StudentListSerializer
+from nupe.core.serializers.student import StudentCreateSerializer, StudentDetailSerializer, StudentListSerializer
 
 
 class StudentViewSet(ModelViewSet):

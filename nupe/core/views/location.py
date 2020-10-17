@@ -3,7 +3,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from nupe.core.filters import CityFilter, LocationFilter, StateFilter
 from nupe.core.models import City, Location, State
-from nupe.core.serializers import CitySerializer, LocationSerializer, StateSerializer
+from nupe.core.serializers.location import CitySerializer, LocationSerializer, StateSerializer
 
 
 class LocationViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

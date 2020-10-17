@@ -2,7 +2,12 @@ from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.filters import AcademicEducationFilter, GradeFilter
 from nupe.core.models import AcademicEducation, Grade
-from nupe.core.serializers import AcademicEducationDetailSerializer, AcademicEducationSerializer, GradeSerializer
+from nupe.core.serializers.course import (
+    AcademicEducationCreateSerializer,
+    AcademicEducationDetailSerializer,
+    AcademicEducationListSerializer,
+    GradeSerializer,
+)
 
 
 class GradeViewSet(ModelViewSet):
@@ -50,13 +55,17 @@ class AcademicEducationViewSet(ModelViewSet):
     """
 
     queryset = AcademicEducation.objects.all()
-    serializer_class = AcademicEducationSerializer
     filterset_class = AcademicEducationFilter
     search_fields = ["grade__name", "name"]  # RF.SIS.030
     ordering_fields = ["grade__name", "name"]  # RF.SIS.031
     ordering = ["grade__name", "name"]
 
-    per_action_serializer = {"retrieve": AcademicEducationDetailSerializer}
+    per_action_serializer = {
+        "list": AcademicEducationListSerializer,
+        "retrieve": AcademicEducationDetailSerializer,
+        "create": AcademicEducationCreateSerializer,
+        "partial_update": AcademicEducationCreateSerializer,
+    }
 
     http_method_names = ["get", "post", "patch", "delete"]
 
@@ -69,4 +78,4 @@ class AcademicEducationViewSet(ModelViewSet):
     }
 
     def get_serializer_class(self):
-        return self.per_action_serializer.get(self.action, self.serializer_class)
+        return self.per_action_serializer.get(self.action)

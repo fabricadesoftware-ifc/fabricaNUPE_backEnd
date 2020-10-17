@@ -1,7 +1,8 @@
-from rest_framework.serializers import CharField, ModelSerializer, ValidationError
+from rest_framework.serializers import ModelSerializer, ValidationError
 from validate_docbr.CNPJ import CNPJ
 
 from nupe.core.models import Campus, Institution
+from nupe.core.serializers.location import LocationSerializer
 from nupe.resources.messages.institution import CAMPUS_INVALID_CNPJ_MESSAGE
 
 
@@ -24,6 +25,23 @@ class InstitutionSerializer(ModelSerializer):
 class CampusCreateSerializer(ModelSerializer):
     """
     Recebe e valida informações para então cadastrar ou atualizar um campus
+
+    Campos:
+        id: identificador
+
+        name: nome
+
+        cnpj: cnpj
+
+        address: endereço do campus
+
+        number: número ou algo que identifique o local
+
+        website: site do campus
+
+        location: identificador da localização do campus
+
+        institution: identificador da instituição
     """
 
     class Meta:
@@ -61,9 +79,20 @@ class CampusCreateSerializer(ModelSerializer):
 class CampusListSerializer(ModelSerializer):
     """
     Retorna uma lista de campi cadastrados no banco de dados
+
+    Campos:
+        id: identificador
+
+        name: nome
+
+        institution: informações sobre a instituição
+
+        address: endereço do campus
+
+        number: identificação do local
     """
 
-    institution = CharField()
+    institution = InstitutionSerializer()
 
     class Meta:
         model = Campus
@@ -73,10 +102,27 @@ class CampusListSerializer(ModelSerializer):
 class CampusDetailSerializer(ModelSerializer):
     """
     Retorna os detalhes de um campus específico
+
+    Campos:
+        id: identificador
+
+        name: nome
+
+        cnpj: cnpj
+
+        address: endereço do campus
+
+        number: identificação do local
+
+        website: site do campus
+
+        location: informações sobre a localização do campus
+
+        institution: informações sobre a instituição
     """
 
-    location = CharField()
-    institution = CharField()
+    location = LocationSerializer()
+    institution = InstitutionSerializer()
 
     class Meta:
         model = Campus

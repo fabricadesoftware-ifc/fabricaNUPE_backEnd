@@ -1,7 +1,7 @@
 from rest_framework.serializers import CharField, ModelSerializer
 
 from nupe.account.models import Account
-from nupe.core.serializers import PersonDetailSerializer
+from nupe.core.serializers.person import PersonDetailSerializer
 
 
 class AccountSerializer(ModelSerializer):

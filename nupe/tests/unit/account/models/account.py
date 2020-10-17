@@ -19,6 +19,7 @@ class AccountTestCase(TestCase):
         self.assertIs(hasattr(Account, "is_superuser"), True)
         self.assertIs(hasattr(Account, "full_name"), True)
         self.assertIs(hasattr(Account, "short_name"), True)
+        self.assertIs(hasattr(Account, "account_attendances"), True)
 
     def test_return_str(self):
         account = baker.prepare("account.Account")

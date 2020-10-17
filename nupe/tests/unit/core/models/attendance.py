@@ -14,6 +14,7 @@ class AttendanceTestCase(TestCase):
         self.assertIs(hasattr(Attendance, "status"), True)
         self.assertIs(hasattr(Attendance, "opened_at"), True)
         self.assertIs(hasattr(Attendance, "closed_at"), True)
+        self.assertIs(hasattr(Attendance, "account_attendances"), True)
 
     def test_return_str(self):
         attendance = baker.prepare(Attendance)

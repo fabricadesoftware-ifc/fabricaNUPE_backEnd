@@ -1,8 +1,8 @@
 from rest_framework.serializers import CharField, ModelSerializer, PrimaryKeyRelatedField, ValidationError
 
-from nupe.core.models import Person, Student
-from nupe.core.models.student import Responsible
-from nupe.core.serializers import PersonDetailSerializer, PersonListSerializer
+from nupe.core.models import Person, Responsible, Student
+from nupe.core.serializers.institution import CampusDetailSerializer
+from nupe.core.serializers.person import PersonDetailSerializer, PersonListSerializer
 from nupe.resources.messages.person import (
     SELF_RESPONSIBLE_MESSAGE,
     UNDER_AGE_REQUIRED_RESPONSIBLE_MESSAGE,
@@ -46,11 +46,11 @@ class StudentDetailSerializer(ModelSerializer):
 
         academic_education: nome da formação acadêmica que está cursando
 
-        institution: 'Instituição - Campus' onde estuda
+        campus: informações sobre o campus
 
         academic_education_campus: identificador do objeto da model AcademicEducationCampus
 
-        responsibles: responsáveis do estudante
+        responsibles: informações sobre os responsáveis do estudante
 
         ingress_date: data de ingresso na formação acadêmica
 
@@ -58,7 +58,7 @@ class StudentDetailSerializer(ModelSerializer):
     """
 
     personal_info = PersonDetailSerializer(source="person")
-    campus = CharField(source="academic_education_campus.campus")
+    campus = CampusDetailSerializer(source="academic_education_campus.campus", default=None)
     responsibles = PersonListSerializer(source="responsibles_persons", many=True)
 
     class Meta:

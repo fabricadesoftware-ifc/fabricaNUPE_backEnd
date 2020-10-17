@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from nupe.core.filters import PersonFilter
 from nupe.core.models import Person
-from nupe.core.serializers import PersonCreateSerializer, PersonDetailSerializer, PersonListSerializer
+from nupe.core.serializers.person import PersonCreateSerializer, PersonDetailSerializer, PersonListSerializer
 
 
 class PersonViewSet(ModelViewSet):

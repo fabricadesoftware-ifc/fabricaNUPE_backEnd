@@ -3,7 +3,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import GenericViewSet
 
 from nupe.file.models import ProfileImage
-from nupe.file.serializers import ProfileImageCreateSerializer
+from nupe.file.serializers.image_upload import ProfileImageCreateSerializer
 
 
 class ProfileImageViewSet(GenericViewSet, CreateModelMixin, DestroyModelMixin):

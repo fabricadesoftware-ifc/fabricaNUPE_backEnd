@@ -63,6 +63,8 @@ class Account(AbstractBaseUser, PermissionsMixin, SafeDeleteModel):
 
         is_superuser: boolean para status de administrador do sistema, é/não é
 
+        account_attendances: relação inversa para a model AccountAttendance
+
     Propriedades:
         full_name: nome completo do usuário
 

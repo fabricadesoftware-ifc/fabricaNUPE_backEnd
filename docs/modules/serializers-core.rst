@@ -87,10 +87,15 @@ Serializer para Listar, Detalhar, Cadastrar ou Atualizar um Grau
 
 .. autoclass:: nupe.core.serializers.course.GradeSerializer
 
-Serializer para Listar, Cadastrar ou Atualizar uma Formação Acadêmica
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Serializer para Cadastrar ou Atualizar uma Formação Acadêmica
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: nupe.core.serializers.course.AcademicEducationSerializer
+.. autoclass:: nupe.core.serializers.course.AcademicEducationCreateSerializer
+
+Serializer para Listar Formações Acadêmicas
++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.course.AcademicEducationListSerializer
 
 Serializer para Detalhar uma Formação Acadêmica
 +++++++++++++++++++++++++++++++++++++++++++++++
@@ -135,3 +140,18 @@ Serializer para Cadastrar ou Atualizar um Atendimento
 +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: nupe.core.serializers.attendance.AttendanceCreateSerializer
+
+Serializer para Listar os Atendimentos dos Usuários
++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.attendance.AccountAttendanceSerializer
+
+Serializer para Listar os Atendimentos do Usuário Atual
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.attendance.MyAccountAttendanceSerializer
+
+Serializer para Listar os Relatórios de Atendimentos
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: nupe.core.serializers.attendance.AttendanceReportSerializer

@@ -26,6 +26,8 @@ class Attendance(SafeDeleteModel):
 
         closed_at: atendimento fechado em (datetime)
 
+        account_attendances: relação inversa para a model AccountAttendance
+
     Valores de Escolha:
         severidade:
             Baixa = L
@@ -128,9 +130,9 @@ class AccountAttendance(SafeDeleteModel):
 
     _safedelete_policy = SOFT_DELETE_CASCADE
 
-    public_annotation = models.TextField(max_length="255")
-    private_annotation = models.TextField(max_length="255")
-    group_annotation = models.TextField(max_length="255")
+    public_annotation = models.TextField(max_length="255", null=True, blank=True)
+    private_annotation = models.TextField(max_length="255", null=True, blank=True)
+    group_annotation = models.TextField(max_length="255", null=True, blank=True)
     attendance = models.ForeignKey(
         "core.Attendance",
         related_name="account_attendances",
