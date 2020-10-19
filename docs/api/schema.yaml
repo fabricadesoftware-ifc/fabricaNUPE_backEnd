@@ -2408,10 +2408,7 @@ definitions:
     required:
       - attendance_reason
       - attendance_severity
-      - attendants
       - student
-      - student_profile_image
-      - student_age
       - account_attendance
     type: object
     properties:
@@ -2432,20 +2429,8 @@ definitions:
           - M
           - H
           - S
-      attendants:
-        type: array
-        items:
-          $ref: '#/definitions/AccountDetail'
       student:
         $ref: '#/definitions/StudentDetail'
-      student_profile_image:
-        title: Student profile image
-        type: string
-        minLength: 1
-      student_age:
-        title: Student age
-        type: string
-        minLength: 1
       account_attendance:
         type: array
         items:

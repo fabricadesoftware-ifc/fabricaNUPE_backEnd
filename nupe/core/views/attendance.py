@@ -27,17 +27,25 @@ class AttendanceViewSet(ModelViewSet):
 
     partial_update: atualiza um ou mais atributos de um atendimento. RF.SIS.024
 
-    report: retorna um relatório completo de todos os atendimentos
+    report: retorna um relatório completo de todos os atendimentos. RF.SIS.051, RF.SIS.052, RF.SIS.053, RF.SIS.054,
+    RF.SIS.055, RF.SIS.056
 
     my: retorna todos os atendimentos realizados pelo usuário atual
     """
 
     queryset = Attendance.objects.all()
     filterset_class = AttendanceFilter  # RF.SIS.011, RF.SIS.012, RF.SIS.026
-    search_fields = ["student__full_name", "attendants__full_name"]
+    search_fields = [
+        "student__person__first_name",
+        "student__person__last_name",
+        "attendants__person__first_name",
+        "attendants__person__last_name",
+    ]
     ordering_fields = [
-        "student__person__full_name",
-        "attendants__full_name",
+        "student__person__first_name",
+        "student__person__last_name",
+        "attendants__person__first_name",
+        "attendants__person__last_name",
         "attendance_severity",
         "status",
         "opened_at",
@@ -64,7 +72,9 @@ class AttendanceViewSet(ModelViewSet):
     @action(detail=False)
     @swagger_auto_schema(responses={HTTP_200_OK: AttendanceReportSerializer})
     def report(self, request):
-        serializer = AttendanceReportSerializer(instance=self.get_queryset(), many=True)
+        queryset = self.filter_queryset(queryset=self.get_queryset())
+
+        serializer = AttendanceReportSerializer(instance=queryset, many=True)
 
         return self.get_paginated_response(data=self.paginate_queryset(queryset=serializer.data))
 

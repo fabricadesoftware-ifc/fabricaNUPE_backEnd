@@ -366,6 +366,15 @@ class AttendanceAPITestCase(APITestCase):
         self.assertIsNone(data.get("attendants"))
         self.assertIsNone(data.get("account_attendances"))
 
+    def test_report_without_permission(self):
+        client = create_account_with_permissions_and_do_authentication(permissions=[])
+        url = reverse("attendance-report")
+
+        response = client.get(path=url)
+
+        # não deve ter permissão para acessar
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)
+
     def test_my_attendances(self):
         client = create_account_with_permissions_and_do_authentication(permissions=["core.view_attendance"])
         url = reverse("attendance-my")
