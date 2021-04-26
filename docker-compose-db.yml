@@ -1,0 +1,22 @@
+version: "3"
+
+networks:
+    db:
+
+volumes:
+    db:
+
+services:
+    db:
+        container_name: db
+        image: postgres:13.0-alpine
+        environment:
+            # em caso de alteração, deve ser atualizado as variáveis da imagem docker do backend
+            POSTGRES_USER: nupe
+            POSTGRES_PASSWORD: nupe
+            POSTGRES_DB: nupe
+        networks:
+            - db
+        volumes:
+            - db:/var/lib/postgresql/data
+        restart: always
