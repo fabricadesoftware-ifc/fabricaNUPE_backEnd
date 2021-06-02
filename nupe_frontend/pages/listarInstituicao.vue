@@ -3,7 +3,7 @@
     <title-bar :title-stack="titleStack" />
 
     <hero-bar>
-      Gerenciamento de Campus
+      Listagem de Instituição
       <template v-slot:right>
         <router-link to="/" class="button"> Dashboard </router-link>
       </template>
@@ -13,7 +13,7 @@
       title="Câmpus"
       icon="puzzle"
     >
-      <listar-campus />
+      <listar-instituicao />
     </card-component>
   </div>
 </template>
@@ -23,15 +23,15 @@ import HeroBar from "@/components/templates/HeroBar";
 import TitleBar from "@/components/templates/TitleBar";
 import CardComponent from "@/components/templates/CardComponent";
 
-import ListarCampus from "@/components/campus/ListarCampus";
+import ListarInstituicao from "@/components/instituicao/ListarInstituicao";
 
 export default {
   auth: false,
-  components: { ListarCampus, TitleBar, HeroBar, CardComponent },
+  components: { ListarInstituicao, TitleBar, HeroBar, CardComponent },
 
   computed: {
     titleStack() {
-      return ["Admin", "Campus"];
+      return ["Admin", "Listagem de Instituição"];
     },
   },
 };

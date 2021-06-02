@@ -14,7 +14,7 @@ export default {
           general_director: "Cleder Alexandre Somensi",
         },
         {
-          cnpj: "11.635.424/0003-48",
+          cnpj: "10.635.424/0003-48",
           campus_name: "Araquari",
           institution_name: "IFC - Instituto Federal Catarinense",
           general_director: "Cleder Alexandre Somensi",
