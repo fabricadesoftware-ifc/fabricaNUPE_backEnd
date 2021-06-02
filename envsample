@@ -1,0 +1,5 @@
+SECRET_KEY=3xuzy3_y9!4pc=9iy!=v6ap!8k^#7-1b&57m#n^3(6&(mzsp6e
+DATABASE_URL=postgres://nupe:nupe@localhost:8865/nupe
+DEBUG=True
+DJANGO_SUPERUSER_EMAIL=nupexample@example.com
+DJANGO_SUPERUSER_PASSWORD=nuperoot

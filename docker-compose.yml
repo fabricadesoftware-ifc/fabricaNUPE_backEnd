@@ -1,48 +1,6 @@
-version: "3"
-
-networks:
-    dev_backend:
-    dev_frontend:
-    db:
-
-volumes:
-    db:
+version: "3.8"
 
 services:
-    dev_backend:
-        container_name: dev_backend
-        build:
-            context: .
-            dockerfile: dev_backend.Dockerfile
-        image: dev_backend:1.0
-        command: python manage.py runserver 0:8000
-        networks:
-            - dev_backend
-            - db
-        ports:
-            - 8000:8000
-        volumes:
-            - ./:/usr/nupe
-        restart: always
-        depends_on:
-            - db
-    dev_frontend:
-        container_name: dev_frontend
-        build:
-            context: .
-            dockerfile: dev_frontend.Dockerfile
-        image: dev_frontend:1.0
-        command: npm run dev
-        networks:
-            - dev_frontend
-        ports:
-            - 3000:3000
-        volumes:
-            - ./nupe_frontend/:/usr/nupe_frontend
-            - /usr/nupe_frontend/node_modules/ # https://stackoverflow.com/questions/30043872/docker-compose-node-modules-not-present-in-a-volume-after-npm-install-succeeds
-        restart: always
-        depends_on:
-            - dev_backend
     db:
         container_name: db
         image: postgres:13.0-alpine
@@ -51,8 +9,12 @@ services:
             POSTGRES_USER: nupe
             POSTGRES_PASSWORD: nupe
             POSTGRES_DB: nupe
-        networks:
-            - db
         volumes:
             - db:/var/lib/postgresql/data
+        ports: 
+            - "8865:5432"
         restart: always
+
+volumes:
+    db:
+
