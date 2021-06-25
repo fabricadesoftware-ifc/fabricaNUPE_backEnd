@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 
 import environ
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -26,6 +27,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "django_filters",
     "corsheaders",
+    "drf_spectacular",
     # apps
     "nupe.core",
     "nupe.file",
@@ -89,19 +91,35 @@ REST_FRAMEWORK = {
         "rest_framework.filters.OrderingFilter",
     ],
     # paginação
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 20,
+    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    # "PAGE_SIZE": 20,
     # testes
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    # schemas - doc
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-SWAGGER_SETTINGS = {
-    "USE_SESSION_AUTH": False,
-    "SECURITY_DEFINITIONS": {
-        "NUPE Authentication": {"type": "oauth2", "tokenUrl": "/oauth/token/", "flow": "password"}
-    },
-    "DEFAULT_INFO": "nupe.urls.api_info",
+SPECTACULAR_SETTINGS = {
+    "TITLE": "NuPe API",
+    "DESCRIPTION": "A backend project for NuPe",
+    "VERSION": "1.0.0",
+    # OTHER SETTINGS
+    # Oauth2 related settings. used for example by django-oauth2-toolkit.
+    # https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#oauth-flows-object
+    "OAUTH2_FLOWS": ["password"],
+    # "OAUTH2_AUTHORIZATION_URL": None,
+    "OAUTH2_TOKEN_URL": "/oauth/token/",
+    # "OAUTH2_REFRESH_URL": None,
+    # "OAUTH2_SCOPES": None,
 }
+
+# SWAGGER_SETTINGS = {
+#     "USE_SESSION_AUTH": False,
+#     "SECURITY_DEFINITIONS": {
+#         "NUPE Authentication": {"type": "oauth2", "tokenUrl": "/oauth/token/", "flow": "password"}
+#     },
+#     "DEFAULT_INFO": "nupe.urls.api_info",
+# }
 
 OAUTH2_PROVIDER = {
     "ACCESS_TOKEN_EXPIRE_SECONDS": timedelta(hours=4).seconds,
