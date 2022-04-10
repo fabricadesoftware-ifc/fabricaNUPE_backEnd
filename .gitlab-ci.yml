@@ -1,140 +1,147 @@
-stages:
-    - build
-    - test
-    - deploy
+# stages:
+#     - build
+#     - test
+#     - deploy
 
-variables:
-    # deploy
-    DOCS_PATH: docs/_build/html
-    DOCS_URL: http://nupe-documentation.surge.sh
-    DIST_PATH: nupe_frontend/dist
-    DIST_URL: http://nupe-frontend.surge.sh
+# variables:
+#     # deploy
+#     DOCS_PATH: docs/_build/html
+#     DOCS_URL: http://nupe-documentation.surge.sh
+#     DIST_PATH: nupe_frontend/dist
+#     DIST_URL: http://nupe-frontend.surge.sh
 
-dev_backend_image push to container_registry:
-    image:
-        name: gcr.io/kaniko-project/executor:debug
-        entrypoint: [""]
-    stage: build
-    variables:
-        IMAGE_TAG: $CI_REGISTRY_IMAGE/nupe:backend
-    before_script:
-        - mkdir -p /kaniko/.docker
-        - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    script: /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dev_backend.Dockerfile --destination $IMAGE_TAG
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - dev_backend.Dockerfile
-              - poetry.lock
-              - pyproject.toml
+# dev_backend_image push to container_registry:
+#     image:
+#         name: gcr.io/kaniko-project/executor:debug
+#         entrypoint: [""]
+#     stage: build
+#     variables:
+#         IMAGE_TAG: $CI_REGISTRY_IMAGE/nupe:backend
+#     before_script:
+#         - mkdir -p /kaniko/.docker
+#         - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+#     script: /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dev_backend.Dockerfile --destination $IMAGE_TAG
+#     rules:
+#         - if: $CI_COMMIT_BRANCH == "develop"
+#           changes:
+#               - dev_backend.Dockerfile
+#               - poetry.lock
+#               - pyproject.toml
 
-dev_frontend_image push to container_registry:
-    extends: dev_backend_image push to container_registry
-    variables:
-        IMAGE_TAG: $CI_REGISTRY_IMAGE/nupe:frontend
-    script: /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dev_frontend.Dockerfile --destination $IMAGE_TAG
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - dev_frontend.Dockerfile
-              - nupe_frontend/package-lock.json
-              - nupe_frontend/package.json
+# dev_frontend_image push to container_registry:
+#     extends: dev_backend_image push to container_registry
+#     variables:
+#         IMAGE_TAG: $CI_REGISTRY_IMAGE/nupe:frontend
+#     script: /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dev_frontend.Dockerfile --destination $IMAGE_TAG
+#     rules:
+#         - if: $CI_COMMIT_BRANCH == "develop"
+#           changes:
+#               - dev_frontend.Dockerfile
+#               - nupe_frontend/package-lock.json
+#               - nupe_frontend/package.json
 
-docs build:
-    image: $CI_REGISTRY_IMAGE/nupe:backend
-    stage: build
-    before_script:
-        - ./manage.py generate_swagger -o docs/api/schema.yaml
-    script: make -C docs/ html
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - docs/**/*
-    artifacts:
-        name: docs-nupe builded
-        expire_in: 30min
-        paths:
-            - $DOCS_PATH
+# docs build:
+#     image: $CI_REGISTRY_IMAGE/nupe:backend
+#     stage: build
+#     before_script:
+#         - ./manage.py generate_swagger -o docs/api/schema.yaml
+#     script: make -C docs/ html
+#     rules:
+#         - if: $CI_COMMIT_BRANCH == "develop"
+#           changes:
+#               - docs/**/*
+#     artifacts:
+#         name: docs-nupe builded
+#         expire_in: 30min
+#         paths:
+#             - $DOCS_PATH
 
-dev_frontend build:
-    image: $CI_REGISTRY_IMAGE/nupe:frontend
-    stage: build
-    before_script:
-        - cd nupe_frontend
-        - npm install
-    script: npm run build
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - nupe_frontend/**/*
-    artifacts:
-        name: dev_frontend builded
-        expire_in: 30min
-        paths:
-            - $DIST_PATH
+# dev_frontend build:
+#     image: $CI_REGISTRY_IMAGE/nupe:frontend
+#     stage: build
+#     before_script:
+#         - cd nupe_frontend
+#         - npm install
+#     script: npm run build
+#     rules:
+#         - if: $CI_COMMIT_BRANCH == "develop"
+#           changes:
+#               - nupe_frontend/**/*
+#     artifacts:
+#         name: dev_frontend builded
+#         expire_in: 30min
+#         paths:
+#             - $DIST_PATH
 
-dev_backend test:
-    image: $CI_REGISTRY_IMAGE/nupe:backend
-    services:
-        - postgres:13.0-alpine
-    variables:
-        POSTGRES_DB: nupe
-        POSTGRES_USER: nupe
-        POSTGRES_PASSWORD: anypasswordtotest
-        DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB
-    stage: test
-    script:
-        - black --check --diff nupe
-        - isort -rc -q nupe
-        - flake8 --show-source nupe
-        - bandit -rq -x nupe/tests/ nupe
-        - coverage run manage.py test
-        - coverage report
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - manage.py
-              - nupe/**/*
-          allow_failure: true
+# dev_backend test:
+#     image: $CI_REGISTRY_IMAGE/nupe:backend
+#     services:
+#         - postgres:13.0-alpine
+#     variables:
+#         POSTGRES_DB: nupe
+#         POSTGRES_USER: nupe
+#         POSTGRES_PASSWORD: anypasswordtotest
+#         DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB
+#     stage: test
+#     script:
+#         - black --check --diff nupe
+#         - isort -rc -q nupe
+#         - flake8 --show-source nupe
+#         - bandit -rq -x nupe/tests/ nupe
+#         - coverage run manage.py test
+#         - coverage report
+#     rules:
+#         - if: $CI_COMMIT_BRANCH == "develop"
+#           changes:
+#               - manage.py
+#               - nupe/**/*
+#           allow_failure: true
 
-dev_backend check dependencies:
-    extends: dev_backend test
-    script: python manage.py check_vulnerabilities
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          allow_failure: true
+# dev_backend check dependencies:
+#     extends: dev_backend test
+#     script: python manage.py check_vulnerabilities
+#     rules:
+#         - if: $CI_COMMIT_BRANCH == "develop"
+#           allow_failure: true
 
-docs deploy:
-    image: node
-    stage: deploy
-    variables:
-        GIT_STRATEGY: none
-    before_script:
-        - npm install -g surge
-    script: surge -p $DOCS_PATH -d $DOCS_URL
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - docs/**/*
-    dependencies:
-        - docs build
-    environment:
-        name: docs-nupe
-        url: $DOCS_URL
-    needs:
-        - docs build
+# docs deploy:
+#     image: node
+#     stage: deploy
+#     variables:
+#         GIT_STRATEGY: none
+#     before_script:
+#         - npm install -g surge
+#     script: surge -p $DOCS_PATH -d $DOCS_URL
+#     rules:
+#         - if: $CI_COMMIT_BRANCH == "develop"
+#           changes:
+#               - docs/**/*
+#     dependencies:
+#         - docs build
+#     environment:
+#         name: docs-nupe
+#         url: $DOCS_URL
+#     needs:
+#         - docs build
 
-dev_frontend deploy:
-    extends: docs deploy
-    script: surge -p $DIST_PATH -d $DIST_URL
-    rules:
-        - if: $CI_COMMIT_BRANCH == "develop"
-          changes:
-              - nupe_frontend/**/*
-    dependencies:
-        - dev_frontend build
-    environment:
-        name: frontend-nupe
-        url: $DIST_URL
-    needs:
-        - dev_frontend build
+# dev_frontend deploy:
+#     extends: docs deploy
+#     script: surge -p $DIST_PATH -d $DIST_URL
+#     rules:
+#         - if: $CI_COMMIT_BRANCH == "develop"
+#           changes:
+#               - nupe_frontend/**/*
+#     dependencies:
+#         - dev_frontend build
+#     environment:
+#         name: frontend-nupe
+#         url: $DIST_URL
+#     needs:
+#         - dev_frontend build
+deploy:
+  stage: deploy
+  image: ilyasemenov/gitlab-ci-git-push
+  script:
+    - git-push ssh://dokku@app2.fabricadesoftware.ifc.edu.br:1022/nupe-backend
+  only:
+    - master
