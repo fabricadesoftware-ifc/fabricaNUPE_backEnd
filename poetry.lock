@@ -680,7 +680,7 @@ python-versions = ">=3.5"
 name = "pygraphviz"
 version = "1.6"
 description = "Python interface to Graphviz"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 
@@ -1027,7 +1027,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.1"
-content-hash = "cdd159a4331fa2ef2635faa843a812ff83b68a8eb965a69bf9c6d36ca2de7d57"
+content-hash = "281a02e4939ddf936a64a5f80e040c43d43302f1d816996d138e4cbb2b63a6d1"
 
 [metadata.files]
 alabaster = [
