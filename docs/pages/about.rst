@@ -9,16 +9,23 @@ O NuPe é um projeto que está sendo desenvolvido por membros da **Fábrica de S
 
 Esse projeto é voltado a pesquisa, então os membros tem a liberdade de aprender sobre novas tecnologias, ferramentas e aplicá-las no projeto.
 
-Membros
--------  
+Membros que atuaram no projeto
+-------------------------------  
 
-- Eduardo da Silva (**Coordenador**)
+- Eduardo da Silva (**Professor Coordenador**)
 
-- Yuri (**Estagiário**)
+- Yuri Hattenhauer Salvador (**Estagiário**)
 
-- Luis Guerreiro (**Bolsista**)
+- Luis Fernando Carvalho Guerreiro da Silva (**Bolsista**)
 
-- Jorge (**Bolsista**)
+- Calleo David Fischer Pontes (**Bolsista**)
+
+- Emanuel Cardoso de Aguiar Floriano (**Bolsista**)
+
+- Matheus Eduardo dos Santos (**Bolsista**)
+
+- Renan Felipe Andrade da Silva (**Bolsista**)
+
 
 Informações sobre a Fábrica de Software podem ser encontradas aqui_
 

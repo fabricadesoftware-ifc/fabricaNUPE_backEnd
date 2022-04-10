@@ -1,0 +1,49 @@
+Diagrama de Classes 1
+[Attendance]++->[Student]
+[Attendance]Attendants<-.->[Account]
+[Attendance]++->[AttendanceReason]
+[Grade]<-++[AcademicEducation]
+[Account]++->[Sector]
+[Account]<->[Campus]
+[AcademicEducation]++->[Campus]
+[AcademicEducationCampus]<-.->[AcademicEducation]
+[AcademicEducationCampus]<-.->[Campus]
+[Institution]<-++[Campus]
+[Institution]<->[Location]
+[Function]<-++[Account]
+[Person]^-[Student]
+[Student]-[AcademicEducationCampus]
+[AttendanceReason]father->[AttendanceReason]
+[Student]<-.->responsibles[Person]
+
+
+Diagrama de Classes 2 - Com Atributos
+[Attendance|#id;+severity;+status;opened_at;+closed_at]++->[Student]
+[Attendance]Attendants<-.->[Account|#id;+email;+active;+username;+password]
+[Attendance]++->[AttendanceReason|#id;+name;+description]
+[Grade|#id;+name]<-++[AcademicEducation|#id;+name]
+[Account]++->[Sector|#id;+name;+description]
+[Account]<->[Campus|#id;+name;+cnpj;+address;+website]
+[AcademicEducation]++->[Campus]
+[AcademicEducationCampus]<-.->[AcademicEducation]
+[AcademicEducationCampus]<-.->[Campus]
+[Institution|#id;+name]<-++[Campus]
+[Institution]<->[Location|#id;+city;+state]
+[Function|#id;+name;+description]<-++[Account]
+[Person|#id;+name;+cpf;+birthday]^-[Student]
+[Student|#id;+registration;+graduated;+ingress_date]-[AcademicEducationCampus]
+[AttendanceReason]father->[AttendanceReason]
+[Student]<-.->responsibles[Person]
+
+Diagram de Caso de Uso
+[User]-(Login)
+[User]-(Management)
+(Management)>(Accounts)
+(Accounts)<(Person)
+(Accounts)<(Function)
+(Accounts)<(Sector)
+[User]-(Attendance Management)
+(Attendance Management)>Create Attendance
+(Create Attendance)<Accounts
+(Create Attendance)<Student
+(Login)<(Auth Service)

@@ -66,6 +66,6 @@ Módulo de Motivo
 ----------------
 
 Filtros para o Endpoint de Motivo de Atendimento
-++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++ 
 
 .. autoclass:: nupe.core.filters.reason.AttendanceReasonFilter

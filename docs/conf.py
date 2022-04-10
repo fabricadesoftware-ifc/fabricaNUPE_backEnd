@@ -24,8 +24,8 @@ django.setup()
 # -- Project information -----------------------------------------------------
 
 project = "NuPe"
-copyright = "2020, Luis Guerreiro"
-author = "Luis Guerreiro"
+copyright = "2022, Fábrica de Software - IFC Araquari"
+author = "Fábrica de Software - IFC Araquari"
 
 # The full version, including alpha/beta/rc tags
 release = "v1.0.0"

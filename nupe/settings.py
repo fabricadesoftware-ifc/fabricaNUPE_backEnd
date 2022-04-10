@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "django_filters",
     "corsheaders",
+    "django_extensions",
     "drf_spectacular",
     # apps
     "nupe.core",
@@ -139,7 +140,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 STATIC_URL = "/static/"
 
