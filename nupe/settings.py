@@ -24,7 +24,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "oauth2_provider",
     "safedelete",
-    "drf_yasg",
     "django_filters",
     "corsheaders",
     "django_extensions",
@@ -34,6 +33,9 @@ INSTALLED_APPS = [
     "nupe.file",
     "nupe.account",
 ]
+
+if DEBUG is True:
+    INSTALLED_APPS += ["drf_yasg"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -46,11 +48,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = env("ALLOWED_HOSTS", list, ["127.0.0.1", "localhost"])
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-]
+CORS_ORIGIN_WHITELIST = env("CORS_ORIGIN_WHITELIST", list, ["http://localhost:3000"])
 
 ROOT_URLCONF = "nupe.urls"
 
@@ -142,10 +142,9 @@ USE_L10N = True
 
 USE_TZ = False
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 MEDIA_URL = "/media/"
-

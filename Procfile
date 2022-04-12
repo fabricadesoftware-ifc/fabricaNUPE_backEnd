@@ -1,0 +1,1 @@
+web: gunicorn nupe.wsgi
