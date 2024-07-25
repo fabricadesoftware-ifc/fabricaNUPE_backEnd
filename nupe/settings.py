@@ -34,8 +34,8 @@ INSTALLED_APPS = [
     "nupe.account",
 ]
 
-if DEBUG is True:
-    INSTALLED_APPS += ["drf_yasg"]
+# if DEBUG is True:
+#     INSTALLED_APPS += ["drf_yasg"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -129,6 +129,9 @@ OAUTH2_PROVIDER = {
 }
 
 DATABASES = {"default": env.db()}
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
 AUTH_USER_MODEL = "account.Account"
 

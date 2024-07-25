@@ -1,44 +1,108 @@
-[tool.poetry]
+[project]
 name = "nupe"
 version = "0.1.0"
 description = "Projeto da Fabrica de Software para o NUPE do IFC - Araquari"
-authors = ["\"eduardo\", \"yuri\", \"luis\", \"jorge\""]
+authors = [
+    {name = "rafaaulbrich", email = "rafaelacamilly2018@gmail.com"},
+]
 
-[tool.poetry.dependencies]
-python = "^3.6.1"
-django = "^2.2"
-djangorestframework = "^3.11.0"
-validate-docbr = "^1.7.0"
-drf-action-permissions = "^0.1.1"
-drf-common-exceptions = "^0.1.1"
-django-oauth-toolkit = "^1.3.2"
-django-safedelete = "^0.5.5"
-django-filter = "^2.3.0"
-django-cors-headers = "^3.4.0"
-psycopg2-binary = "2.8.6"
-django-environ = "^0.4.5"
-drf-spectacular = "^0.17.2"
-drf-yasg = "^1.17.1"
-safety = "^1.9.0"
-django-extensions = "^3.1.5"
-gunicorn = "^20.1.0"
-pillow = "7"
+dependencies = [
+    # "django>=3.2.25",
+    # "djangorestframework<4.0.0,>=3.11.0",
+    # "validate-docbr<2.0.0,>=1.7.0",
+    # "drf-action-permissions<1.0.0,>=0.1.1",
+    # "drf-common-exceptions<1.0.0,>=0.1.1",
+    # "django-oauth-toolkit<2.0.0,>=1.3.2",
+    # "django-safedelete<1.0.0,>=0.5.5",
+    # "django-filter<3.0.0,>=2.3.0",
+    # "django-cors-headers<4.0.0,>=3.4.0",
+    # "psycopg2-binary>=2.9.8",
+    # "django-environ<1.0.0,>=0.4.5",
+    # "drf-spectacular<1.0.0,>=0.17.2",
+    # "drf-yasg<2.0.0,>=1.17.1",
+    # "safety<2.0.0,>=1.9.0",
+    # "django-extensions<4.0.0,>=3.1.5",
+    # "gunicorn<21.0.0,>=20.1.0",
+    # # "pillow==7",
+    # "graphviz>=0.19.1",
+    # "setuptools>=59.6.0",
+    "django>=5.0.7",
+    "djangorestframework>=3.15.2",
+    "django-safedelete>=1.4.0",
+    "django-cors-headers>=4.4.0",
+    "drf-spectacular>=0.27.2",
+    "django-extensions>=3.2.3",
+    "django-filter>=24.2",
+    "psycopg2-binary>=2.9.9",
+    "setuptools>=71.1.0",
+    "Pillow>=10.4.0",
+    "django-environ>=0.11.2",
+    "drf-action-permissions>=0.1.1",
+    "django-oauth-toolkit>=2.4.0",
+    "validate-docbr>=1.10.0",
+]
 
-[tool.poetry.dev-dependencies]
-pre-commit = "^2.2.0"
-black = "^19.10b0"
-flake8 = "^3.7.9"
-isort = "^4.3.21"
-pygraphviz = "1.6"
-sphinx = "^3.2.1"
-sphinxcontrib-redoc = "^1.6.0"
-sphinx_redactor_theme = "^0.0.1"
-coverage = "^5.1"
-model_bakery = "^1.1.0"
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.dev-dependencies]
+dev = [
+    # "pre-commit<3.0.0,>=2.2.0",
+    # "black<20.0,>=19.10b0",
+    # "flake8<4.0.0,>=3.7.9",
+    # "isort<5.0.0,>=4.3.21",
+    # "pygraphviz==1.6",
+    # "sphinx<4.0.0,>=3.2.1",
+    # "sphinxcontrib-redoc<2.0.0,>=1.6.0",
+    # "sphinx-redactor-theme<1.0.0,>=0.0.1",
+    # "coverage<6.0,>=5.1",
+    # "model-bakery<2.0.0,>=1.1.0",
+    "pre-commit>=3.7.1",
+    "black>=24.4.2",
+    "isort>=5.13.2",
+    "pydotplus>=2.0.2",
+    "model-bakery>=1.18.2",
+]
+
+[[tool.pdm.autoexport]]
+filename = "requirements.txt"
+without-hashes = "true"
+
+[tool.pdm.scripts]
+# pre_dev = "python ./scripts/set_my_ip.py"
+dev = "python manage.py runserver 0.0.0.0:19003"
+createsuperuser = "python manage.py createsuperuser"
+pre_migrate = "python manage.py makemigrations"
+migrate = "python manage.py migrate"
+post_migrate = "python manage.py graph_models -g -o core.png core"
+shell = "python manage.py shell"
+shellp= "python manage.py shell_plus"
+test = "python manage.py test"
+loaddata = "python manage.py loaddata core.json"
+dumpdata = "python manage.py dumpdata --indent 2"
+cria_api = "python ./scripts/cria_api.py {args}"
 
 
 [tool.black]
-line-length = 119
+line-length = 120
+include = '\.pyi?$'
+exclude = '''
+/(
+  \.git
+ | \.hg
+ | \.mypy_cache
+ | \.tox
+ | \.venv
+ | _build
+ | buck-out
+ | build
+ | __pypackages__
+ )/
+'''
 
 [tool.isort]
 multi_line_output = 3
@@ -47,6 +111,3 @@ force_grid_wrap = 0
 use_parentheses = true
 line_length = 119
 
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"

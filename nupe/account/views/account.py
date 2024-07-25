@@ -1,4 +1,5 @@
-from drf_yasg.utils import swagger_auto_schema
+# from drf_yasg.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
@@ -51,13 +52,14 @@ class AccountViewSet(ModelViewSet):
         "retrieve": AccountDetailSerializer,
         "create": AccountSerializer,
         "partial_update": AccountSerializer,
+        "current": CurrentAccountSerializer, 
     }
 
     def get_serializer_class(self):
-        return self.per_action_serializer.get(self.action)
+        return self.per_action_serializer.get(self.action) or AccountSerializer
 
     @action(detail=False)
-    @swagger_auto_schema(responses={HTTP_200_OK: CurrentAccountSerializer})
+    # @extend_schema(responses={HTTP_200_OK: OpenApiResponse(response=CurrentAccountSerializer)})
     def current(self, request):
         serializer = CurrentAccountSerializer(instance=self.request.user)
         data = {"user": serializer.data}

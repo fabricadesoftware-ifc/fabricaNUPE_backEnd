@@ -78,4 +78,4 @@ class AcademicEducationViewSet(ModelViewSet):
     }
 
     def get_serializer_class(self):
-        return self.per_action_serializer.get(self.action)
+        return self.per_action_serializer.get(self.action) or AcademicEducationSerializer

@@ -1,4 +1,10 @@
 {
-    "python.pythonPath": "/bin/python3",
-    "restructuredtext.confPath": "${workspaceFolder}/docs"
+  "python.pythonPath": "/bin/python3",
+  "restructuredtext.confPath": "${workspaceFolder}/docs",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/__pypackages__/3.10/lib"
+  ],
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}/__pypackages__/3.10/lib"
+  ]
 }

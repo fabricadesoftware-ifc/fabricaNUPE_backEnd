@@ -2,8 +2,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
+# from drf_yasg import openapi
+# from drf_yasg.views import get_schema_view
 from rest_framework.permissions import AllowAny
 
 from nupe.account.router import router as account_router
@@ -37,9 +37,9 @@ urlpatterns = [
 
 # informações a serem exibidas no template do swagger
 description = "Projeto realizado pela Fábrica de Software para melhorar o atendimento realizado pelo NUPE"
-contact = openapi.Contact(
-    name="Luis Guerreiro", url="https://linkedin.com/in/devguerreiro", email="luiscvlh11@gmail.com"
-)
-api_info = openapi.Info(title="Nupe API", default_version="v0.1.0", description=description, contact=contact)
+# contact = openapi.Contact(
+#     name="Luis Guerreiro", url="https://linkedin.com/in/devguerreiro", email="luiscvlh11@gmail.com"
+# )
+# api_info = openapi.Info(title="Nupe API", default_version="v0.1.0", description=description, contact=contact)
 
-schema_view = get_schema_view(info=api_info, public=True, permission_classes=[AllowAny])
+# # schema_view = get_schema_view(info=api_info, public=True, permission_classes=[AllowAny])

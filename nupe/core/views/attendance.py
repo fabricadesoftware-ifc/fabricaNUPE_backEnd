@@ -1,4 +1,4 @@
-from drf_yasg.utils import swagger_auto_schema
+# from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import ModelViewSet
@@ -70,7 +70,7 @@ class AttendanceViewSet(ModelViewSet):
         return self.per_action_serializer.get(self.action, AttendanceCreateSerializer)
 
     @action(detail=False)
-    @swagger_auto_schema(responses={HTTP_200_OK: AttendanceReportSerializer})
+    # @swagger_auto_schema(responses={HTTP_200_OK: AttendanceReportSerializer})
     def report(self, request):
         queryset = self.filter_queryset(queryset=self.get_queryset())
 
@@ -79,7 +79,7 @@ class AttendanceViewSet(ModelViewSet):
         return self.get_paginated_response(data=self.paginate_queryset(queryset=serializer.data))
 
     @action(detail=False)
-    @swagger_auto_schema(responses={HTTP_200_OK: MyAccountAttendanceSerializer})
+    # @swagger_auto_schema(responses={HTTP_200_OK: MyAccountAttendanceSerializer})
     def my(self, request):
         serializer = MyAccountAttendanceSerializer(
             instance=AccountAttendance.objects.filter(account=request.user), many=True
