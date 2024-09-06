@@ -1,8 +1,11 @@
 from rest_framework.serializers import CharField, ModelSerializer, SlugRelatedField, ValidationError
 from validate_docbr import CPF
 
+from uploader.models import Image
+from uploader.serializers import ImageSerializer
+
 from nupe.core.models import Person
-from nupe.file.models import ProfileImage
+# from nupe.file.models import ProfileImage
 from nupe.resources.messages.person import PERSON_INVALID_CPF_MESSAGE
 
 
@@ -26,6 +29,7 @@ class PersonListSerializer(ModelSerializer):
 
 
 class PersonDetailSerializer(ModelSerializer):
+    capa = ImageSerializer(required=False)
     """
     Retorna os detalhes de uma pessoa específica
 
@@ -47,7 +51,7 @@ class PersonDetailSerializer(ModelSerializer):
         profile_image: url da foto de perfil
     """
 
-    profile_image = CharField(source="profile_image.url", default=None)
+    # profile_image = CharField(source="profile_image.url", default=None)
 
     class Meta:
         model = Person
@@ -64,6 +68,18 @@ class PersonDetailSerializer(ModelSerializer):
 
 
 class PersonCreateSerializer(ModelSerializer):
+    profile_image_attachment_key = SlugRelatedField(
+        source="profile image",
+        queryset=Image.objects.all(),
+        slug_field="attachment_key",
+        required=False,
+        write_only=True,
+    )
+    profile_image = ImageSerializer(
+        required=False,
+        read_only=True
+    )
+    
     """
     Recebe e valida as informações para então cadastrar ou atualizar uma pessoa
 
@@ -86,7 +102,7 @@ class PersonCreateSerializer(ModelSerializer):
         para obter o identificador de associação)
     """
 
-    profile_image = SlugRelatedField(slug_field="attachment_id", queryset=ProfileImage.objects.all(), required=False)
+    # profile_image = SlugRelatedField(slug_field="attachment_id", queryset=ProfileImage.objects.all(), required=False)
 
     class Meta:
         model = Person

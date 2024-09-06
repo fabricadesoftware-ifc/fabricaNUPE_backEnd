@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "nupe.core",
     "nupe.file",
     "nupe.account",
+    "uploader",
 ]
 
 # if DEBUG is True:
@@ -147,6 +148,10 @@ USE_TZ = False
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 STATIC_URL = "/static/"
+# App Uploader settings
+MEDIA_ENDPOINT = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+FILE_UPLOAD_PERMISSIONS = 0o640
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 

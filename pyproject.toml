@@ -40,6 +40,8 @@ dependencies = [
     "drf-action-permissions>=0.1.1",
     "django-oauth-toolkit>=2.4.0",
     "validate-docbr>=1.10.0",
+    "python-magic>=0.4.27; sys_platform == \"linux\"",
+    "python-magic-bin>=0.4.14; sys_platform == \"win32, darwin\"",
 ]
 
 requires-python = ">=3.10"
@@ -78,7 +80,7 @@ dev = "python manage.py runserver 0.0.0.0:8000"
 createsuperuser = "python manage.py createsuperuser"
 pre_migrate = "python manage.py makemigrations"
 migrate = "python manage.py migrate"
-post_migrate = "python manage.py graph_models -g -o core.png core"
+post_migrate = "python manage.py graph_models --disable-sort-fields -g -o core.png core uploader"
 shell = "python manage.py shell"
 shellp= "python manage.py shell_plus"
 test = "python manage.py test"

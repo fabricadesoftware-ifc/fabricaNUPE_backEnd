@@ -5,6 +5,7 @@ from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 from nupe.core.utils.properties import calculate_age
 from nupe.core.utils.regex import ONLY_NUMBERS
 
+from uploader.models import Image
 
 class Person(SafeDeleteModel):
     """
@@ -72,10 +73,12 @@ class Person(SafeDeleteModel):
         help_text="DDD+Número",
     )
     profile_image = models.OneToOneField(
-        "file.ProfileImage",
+        Image,
+        related_name="+",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        default=None,
         help_text="O upload da imagem deve ser feito antes, para obter o atributo de associação",
     )
     created_at = models.DateTimeField(auto_now_add=True)

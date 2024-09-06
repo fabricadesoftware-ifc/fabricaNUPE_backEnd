@@ -11,6 +11,8 @@ from nupe.core.router import router as core_router
 from nupe.core.views import custom_handler_404
 from nupe.file.router import router as file_router
 
+from uploader.router import router as uploader_router
+
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 
@@ -30,9 +32,12 @@ urlpatterns = [
     path("api/v1/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/v1/schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path("admin/", admin.site.urls),
+    path("api/media/", include(uploader_router.urls)),
     # RF.SIS.001, RF.SIS.002
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_ENDPOINT, document_root=settings.MEDIA_ROOT)
 
 
 # informações a serem exibidas no template do swagger
