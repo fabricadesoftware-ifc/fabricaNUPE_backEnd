@@ -29,7 +29,7 @@ class PersonListSerializer(ModelSerializer):
 
 
 class PersonDetailSerializer(ModelSerializer):
-    capa = ImageSerializer(required=False)
+    # capa = ImageSerializer(required=False)
     """
     Retorna os detalhes de uma pessoa específica
 
