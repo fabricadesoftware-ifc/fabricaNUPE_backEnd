@@ -12,15 +12,15 @@ django-cors-headers==4.4.0
 django-environ==0.11.2
 django-extensions==3.2.3
 django-filter==24.3
-django-oauth-toolkit==3.0.0
+django-oauth-toolkit==3.0.1
 django-safedelete==1.4.0
 djangorestframework==3.15.2
 drf-action-permissions==0.1.1
 drf-spectacular==0.27.2
-idna==3.8
+idna==3.10
 inflection==0.5.1
 jsonschema==4.23.0
-jsonschema-specifications==2023.12.1
+jsonschema-specifications==2024.10.1
 jwcrypto==1.5.6
 oauthlib==3.2.2
 packaging==24.1
@@ -33,10 +33,10 @@ pyyaml==6.0.2
 referencing==0.35.1
 requests==2.32.3
 rpds-py==0.20.0
-setuptools==74.1.2
+setuptools==75.1.0
 sqlparse==0.5.1
 typing-extensions==4.12.2
-tzdata==2024.1; sys_platform == "win32"
+tzdata==2024.2; sys_platform == "win32"
 uritemplate==4.1.1
-urllib3==2.2.2
+urllib3==2.2.3
 validate-docbr==1.10.0

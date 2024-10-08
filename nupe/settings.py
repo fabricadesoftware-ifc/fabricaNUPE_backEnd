@@ -28,11 +28,11 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_extensions",
     "drf_spectacular",
+    "uploader",
     # apps
     "nupe.core",
     "nupe.file",
     "nupe.account",
-    "uploader",
 ]
 
 # if DEBUG is True:
