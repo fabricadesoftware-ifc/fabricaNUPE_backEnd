@@ -51,7 +51,7 @@ MIDDLEWARE = [
 
 # ALLOWED_HOSTS = env("ALLOWED_HOSTS", list, ["127.0.0.1", "localhost"])
 ALLOWED_HOSTS = ["*"]
-CORS_ORIGIN_WHITELIST = env("CORS_ORIGIN_WHITELIST", list, ["http://localhost:3000"])
+CORS_ORIGIN_WHITELIST = env("CORS_ORIGIN_WHITELIST", list, ["http://localhost:3000", "http://localhost:5173"])
 
 ROOT_URLCONF = "nupe.urls"
 
@@ -81,8 +81,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     # autenticação
-    "DEFAULT_AUTHENTICATION_CLASSES": ("oauth2_provider.contrib.rest_framework.OAuth2Authentication",),
-    "DEFAULT_PERMISSION_CLASSES": ("drf_action_permissions.DjangoActionPermissions",),
+    # "DEFAULT_AUTHENTICATION_CLASSES": ("oauth2_provider.contrib.rest_framework.OAuth2Authentication",),
+    # "DEFAULT_PERMISSION_CLASSES": ("drf_action_permissions.DjangoActionPermissions",),
     # render/parser
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
