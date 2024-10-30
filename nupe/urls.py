@@ -14,6 +14,7 @@ from nupe.file.router import router as file_router
 from uploader.router import router as uploader_router
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 # quando DEBUG = False, retorna um json ao invés de renderizar um template
@@ -25,6 +26,8 @@ core_router.registry.extend(account_router.registry)
 
 urlpatterns = [
     path("api/v1/", include(core_router.urls)),
+    path("api/v1/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/v1/token-refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # Documentation - Swagger
     # YOUR PATTERNS
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),

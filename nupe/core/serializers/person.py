@@ -51,7 +51,10 @@ class PersonDetailSerializer(ModelSerializer):
         profile_image: url da foto de perfil
     """
 
-    # profile_image = CharField(source="profile_image.url", default=None)
+    profile_image = ImageSerializer(
+        required=False,
+        read_only=True
+    )
 
     class Meta:
         model = Person
@@ -75,10 +78,10 @@ class PersonCreateSerializer(ModelSerializer):
         required=False,
         write_only=True,
     )
-    profile_image = ImageSerializer(
-        required=False,
-        read_only=True
-    )
+    # profile_image = ImageSerializer(
+    #     required=False,
+    #     read_only=True
+    # )
     
     """
     Recebe e valida as informações para então cadastrar ou atualizar uma pessoa
@@ -106,7 +109,7 @@ class PersonCreateSerializer(ModelSerializer):
 
     class Meta:
         model = Person
-        fields = ["id", "first_name", "last_name", "cpf", "birthday_date", "gender", "contact", "profile_image"]
+        fields = ["id", "first_name", "last_name", "cpf", "birthday_date", "gender", "contact", "profile_image_attachment_key"]
 
     def validate_cpf(self, cpf):
         """
@@ -135,7 +138,7 @@ class PersonCreateSerializer(ModelSerializer):
 
             validated_data (dict): dados já validados para atualização
         """
-        new_profile_image = validated_data.get("profile_image")
+        new_profile_image = validated_data.get("profile_image_attachment_key")
 
         if new_profile_image is not None:
             # exclui a imagem de perfil antiga
