@@ -10,13 +10,16 @@ Projeto desenvolvido por membros da **Fábrica de Software IFC - Araquari** para
 - Eduardo da Silva (**Coordenador**)
   
 
-- Yuri (**Estagiário**)
+- Carolina (**Estudante**)
   
 
-- Luis Carvalho (**Bolsista**)
+- Evelyn (**Estudante**)
 
 
-- Jorge (**Bolsista**)
+- Julia (**Estudante**)
+
+
+- Rafaella (**Estudante**)
 
 
 # Documentação do Projeto
