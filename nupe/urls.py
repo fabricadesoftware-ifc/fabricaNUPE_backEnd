@@ -35,7 +35,7 @@ urlpatterns = [
     path("api/v1/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/v1/schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path("admin/", admin.site.urls),
-    path("api/media/", include(uploader_router.urls)),
+    path("api/v1/media/", include(uploader_router.urls)),
     # RF.SIS.001, RF.SIS.002
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
 ] 

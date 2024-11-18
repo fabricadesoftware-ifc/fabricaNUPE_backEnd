@@ -78,10 +78,7 @@ class PersonCreateSerializer(ModelSerializer):
         required=False,
         write_only=True,
     )
-    # profile_image = ImageSerializer(
-    #     required=False,
-    #     read_only=True
-    # )
+    # profile_image = ImageSerializer(required=False)
     
     """
     Recebe e valida as informações para então cadastrar ou atualizar uma pessoa
