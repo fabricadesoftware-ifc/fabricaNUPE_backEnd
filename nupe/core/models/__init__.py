@@ -6,3 +6,4 @@ from nupe.core.models.location import City, Location, State
 from nupe.core.models.person import Person
 from nupe.core.models.reason import AttendanceReason
 from nupe.core.models.student import Responsible, Student
+from nupe.core.models.team import Team

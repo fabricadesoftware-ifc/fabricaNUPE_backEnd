@@ -2,6 +2,7 @@ from django.db import models
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 
 from nupe.core.utils.regex import ONLY_NUMBERS
+from nupe.core.models.team import Team
 
 
 class Student(SafeDeleteModel):
@@ -65,6 +66,7 @@ class Student(SafeDeleteModel):
     graduated = models.BooleanField(default=False)
     ingress_date = models.DateField()
     updated_at = models.DateTimeField(auto_now=True)
+    team = models.ForeignKey(Team, on_delete=models.PROTECT)
 
     class Meta:
         unique_together = ["person", "academic_education_campus"]

@@ -7,3 +7,4 @@ from nupe.core.views.location import CityViewSet, LocationViewSet, StateViewSet
 from nupe.core.views.person import PersonViewSet
 from nupe.core.views.reason import AttendanceReasonViewSet
 from nupe.core.views.student import StudentViewSet
+from nupe.core.views.team import TeamViewSet
