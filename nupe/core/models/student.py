@@ -66,7 +66,7 @@ class Student(SafeDeleteModel):
     graduated = models.BooleanField(default=False)
     ingress_date = models.DateField()
     updated_at = models.DateTimeField(auto_now=True)
-    team = models.ForeignKey(Team, on_delete=models.PROTECT)
+    team = models.ForeignKey(Team, on_delete=models.PROTECT, related_name="students")
 
     class Meta:
         unique_together = ["person", "academic_education_campus"]

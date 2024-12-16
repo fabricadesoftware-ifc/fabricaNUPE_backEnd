@@ -14,6 +14,7 @@ from nupe.core.views import (
     SectorViewSet,
     StateViewSet,
     StudentViewSet,
+    TeamViewSet,
 )
 
 router = SimpleRouter()
@@ -31,3 +32,4 @@ router.register("person", PersonViewSet, basename="person")
 router.register("sector", SectorViewSet, basename="sector")
 router.register("state", StateViewSet, basename="state")
 router.register("student", StudentViewSet, basename="student")
+router.register("team", TeamViewSet, basename="team")
